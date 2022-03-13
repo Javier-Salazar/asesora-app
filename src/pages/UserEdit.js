@@ -15,7 +15,6 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import USERLIST from '../_mocks_/user';
 
-//Esto es un comentario de prueba
 const TABLE_HEAD = [
   { id: 'name', label: 'Nombre', alignRight: false },
   { id: 'email', label: 'Correo', alignRight: false },
