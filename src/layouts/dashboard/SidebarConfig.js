@@ -11,37 +11,37 @@ const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 const sidebarConfig = [
   {
     title: 'tablero',
-    path: '/dashboard/app',
+    path: '/asesoraTec/app',
     icon: getIcon(gridFill)
   },
   {
     title: 'usuarios',
-    path: '/dashboard/user',
+    path: '/asesoraTec/user',
     icon: getIcon(peopleFill)
   },
   {
     title: 'asesores',
-    path: '/dashboard/asesores',
+    path: '/asesoraTec/asesores',
     icon: getIcon(personDoneFill)
   },
   {
     title: 'materias',
-    path: '/dashboard/materias',
+    path: '/asesoraTec/materias',
     icon: getIcon(fileTextFill)
   },
   {
     title: 'mis materias',
-    path: '/dashboard/mis-materias',
+    path: '/asesoraTec/mis-materias',
     icon: getIcon(fileTextFill)
   },
   {
     title: 'asesorias',
-    path: '/dashboard/asesorias',
+    path: '/asesoraTec/asesorias',
     icon: getIcon(bookFill)
   },
   {
     title: 'acerca de',
-    path: '/dashboard/acerca-de',
+    path: '/asesoraTec/acerca-de',
     icon: getIcon(infoFill)
   }
 ];

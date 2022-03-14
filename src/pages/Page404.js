@@ -37,7 +37,7 @@ function Page404() {
               />
             </motion.div>
 
-            <Button to="/" size="large" variant="contained" component={RouterLink}>
+            <Button to="/asesoraTec" size="large" variant="contained" component={RouterLink}>
               Regresar al inicio
             </Button>
           </Box>
