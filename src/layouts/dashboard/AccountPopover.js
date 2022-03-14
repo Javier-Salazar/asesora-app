@@ -8,6 +8,7 @@ import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
 import MenuPopover from '../../components/MenuPopover';
 import account from '../../_mocks_/account';
+import Cookies from 'universal-cookie';
 
 const MENU_OPTIONS = [
   {
@@ -28,8 +29,12 @@ const MENU_OPTIONS = [
 ];
 
 function AccountPopover() {
+  const cookies = new Cookies();
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  var profileUser = new Image();
+  profileUser.src = cookies.get('imagen');
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -43,7 +48,7 @@ function AccountPopover() {
   const onSubmit = () => {
     navigate('/');
   }
-
+  var userFoto = new Object();
   return (
     <>
       <IconButton
@@ -66,7 +71,8 @@ function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        
+ <Avatar src={''+cookies.get('stuImagen')} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -77,10 +83,10 @@ function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+          {cookies.get('stuName')+" "+cookies.get('stuLastnameF')}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+          {cookies.get('stuEmail')}
           </Typography>
         </Box>
 

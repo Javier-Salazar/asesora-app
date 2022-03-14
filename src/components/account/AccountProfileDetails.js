@@ -9,20 +9,11 @@ import {
   Grid,
   TextField
 } from '@mui/material';
+
 import Cookies from 'universal-cookie';
 
 const AccountProfileDetails = (props) => {
   const cookies = new Cookies();
-  const [values, setValues] = useState({
-    name: 'Javier',
-    apellidoP: 'Salazar',
-    apellidoM: 'Ballesteros',
-    email:'l16111899@itcj.edu.mx',
-    phone: '656-123-4567',
-    typeUser: 'Estudiante',
-    date: '21-Dic-2022',
-    school: 'Instituto Técnologico de Ciudad Juárez Campus 1'
-  });
 
   return (
     <form autoComplete="off" noValidate {...props}>
@@ -39,7 +30,7 @@ const AccountProfileDetails = (props) => {
                 InputProps={{
                   readOnly: true
                 }}
-                value= {values.name + " " + values.apellidoP + " " + values.apellidoM}
+                value= { cookies.get('stuName') + " " +  cookies.get('stuLastnameF') + " " +  cookies.get('stuLastnameM')}
                 variant="outlined"
               />
             </Grid>
@@ -51,7 +42,7 @@ const AccountProfileDetails = (props) => {
                 InputProps={{
                   readOnly: true
                 }}
-                value= {values.email}
+                value=  {cookies.get('stuEmail')}
                 variant="outlined"
               />
             </Grid>
@@ -63,7 +54,7 @@ const AccountProfileDetails = (props) => {
                 InputProps={{
                   readOnly: true
                 }}
-                value={values.phone}
+                value= {cookies.get('stuPhone')}
                 variant="outlined"
               />
             </Grid>
@@ -75,7 +66,7 @@ const AccountProfileDetails = (props) => {
                 InputProps={{
                   readOnly: true
                 }}
-                value={values.typeUser}
+                value= "Estudiante"
                 variant="outlined"
               />
             </Grid>
@@ -87,7 +78,7 @@ const AccountProfileDetails = (props) => {
                 InputProps={{
                   readOnly: true
                 }}
-                value={values.date}
+                value={cookies.get('stuDate')}
                 variant="outlined"
               />
             </Grid>
@@ -99,7 +90,7 @@ const AccountProfileDetails = (props) => {
                 InputProps={{
                   readOnly: true
                 }}
-                value={values.school}
+                value={cookies.get('stuSchoolName')}
                 variant="outlined"
               />
             </Grid>
