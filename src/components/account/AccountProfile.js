@@ -11,14 +11,6 @@ import {
 
 import Cookies from 'universal-cookie';
 
-const user = {
-  avatar: '/static/mock-images/avatars/javier.png',
-  jobTitle: 'Ingeniero',
-  name: 'Javier Salazar',
-  city: 'Juárez',
-  country: 'México',
-  timezone: 'GTM-7'
-};
 const cookies = new Cookies();
 
 const AccountProfile = (props) => (
@@ -33,17 +25,14 @@ const AccountProfile = (props) => (
         }}
       >
         <Avatar
-          src={user.avatar}
+          src={''+cookies.get('stuImagen')}
           sx={{
             height: 100,
             width: 100
           }}
         />
         <Typography color="textPrimary" gutterBottom variant="h3">
-          {user.name}
-        </Typography>
-        <Typography color="textSecondary" variant="body1">
-          {`${user.city} ${user.country}`}
+        {cookies.get('stuName')}
         </Typography>
       </Box>
     </CardContent>
