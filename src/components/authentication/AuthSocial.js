@@ -37,7 +37,7 @@ function AuthSocial() {
 
       <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
         <DialogContent>
-          {'test'}
+          camara
         </DialogContent>
       </Dialog>
     </>

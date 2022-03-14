@@ -19,6 +19,7 @@ const SectionStyle = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
+  alignItems: 'center',
   margin: theme.spacing(2, 0, 2, 2)
 }));
 
@@ -44,10 +45,10 @@ function Login() {
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+          <Typography variant="h3" sx={{ px: 5, mt: 12, mb: 3, alignSelf: 'flex-start'}}>
             Hola, bienvenido de nuevo
           </Typography>
-          <img src="/static/illustrations/illustration_login.png" alt="login" />
+          <img src="/static/illustrations/illustration_login.png" alt="hi" width="80%" />
         </SectionStyle>
       </MHidden>
 
@@ -57,7 +58,9 @@ function Login() {
             <Typography variant="h4" gutterBottom>
               Iniciar sesión
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>Selecciona una opción para iniciar sesión.</Typography>
+            <Typography sx={{ color: 'text.secondary' }}>
+              Selecciona una opción para iniciar sesión.
+            </Typography>
           </Stack>
           <AuthSocial />
 
