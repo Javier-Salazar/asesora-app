@@ -22,11 +22,7 @@ function AuthSocial() {
   return (
     <>
       <Stack direction="row" spacing={2}>
-        <Tooltip title="Escanear credencial" placement="top" enterDelay={200} arrow>
-          <Button style={{width: '30%'}} size="large" color="inherit" variant="outlined" onClick={handleClickOpen}>
-            <Icon icon={upcScan} color="#454F5B" height={24} />
-          </Button>
-        </Tooltip>
+      <Scanner />
       </Stack>
 
       <Divider sx={{ my: 3 }}>
