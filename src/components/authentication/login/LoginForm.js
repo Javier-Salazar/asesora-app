@@ -28,7 +28,7 @@ function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      navigate('/asesoraTec', { replace: true });
+      navigate('/dashboard', { replace: true });
     }
   });
 
