@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
-import editFill from '@iconify/icons-eva/edit-fill';
+import viewProfile from '@iconify/icons-eva/eye-outline';
 import { Link as RouterLink } from 'react-router-dom';
-import trash2Outline from '@iconify/icons-eva/trash-2-outline';
+import schedule from '@iconify/icons-eva/calendar-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 
@@ -26,18 +26,19 @@ function UserMoreMenu() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'error.main' }}>
+      
+      <MenuItem component={RouterLink} to="/dashboard/user-edit" sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
-            <Icon icon={trash2Outline} width={24} height={24} />
+            <Icon icon={viewProfile} width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Borrar" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary="Ver Perfil" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
         <MenuItem component={RouterLink} to="/dashboard/user-edit" sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
-            <Icon icon={editFill} width={24} height={24} />
+            <Icon icon={schedule} width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Editar" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary="Agendar asesoría" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
       </Menu>
     </>

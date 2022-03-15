@@ -12,6 +12,7 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import UserEdit from './pages/UserEdit'
 import Profile from './pages/Profile';
+import Advises from './pages/Advises';
 import NotFound from './pages/Page404';
 
 
@@ -47,6 +48,7 @@ function Router() {
         { path: 'user-edit', element: <UserEdit /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> },
+        { path: 'asesores', element: <Advises /> },
         { path: 'profile', element: <Profile /> }
       ]
     },
