@@ -11,9 +11,7 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import UserEdit from './pages/UserEdit'
-import Profile from './pages/Profile';
 import NotFound from './pages/Page404';
-
 
 function Router() {
   return useRoutes([
@@ -38,16 +36,15 @@ function Router() {
       ]
     },
     {
-      path: '/asesoraTec',
+      path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/asesoraTec/app" replace /> },
+        { element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'user-edit', element: <UserEdit /> },
         { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> },
-        { path: 'profile', element: <Profile /> }
+        { path: 'blog', element: <Blog /> }
       ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }

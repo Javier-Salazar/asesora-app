@@ -13,12 +13,12 @@ const MENU_OPTIONS = [
   {
     label: 'Inicio',
     icon: homeFill,
-    linkTo: '/asesoraTec'
+    linkTo: '/dashboard'
   },
   {
     label: 'Mi perfil',
     icon: personFill,
-    linkTo: '/asesoraTec/profile'
+    linkTo: '#'
   },
   {
     label: 'Configuraciones',
