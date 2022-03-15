@@ -8,10 +8,8 @@ import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
-import Cookies from 'universal-cookie';
+import account from '../../_mocks_/account';
 
-
-  
 const DRAWER_WIDTH = 280;
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -33,18 +31,8 @@ DashboardSidebar.propTypes = {
   isOpenSidebar: PropTypes.bool,
   onCloseSidebar: PropTypes.func
 };
-function typeUser(type){
-  if(type=="N"){
-    return "Estudiante"
-  }else if(type=="A"){
-    return "Asesor"
-  }else{
-    return "Administrador"
-  }
-}
 
 function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
-  const cookies = new Cookies();
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -70,13 +58,13 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={''+cookies.get('stuImagen')} alt="photoURL" />
+            <Avatar src={account.photoURL} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-              {cookies.get('stuName') + " " +  cookies.get('stuLastnameF')}
+                {account.displayName}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {typeUser(cookies.get('stuType'))}
+                {account.role}
               </Typography>
             </Box>
           </AccountStyle>
