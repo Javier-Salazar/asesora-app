@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
@@ -9,6 +9,8 @@ import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 import account from '../../_mocks_/account';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 const DRAWER_WIDTH = 280;
 
@@ -33,6 +35,7 @@ DashboardSidebar.propTypes = {
 };
 
 function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
+
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -41,6 +44,24 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  const cookies = new Cookies();
+  const [infoUser, setInfoUser] = useState([]);
+  {/** Petición para TRAER los datos de la BD*/ }
+  const peticionesGet = async () => {
+    await axios.get("https://localhost:44397/api/users/" + cookies.get('UserCode'))
+      .then(Response => {
+        setInfoUser(Response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  {/**Se ejecuta por defecto cada vez que el componente se actualiza*/ }
+  useEffect(() => {
+    peticionesGet();
+  }, [])
+
 
   const renderContent = (
     <Scrollbar
@@ -58,10 +79,10 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src={'data:image/png;base64,' + infoUser.userx_image} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+              {infoUser.userx_name+ " "+ infoUser.userx_lastname}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}

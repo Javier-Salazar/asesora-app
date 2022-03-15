@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settingsFill from '@iconify/icons-eva/settings-fill';
@@ -7,7 +7,9 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
 import MenuPopover from '../../components/MenuPopover';
-import account from '../../_mocks_/account';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+
 
 const MENU_OPTIONS = [
   {
@@ -27,6 +29,8 @@ const MENU_OPTIONS = [
   }
 ];
 
+const cookies = new Cookies();
+
 function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -43,6 +47,25 @@ function AccountPopover() {
   const onSubmit = () => {
     navigate('/');
   }
+
+
+ 
+  const [infoUser, setInfoUser] = useState([]);
+  {/** Petición para TRAER los datos de la BD*/ }
+  const peticionesGet = async () => {
+    await axios.get("https://localhost:44397/api/users/" + cookies.get('UserCode'))
+      .then(Response => {
+        setInfoUser(Response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  {/**Se ejecuta por defecto cada vez que el componente se actualiza*/ }
+  useEffect(() => {
+    peticionesGet();
+  }, [])
+
 
   return (
     <>
@@ -66,7 +89,7 @@ function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={'data:image/png;base64,' + infoUser.userx_image} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -77,10 +100,10 @@ function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+            {infoUser.userx_name+ " "+ infoUser.userx_lastname}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {infoUser.userx_email}
           </Typography>
         </Box>
 
