@@ -3,6 +3,8 @@ import { Icon } from '@iconify/react';
 import upcScan  from '@iconify/icons-bi/upc-scan';
 import { Stack, Button, Divider, Typography, Tooltip, Dialog, DialogContent } from '@mui/material';
 import Slide from '@mui/material/Slide';
+import Scanner from './scannerLogin/Scanner';
+import Quagga from 'quagga'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -16,6 +18,7 @@ function AuthSocial() {
   }
 
   const handleClose = () => {
+    Quagga.stop();
     setOpen(false);
   }
 
@@ -35,9 +38,9 @@ function AuthSocial() {
         </Typography>
       </Divider>
 
-      <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
+      <Dialog open={open}  TransitionComponent={Transition} onClose={handleClose}>
         <DialogContent>
-          camara
+         <Scanner />
         </DialogContent>
       </Dialog>
     </>
