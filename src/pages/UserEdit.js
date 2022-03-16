@@ -99,77 +99,91 @@ function UserEdit({status}) {
 
             <Card sx={ theme => ({
                 width: '66%',
-                padding: '24px',
+                // padding: '24px',
                 [theme.breakpoints.down('md')]: {
                     width: '100%'
                 }
             })}>
             <Scrollbar>
-                <FormikProvider value={formik}>
+                <FormikProvider value={formik} sx={{padding: '24px'}}>
                     <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                        <Stack spacing={3}>
-                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                            <TextField
+                        <Stack spacing={2} sx={{padding: '24px'}}>
+                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                              <TextField
+                              fullWidth
+                              label="Código"
+                              {...getFieldProps('firstName')}
+                              error={Boolean(touched.firstName && errors.firstName)}
+                              helperText={touched.firstName && errors.firstName}
+                              />
+                              
+                              <TextField
+                                fullWidth
+                                label="Correo electrónico"
+                                {...getFieldProps('firstName')}
+                                error={Boolean(touched.firstName && errors.firstName)}
+                                helperText={touched.firstName && errors.firstName}
+                              />
+                          </Stack>
+
+                          <TextField
                             fullWidth
                             label="Nombre"
-                            {...getFieldProps('firstName')}
-                            error={Boolean(touched.firstName && errors.firstName)}
-                            helperText={touched.firstName && errors.firstName}
-                            />
-
-                            <TextField
-                            fullWidth
-                            label="Apellido"
                             {...getFieldProps('lastName')}
                             error={Boolean(touched.lastName && errors.lastName)}
                             helperText={touched.lastName && errors.lastName}
-                            />
-                        </Stack>
+                          />
 
-                        <TextField
-                            fullWidth
-                            autoComplete="username"
-                            type="email"
-                            label="Correo electrónico"
-                            {...getFieldProps('email')}
-                            error={Boolean(touched.email && errors.email)}
-                            helperText={touched.email && errors.email}
-                        />
+                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                              <TextField
+                              fullWidth
+                              label="Apellido paterno"
+                              {...getFieldProps('firstName')}
+                              error={Boolean(touched.firstName && errors.firstName)}
+                              helperText={touched.firstName && errors.firstName}
+                              />
 
-                        <TextField
-                            fullWidth
-                            autoComplete="current-password"
-                            type={showPassword ? 'text' : 'password'}
-                            label="Contraseña"
-                            {...getFieldProps('password')}
-                            InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
-                                    <Icon icon={showPassword ? eyeFill : eyeOffFill} />
-                                </IconButton>
-                                </InputAdornment>
-                            )
-                            }}
-                            error={Boolean(touched.password && errors.password)}
-                            helperText={touched.password && errors.password}
-                        />
+                              <TextField
+                              fullWidth
+                              label="Apellido materno"
+                              {...getFieldProps('lastName')}
+                              error={Boolean(touched.lastName && errors.lastName)}
+                              helperText={touched.lastName && errors.lastName}
+                              />
+                          </Stack>
 
-                        <LoadingButton
-                            fullWidth
-                            size="large"
-                            type="submit"
-                            variant="contained"
-                            loading={isSubmitting}
-                        >
-                            Registrarse
-                        </LoadingButton>
+                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                              <TextField
+                              fullWidth
+                              label="Contraseña"
+                              {...getFieldProps('lastName')}
+                              error={Boolean(touched.lastName && errors.lastName)}
+                              helperText={touched.lastName && errors.lastName}
+                              />
+                              
+                              <TextField
+                              fullWidth
+                              label="Teléfono"
+                              {...getFieldProps('firstName')}
+                              error={Boolean(touched.firstName && errors.firstName)}
+                              helperText={touched.firstName && errors.firstName}
+                              />
+                          </Stack>
+
+                          <LoadingButton
+                              type="submit"
+                              variant="contained"
+                              loading={isSubmitting}
+                              sx={{width: 'content'}}
+                          >
+                              Guardar cambios
+                          </LoadingButton>
                         </Stack>
                     </Form>
                 </FormikProvider>
-                <Button variant="contained">
+                {/* <Button variant="contained">
                     Guardar cambios
-                </Button>
+                </Button> */}
             </Scrollbar>
             </Card>
         </ContainerStyle>

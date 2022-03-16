@@ -7,10 +7,9 @@ import Page from '../components/Page';
 
 const RootStyle = styled(Page)(({ theme }) => ({
   display: 'flex',
-  minHeight: '100%',
+  maxHeight: '100vh',
   alignItems: 'center',
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10)
+  paddingTop: theme.spacing(15)
 }));
 
 function Page404() {
@@ -18,26 +17,26 @@ function Page404() {
     <RootStyle title="Página no encontrada | Asesora App">
       <Container>
         <MotionContainer initial="initial" open>
-          <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
+          <Box sx={{ maxWidth: 552, margin: 'auto', textAlign: 'center' }}>
+          <motion.div variants={varBounceIn}>
+              <Box component="img" src="/static/illustrations/illustration_no_results.svg" sx={{
+                width: '35%',
+                margin: 'auto',
+                marginBottom: 1
+              }}/>
+            </motion.div>
+
             <motion.div variants={varBounceIn}>
-              <Typography variant="h3" paragraph>
+              <Typography variant="h3" paragraph sx={{mb: 2}}>
                 Lo sentimos, la página no ha sido encontrada!
               </Typography>
             </motion.div>
-            <Typography sx={{ color: 'text.secondary' }}>
+            <Typography sx={{ color: 'text.secondary', mb: 4}}>
               Lo sentimos, no hemos podido encontrar la página que estabas buscando. 
               ¿Quizás has escrito mal la URL? Asegúrate de revisar tu ortografía.
             </Typography>
 
-            <motion.div variants={varBounceIn}>
-              <Box
-                component="img"
-                src="/static/illustrations/illustration_404.svg"
-                sx={{ height: 260, mx: 'auto', my: { xs: 5, sm: 10 } }}
-              />
-            </motion.div>
-
-            <Button to="/" size="large" variant="contained" component={RouterLink}>
+            <Button to="#" size="large" variant="contained" component={RouterLink}>
               Regresar al inicio
             </Button>
           </Box>
