@@ -15,6 +15,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 const SectionStyle = styled(Card)(({ theme }) => ({
   width: '100%',
   maxWidth: 464,
+  maxHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -43,10 +44,10 @@ function Register() {
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 12, mb: 2 }}>
+          <Typography variant="h3" sx={{ px: 5, mt: 14, mb: 0 }}>
             Buscar asesorias nunca había sido tan fácil
           </Typography>
-          <img alt="register" src="/static/illustrations/illustration_register.png" />
+          <img alt="register" src="/static/illustrations/illustration_register.png" style={{width: '83%', margin: 'auto'}}/>
         </SectionStyle>
       </MHidden>
 

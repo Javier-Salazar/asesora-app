@@ -36,7 +36,7 @@ function Page404() {
               ¿Quizás has escrito mal la URL? Asegúrate de revisar tu ortografía.
             </Typography>
 
-            <Button to="#" size="large" variant="contained" component={RouterLink}>
+            <Button to="/dashboard" size="large" variant="contained" component={RouterLink}>
               Regresar al inicio
             </Button>
           </Box>
