@@ -14,7 +14,6 @@ export default function Scanner() {
   const baseUrl = "https://localhost:44397/api/users"
  
   const [tablaUsuarios, setTablaUsuarios] = useState([]);
-  {/** Petición para TRAER los datos de la BD*/ }
   const peticionesGet = async () => {
     await axios.get(baseUrl)
       .then(Response => {
@@ -31,10 +30,10 @@ export default function Scanner() {
 
   const busquedaUser = (terminoBusqueda) => {
     var seEncuentra = 0;
-    tablaUsuarios.filter((elemento) => {//Se busca el número de control
-      if (elemento.userx_code.toLowerCase() == terminoBusqueda.toLowerCase()) {
+    tablaUsuarios.filter(({elemento}) => {//Se busca el número de control
+      if (elemento.userx_code.toLowerCase() === terminoBusqueda.toLowerCase()) {
         seEncuentra = 1;
-        if (elemento.userx_type == "N") {//Si es Normal (Alumno)
+        if (elemento.userx_type === "N") {//Si es Normal (Alumno)
           const Url = "https://localhost:44397/api/students/" + elemento.userx_code
           axios.get(Url)
             .then(Response => { //Se llenan las Cookies con la información obtenida
@@ -48,7 +47,7 @@ export default function Scanner() {
         }
       }
     })
-    if (seEncuentra == 0) {
+    if (seEncuentra === 0) {
       window.alert('No se encontro el usuario, vuelva a intentar');
     }
   }
@@ -57,8 +56,7 @@ export default function Scanner() {
     busquedaUser(result.codeResult.code);
   }
 
-    return (
-        <ScannerQuagga onDetected={_onDetected} /> 
-      
-    );
+  return (
+      <ScannerQuagga onDetected={_onDetected} /> 
+  );
 }

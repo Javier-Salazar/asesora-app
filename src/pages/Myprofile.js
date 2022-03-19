@@ -61,11 +61,11 @@ function UserEdit({status}) {
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
   return (
-    <Page title="AsesoraApp | Editar Usuario">
+    <Page title="AsesoraApp | Mi perfil">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Editar usuario
+            Mi perfil
           </Typography>
         </Stack>
 
