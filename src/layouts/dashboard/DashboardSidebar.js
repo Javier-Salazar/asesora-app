@@ -47,7 +47,7 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
   const cookies = new Cookies();
   const [infoUser, setInfoUser] = useState([]);
-  {/** Petición para TRAER los datos de la BD*/ }
+
   const peticionesGet = async () => {
     await axios.get("https://localhost:44397/api/users/" + cookies.get('UserCode'))
       .then(Response => {
@@ -57,10 +57,10 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       })
   }
 
-  {/**Se ejecuta por defecto cada vez que el componente se actualiza*/ }
+  // Se ejecuta por defecto cada vez que el componente se actualiza
   useEffect(() => {
     peticionesGet();
-  }, [])
+  })
 
 
   const renderContent = (

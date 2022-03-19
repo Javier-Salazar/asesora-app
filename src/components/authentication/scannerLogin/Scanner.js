@@ -23,7 +23,7 @@ export default function Scanner() {
       })
   }
 
-  {/**Se ejecuta por defecto cada vez que el componente se actualiza*/ }
+  // Se ejecuta por defecto cada vez que el componente se actualiza
   useEffect(() => {
     peticionesGet();
   }, [])
@@ -33,7 +33,7 @@ export default function Scanner() {
     tablaUsuarios.filter(({elemento}) => {//Se busca el número de control
       if (elemento.userx_code.toLowerCase() === terminoBusqueda.toLowerCase()) {
         seEncuentra = 1;
-        if (elemento.userx_type === "N") {//Si es Normal (Alumno)
+        if (elemento.userx_type === "N") {
           const Url = "https://localhost:44397/api/students/" + elemento.userx_code
           axios.get(Url)
             .then(Response => { //Se llenan las Cookies con la información obtenida
@@ -46,9 +46,11 @@ export default function Scanner() {
             })
         }
       }
+      return 0;
     })
+
     if (seEncuentra === 0) {
-      window.alert('No se encontro el usuario, vuelva a intentar');
+      window.alert('No se encontro el usuario, vuelve a intentar');
     }
   }
 
