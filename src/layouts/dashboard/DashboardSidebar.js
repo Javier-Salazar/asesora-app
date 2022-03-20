@@ -35,7 +35,6 @@ DashboardSidebar.propTypes = {
 };
 
 function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
-
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -57,11 +56,6 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       })
   }
 
-<<<<<<< HEAD
-
-=======
-  // Se ejecuta por defecto cada vez que el componente se actualiza
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
   useEffect(() => {
     peticionesGet();
   })
@@ -83,10 +77,10 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={'data:image/png;base64,' + infoUser.userx_image} alt="photoURL" />
+            <Avatar src={`data:image/png;base64,${infoUser.userx_image}`} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {infoUser.userx_name + " " + infoUser.userx_lastname}
+                {`${infoUser.userx_name} ${infoUser.userx_lastname}`}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}

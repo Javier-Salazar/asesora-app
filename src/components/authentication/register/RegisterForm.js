@@ -10,21 +10,21 @@ import axios from "axios";
 import { Alert } from "@mui/material";
 
 function RegisterForm() {
-  const [showPassword, setShowPassword] = useState(false);
   const date = new Date();
-  const [mostrarAlert, setMostrarAlert] = useState(false);
-  const [mostrarAlertPos, setMostrarAlertPos] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showAlertPost, setShowAlertPost] = useState(false);
 
-  const RegisterSchema = Yup.object().shape({//Se validan los campos 
+  const RegisterSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, "El nombre es muy corto")
       .max(30, "El nombre es muy largo")
       .required("El nombre es obligatorio"),
-    lastNameP: Yup.string()
+    lastName: Yup.string()
       .min(2, "El apellido es muy corto")
       .max(30, "El apellido es muy largo")
       .required("El apellido es obligatorio"),
-    lastNameM: Yup.string()
+    motherLastName: Yup.string()
       .min(2, "El apellido es muy corto")
       .max(30, "El apellido es muy largo"),
     email: Yup.string()
@@ -36,32 +36,32 @@ function RegisterForm() {
       ),
     password: Yup.string()
       .required("La contraseña es obligatoria")
-      .min(8, "La contraseña debe tener minimo 8 caracteres por seguridad"),
+      .min(8, "La contraseña debe contener mínimo 8 caracteres")
   });
 
   const formik = useFormik({
     initialValues: {
       name: "",
-      lastNameP: "",
-      lastNameM: "",
+      lastName: "",
+      motherLastName: "",
       email: "",
       password: "",
     },
-    validationSchema: RegisterSchema, //Si Cumple con todos los argumentos se valida que el correo sea nuevo
+    validationSchema: RegisterSchema,
     onSubmit: () => {
-      setMostrarAlert(false);
-      setMostrarAlertPos(false);
-      busquedaUser(getFieldProps("email").value); //Se inicializa la busqueda / modifica (seEncuentra)
-      if (seEncuentra === false) {
-        //Si no existe una cuenta con el correo se agrega
+      setShowAlert(false);
+      setShowAlertPost(false);
+      searchUser(getFieldProps("email").value);
+      if (isFind === false) {
         peticionPost();
-        setMostrarAlertPos(true);
-      } else {
-        setMostrarAlert(true);
-      }//Se limpian los campos
+        setShowAlertPost(true);
+      } 
+      else {
+        setShowAlert(true);
+      }
       setFieldValue("name", "", false);
-      setFieldValue("lastNameP", "", false);
-      setFieldValue("lastNameM", "", false);
+      setFieldValue("lastName", "", false);
+      setFieldValue("motherLastName", "", false);
       setFieldValue("email", "", false);
       setFieldValue("password", "", false);
     },
@@ -70,7 +70,6 @@ function RegisterForm() {
   const baseUrl = "https://localhost:44397/api/users";
   const [data, setData] = useState([]);
 
-  //Petición para traer los datos de la BD
   const peticionesGet = async () => {
     await axios
       .get(baseUrl)
@@ -82,16 +81,15 @@ function RegisterForm() {
       });
   };
 
-  //Petición para insertar los datos 
   const peticionPost = async () => {
     await axios
       .post(baseUrl, {
-        userx_code: "" + getFieldProps("email").value.split("@", 1), //Corta el correo para obtener el ID del User,
-        userx_name: "" + getFieldProps("name").value,
-        userx_lastname: "" + getFieldProps("lastNameP").value,
-        userx_mother_lastname: "" + getFieldProps("lastNameM").value,
-        userx_email: "" + getFieldProps("email").value,
-        userx_password: "" + getFieldProps("password").value,
+        userx_code: getFieldProps("email").value.split("@", 1),
+        userx_name: getFieldProps("name").value,
+        userx_lastname: getFieldProps("lastName").value,
+        userx_mother_lastname: getFieldProps("motherLastName").value,
+        userx_email: getFieldProps("email").value,
+        userx_password: getFieldProps("password").value,
         userx_remember: "N",
         userx_phone: "",
         userx_type: "N",
@@ -118,27 +116,22 @@ function RegisterForm() {
     peticionesGet();
   }, []);
 
-  var seEncuentra = false;
+  var isFind = false;
 
-  const busquedaUser = (terminoBusqueda) => {
-    data.filter((elemento) => {
+  const searchUser = (finded) => {
+    data.filter((element) => {
       //Se busca el correo ingresado
-      if (elemento.userx_email.toLowerCase() === terminoBusqueda.toLowerCase()) {
-        console.log(elemento.userx_email.toLowerCase());
-        console.log(terminoBusqueda.toLowerCase());
-        seEncuentra = true;
-        console.log(seEncuentra);
+      if (element.userx_email.toLowerCase() === finded.toLowerCase()) {
+        console.log(element.userx_email.toLowerCase());
+        console.log(finded.toLowerCase());
+        isFind = true;
+        console.log(isFind);
       }
+      return 0;
     });
   };
 
-  const {
-    errors,
-    touched,
-    handleSubmit,
-    getFieldProps,
-    setFieldValue,
-  } = formik;
+  const { errors, touched, handleSubmit, getFieldProps, setFieldValue } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -147,7 +140,7 @@ function RegisterForm() {
           <TextField
             fullWidth
             label="Nombre"
-            name="nameTxt"
+            name="name"
             {...getFieldProps("name")}
             error={Boolean(touched.name && errors.name)}
             helperText={touched.name && errors.name}
@@ -156,18 +149,18 @@ function RegisterForm() {
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <TextField
               fullWidth
-              label="Apellido Paterno"
-              {...getFieldProps("lastNameP")}
-              error={Boolean(touched.lastNameP && errors.lastNameP)}
-              helperText={touched.lastNameP && errors.lastNameP}
+              label="Apellido paterno"
+              {...getFieldProps("lastName")}
+              error={Boolean(touched.lastName && errors.lastName)}
+              helperText={touched.lastName && errors.lastName}
             />
 
             <TextField
               fullWidth
-              label="Apellido Materno"
-              {...getFieldProps("lastNameM")}
-              error={Boolean(touched.lastNameM && errors.lastNameM)}
-              helperText={touched.lastNameM && errors.lastNameM}
+              label="Apellido materno"
+              {...getFieldProps("motherLastName")}
+              error={Boolean(touched.motherLastName && errors.motherLastName)}
+              helperText={touched.motherLastName && errors.motherLastName}
             />
           </Stack>
 
@@ -211,17 +204,26 @@ function RegisterForm() {
           >
             Registrarse
           </LoadingButton>
-          {mostrarAlertPos ? (
-            <Alert severity="success">
-              Se ha realizado el registro con éxito, Inicie sesión y configure
-              su perfil para hacer uso de las funcionalidades
-            </Alert>
-          ) : null}
-          {mostrarAlert ? (
-            <Alert border-radius="12px" severity="error">
-              Ya existe una cuenta asociada con el correo ingresado
-            </Alert>
-          ) : null}
+
+          {
+            showAlertPost
+            ? (
+              <Alert severity="success">
+                Se ha registrado con éxito, Inicie sesión y configure
+                su perfil para hacer uso de las funcionalidades
+              </Alert>
+            ) 
+            : null
+          }
+          {
+            showAlert 
+            ? (
+              <Alert border-radius="12px" severity="error">
+                Ya existe una cuenta asociada a este correo electrónico
+              </Alert>
+            ) 
+            : null
+          }
         </Stack>
       </Form>
     </FormikProvider>

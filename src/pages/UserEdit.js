@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import { Link as useNavigate } from 'react-router-dom';
-=======
 import { useNavigate } from 'react-router-dom';
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
+import { useState } from 'react';
 import * as Yup from 'yup';
 import { sentenceCase } from 'change-case';
 import styled from '@emotion/styled';
@@ -12,10 +9,6 @@ import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
-<<<<<<< HEAD
-
-=======
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -27,18 +20,12 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-<<<<<<< HEAD
-function UserEdit({ status }) {
-  status = 'inactivo'
-
-=======
 function UserEdit({status}) {
   status = 'inactivo';
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
   const [accountStatus, setStatus] = useState(status);
   
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
   const navigate = useNavigate();
 
   const RegisterSchema = Yup.object().shape({
@@ -83,28 +70,6 @@ function UserEdit({status}) {
         </Stack>
 
         <ContainerStyle>
-<<<<<<< HEAD
-          <Card sx={theme => ({
-            width: '32%',
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            [theme.breakpoints.down('md')]: {
-              width: '100%',
-              marginBottom: '24px'
-            }
-          })}>
-            <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse' }}>
-              <Label
-                variant="ghost"
-                color={(status === 'inactivo' && 'error') || 'success'}
-              >
-                {sentenceCase(status)}
-              </Label>
-            </div>
-
-            <Avatar sx={{ margin: 'auto', width: '106px', height: '106px', marginTop: '24px' }} />
-=======
             <Card sx={ theme => ({
                 width: '32%',
                 padding: '24px',
@@ -125,46 +90,32 @@ function UserEdit({status}) {
               </div>
 
               <Avatar sx={{width: '106px', height: '106px', margin: 'auto'}} />
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
 
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'center',
-              alignItems: 'center', marginTop: '16px', marginBottom: '8px'
-            }}>
-              <Typography variant='caption' sx={{ width: '70%', wordWrap: 'break-word', textAlign: 'center' }}>
-                Permitido *.jpeg, *.jpg, *.png tamaño maximo de 3 MB
-              </Typography>
-
-            </div>
-
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
-              alignItems: 'center', marginTop: '24px'
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Estatus
+              <div style={{
+                width: '100%', display: 'flex', justifyContent: 'center',
+                alignItems: 'center', marginTop: '16px', marginBottom: '8px'
+              }}>
+                <Typography variant='caption' sx={{ width: '70%', wordWrap: 'break-word', textAlign: 'center' }}>
+                  Permitido *.jpeg, *.jpg, *.png tamaño maximo de 3 MB
                 </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Definir el estado de la cuenta
-                </Typography>
+
               </div>
-              <Switch defaultChecked sx={{ pl: 2 }} />
-            </div>
 
-<<<<<<< HEAD
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
-              alignItems: 'center', marginTop: '24px'
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Asesor
-                </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Activar convertir en asesor
-                </Typography>
-=======
+              <div style={{
+                width: '100%', display: 'flex', justifyContent: 'space-between',
+                alignItems: 'center', marginTop: '24px'
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
+                  <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
+                    Estatus
+                  </Typography>
+                  <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
+                    Definir el estado de la cuenta
+                  </Typography>
+                </div>
+                <Switch defaultChecked sx={{ pl: 2 }} />
+              </div>
+
               <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
                 alignItems: 'center', marginTop: '24px'
               }}>
@@ -177,60 +128,37 @@ function UserEdit({status}) {
                   </Typography>
                 </div>
                 <Switch sx={{pl: 2}} onChange={() => setStatus(accountStatus === 'inactivo' ? 'activo' : 'inactivo')} checked={accountStatus === 'inactivo' ? false : true}/>
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
               </div>
-              <Switch defaultChecked sx={{ pl: 2 }} />
-            </div>
 
-<<<<<<< HEAD
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
+            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
               alignItems: 'center', marginTop: '24px'
             }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Administrador
+              <div style={{display: 'flex', flexDirection: 'column', maxWidth: '80%'}}>
+                <Typography variant='subtitle2' sx={{wordWrap: 'break-word'}}>
+                  Asesor
                 </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Activar convertir en cuenta adnimistrador
+                <Typography variant='body2' sx={{wordWrap: 'break-word'}}>
+                  Activar convertir en asesor
                 </Typography>
-=======
-              <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', marginTop: '24px'
-              }}>
-                <div style={{display: 'flex', flexDirection: 'column', maxWidth: '80%'}}>
-                  <Typography variant='subtitle2' sx={{wordWrap: 'break-word'}}>
-                    Asesor
-                  </Typography>
-                  <Typography variant='body2' sx={{wordWrap: 'break-word'}}>
-                    Activar convertir en asesor
-                  </Typography>
-                </div>
-                <Switch sx={{pl: 2}} onChange={() => {setAdvisor(!advisor); setAdmin(false);}} checked={advisor}/>
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
               </div>
-              <Switch defaultChecked sx={{ pl: 2 }} />
+              <Switch sx={{pl: 2}} onChange={() => {setAdvisor(!advisor); setAdmin(false);}} checked={advisor}/>
             </div>
 
-<<<<<<< HEAD
-          </Card>
-=======
-              <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', marginTop: '24px'
-              }}>
-                <div style={{display: 'flex', flexDirection: 'column', maxWidth: '80%'}}>
-                  <Typography variant='subtitle2' sx={{wordWrap: 'break-word'}}>
-                    Administrador
-                  </Typography>
-                  <Typography variant='body2' sx={{wordWrap: 'break-word'}}>
-                    Activar convertir en adnimistrador
-                  </Typography>
-                </div>
-                <Switch sx={{pl: 2}} onChange={() => {setAdmin(!admin); setAdvisor(false);}} checked={admin}/>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
+              alignItems: 'center', marginTop: '24px'
+            }}>
+              <div style={{display: 'flex', flexDirection: 'column', maxWidth: '80%'}}>
+                <Typography variant='subtitle2' sx={{wordWrap: 'break-word'}}>
+                  Administrador
+                </Typography>
+                <Typography variant='body2' sx={{wordWrap: 'break-word'}}>
+                  Activar convertir en adnimistrador
+                </Typography>
               </div>
+              <Switch sx={{pl: 2}} onChange={() => {setAdmin(!admin); setAdvisor(false);}} checked={admin}/>
+            </div>
                 
             </Card>
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
 
           <Card sx={theme => ({
             width: '66%',
@@ -239,55 +167,6 @@ function UserEdit({status}) {
             }
           })}>
             <Scrollbar>
-<<<<<<< HEAD
-              <FormikProvider value={formik} sx={{ padding: '24px' }}>
-                <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                  <Stack spacing={2} sx={{ padding: '24px' }}>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        label="Clave"
-                        {...getFieldProps('code')}
-                        error={Boolean(touched.firstName && errors.firstName)}
-                        helperText={touched.firstName && errors.firstName}
-                      />
-
-                      <TextField
-                        fullWidth
-                        type="email"
-                        label="Correo electrónico"
-                        {...getFieldProps('email')}
-                        error={Boolean(touched.firstName && errors.firstName)}
-                        helperText={touched.firstName && errors.firstName}
-                      />
-                    </Stack>
-
-                    <TextField
-                      fullWidth
-                      label="Nombre"
-                      {...getFieldProps('name')}
-                      error={Boolean(touched.lastName && errors.lastName)}
-                      helperText={touched.lastName && errors.lastName}
-                    />
-
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        label="Apellido paterno"
-                        {...getFieldProps('lastName')}
-                        error={Boolean(touched.firstName && errors.firstName)}
-                        helperText={touched.firstName && errors.firstName}
-                      />
-
-                      <TextField
-                        fullWidth
-                        label="Apellido materno"
-                        {...getFieldProps('motherLastName')}
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        helperText={touched.lastName && errors.lastName}
-                      />
-                    </Stack>
-=======
                 <FormikProvider value={formik} sx={{padding: '24px'}}>
                     <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
                         <Stack spacing={2} sx={{padding: '24px'}}>
@@ -349,7 +228,6 @@ function UserEdit({status}) {
                                 helperText={touched.phone && errors.phone}
                               />
                           </Stack>
->>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
 
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <TextField
@@ -357,16 +235,14 @@ function UserEdit({status}) {
                         label="Contraseña"
                         disabled
                         {...getFieldProps('password')}
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        helperText={touched.lastName && errors.lastName}
                       />
 
                       <TextField
                         fullWidth
                         label="Teléfono"
                         {...getFieldProps('phone')}
-                        error={Boolean(touched.firstName && errors.firstName)}
-                        helperText={touched.firstName && errors.firstName}
+                        error={Boolean(touched.phone && errors.phone)}
+                        helperText={touched.phone && errors.phone}
                       />
                     </Stack>
 
