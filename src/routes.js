@@ -11,6 +11,7 @@ import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import UserEdit from './pages/UserEdit'
+import MyProfile from './pages/Myprofile'
 import NotFound from './pages/Page404';
 
 function Router() {
@@ -43,6 +44,7 @@ function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'user-edit', element: <UserEdit /> },
+        { path: 'my-profile', element: <MyProfile /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> }
       ]

@@ -57,10 +57,14 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       })
   }
 
+<<<<<<< HEAD
 
+=======
+  // Se ejecuta por defecto cada vez que el componente se actualiza
+>>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
   useEffect(() => {
     peticionesGet();
-  }, [])
+  })
 
 
   const renderContent = (
