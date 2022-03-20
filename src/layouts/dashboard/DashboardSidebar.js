@@ -57,7 +57,11 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       })
   }
 
+<<<<<<< HEAD
+
+=======
   // Se ejecuta por defecto cada vez que el componente se actualiza
+>>>>>>> 3f22390bb1601e997fd07c1dff00663842e8c8c3
   useEffect(() => {
     peticionesGet();
   })
@@ -82,7 +86,7 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             <Avatar src={'data:image/png;base64,' + infoUser.userx_image} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-              {infoUser.userx_name+ " "+ infoUser.userx_lastname}
+                {infoUser.userx_name + " " + infoUser.userx_lastname}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Quagga from 'quagga'
 
 class Scanner extends Component {
+
   componentDidMount() {
       
     Quagga.init(
@@ -9,8 +10,8 @@ class Scanner extends Component {
         inputStream: {
           type: 'LiveStream',
           constraints: {
-            width: 535,
-            height: 150,
+            width: 410,
+            height: 400,
             facingMode: 'environment', 
           },
         },
