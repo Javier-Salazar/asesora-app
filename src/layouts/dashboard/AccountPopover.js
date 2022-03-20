@@ -49,9 +49,9 @@ function AccountPopover() {
   }
 
 
- 
+
   const [infoUser, setInfoUser] = useState([]);
-  {/** Petición para TRAER los datos de la BD*/ }
+
   const peticionesGet = async () => {
     await axios.get("https://localhost:44397/api/users/" + cookies.get('UserCode'))
       .then(Response => {
@@ -61,7 +61,7 @@ function AccountPopover() {
       })
   }
 
-  {/**Se ejecuta por defecto cada vez que el componente se actualiza*/ }
+
   useEffect(() => {
     peticionesGet();
   }, [])
@@ -100,7 +100,7 @@ function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {infoUser.userx_name+ " "+ infoUser.userx_lastname}
+            {infoUser.userx_name + " " + infoUser.userx_lastname}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {infoUser.userx_email}

@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import Quagga from 'quagga'
-import { alpha, styled } from '@mui/material/styles';
-
-
 
 class Scanner extends Component {
 

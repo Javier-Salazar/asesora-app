@@ -47,7 +47,7 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
   const cookies = new Cookies();
   const [infoUser, setInfoUser] = useState([]);
-  {/** Petición para TRAER los datos de la BD*/ }
+
   const peticionesGet = async () => {
     await axios.get("https://localhost:44397/api/users/" + cookies.get('UserCode'))
       .then(Response => {
@@ -57,7 +57,7 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       })
   }
 
-  {/**Se ejecuta por defecto cada vez que el componente se actualiza*/ }
+
   useEffect(() => {
     peticionesGet();
   }, [])
@@ -82,7 +82,7 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             <Avatar src={'data:image/png;base64,' + infoUser.userx_image} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-              {infoUser.userx_name+ " "+ infoUser.userx_lastname}
+                {infoUser.userx_name + " " + infoUser.userx_lastname}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}
