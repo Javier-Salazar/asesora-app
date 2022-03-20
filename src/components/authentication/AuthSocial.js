@@ -41,6 +41,7 @@ function AuthSocial() {
       <Dialog open={open}  TransitionComponent={Transition} onClose={handleClose}>
         <DialogContent>
          <Scanner />
+         <canvas class="drawingBuffer" width="1" height="20"></canvas>
         </DialogContent>
       </Dialog>
     </>
