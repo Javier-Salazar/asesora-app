@@ -32,7 +32,6 @@ export default function Scanner() {
 
   const searchUser = (finded) => {
     userTable.filter((element) => {
-      console.log(`l${finded.toLowerCase()}`);
       if (element.userx_code.toLowerCase() === `l${finded.toLowerCase()}`) {
         isFind = true;
         if (element.userx_type === "N") {
