@@ -60,7 +60,7 @@ function Adviser(props) {
                 </div>
             </Box>
 
-            <Grid container columnSpacing={0}>
+            <Grid container columnSpacing={0} sx={{mt: 3}}>
                 <Grid item xs={6} sm={6}>
                     <Button fullWidth to="#" component={RouterLink}>
                         ver perfil
