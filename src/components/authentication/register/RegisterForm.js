@@ -30,10 +30,8 @@ function RegisterForm() {
     email: Yup.string()
       .email("El correo electrónico debe ser una dirección válida")
       .required("El correo electrónico es obligatorio")
-      .matches(
-        /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj.edu.mx/,
-        'Ingrese su correo institucional, por ejemplo: "user@itcj.edu.mx" '
-      ),
+      .matches(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj.edu.mx/,
+        'Ingrese su correo institucional, por ejemplo: user@itcj.edu.mx'),
     password: Yup.string()
       .required("La contraseña es obligatoria")
       .min(8, "La contraseña debe contener mínimo 8 caracteres")

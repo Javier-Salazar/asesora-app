@@ -21,7 +21,7 @@ const sidebarConfig = [
   },
   {
     title: 'asesores',
-    path: '/dashboard/asesores',
+    path: '/dashboard/adviser',
     icon: getIcon(personDoneFill)
   },
   {

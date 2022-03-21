@@ -53,7 +53,7 @@ function Register() {
 
       <Container>
         <ContentStyle>
-          <Box sx={{ mt: 10, mb: 5 }}>
+          <Box sx={{ mt: 5, mb: 5 }}>
             <Typography variant="h4" gutterBottom>
               Registrarse
             </Typography>

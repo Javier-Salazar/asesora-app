@@ -25,11 +25,12 @@ function UserEdit({status}) {
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
   const [accountStatus, setStatus] = useState(status);
+  const [phone, setPhone] = useState('');
   
   const navigate = useNavigate();
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string()
+    name: Yup.string()
       .min(2, 'El nombre es muy corto')
       .max(30, 'El nombre es muy largo')
       .required('El nombre es obligatorio'),
@@ -37,27 +38,58 @@ function UserEdit({status}) {
       .min(2, 'El apellido es muy corto')
       .max(30, 'El apellido es muy largo')
       .required('El apellido es obligatorio'),
+    motherLastName: Yup.string()
+      .min(2, "El apellido es muy corto")
+      .max(30, "El apellido es muy largo"),
     email: Yup.string()
       .email('El correo electrónico debe ser una dirección válida')
-      .required('El correo electrónico es obligatorio'),
-    password: Yup.string()
-      .required('La contraseña es obligatoria'),
+      .required('El correo electrónico es obligatorio')
+      .matches(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj.edu.mx/,
+        'Ingrese su correo institucional, por ejemplo: user@itcj.edu.mx'),
     phone: Yup.string()
-      .min(2, 'El telefono es muy corto')
+      .min(7, 'El telefono es muy corto')
+      .max(10, 'El telefono es muy largo')
   });
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
+      name: '',
       lastName: '',
+      motherLastname: '',
       email: '',
-      password: ''
+      phone: ''
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
       navigate('/');
     }
   });
+
+  const handleInput = (e) => {
+    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+    setPhone(formattedPhoneNumber);
+    console.log(phone);
+  };
+
+  function formatPhoneNumber(value) {
+    if (!value) {
+      return value;
+    }
+
+    const phoneNumber = value.replace(/[^\d]/g, '');
+  
+    const phoneNumberLength = phoneNumber.length;
+
+    if (phoneNumberLength < 3) {
+      return phoneNumber;
+    }
+
+    if (phoneNumberLength < 7) {
+      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    }
+
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3,6)}-${phoneNumber.slice(6, 10)}`;
+  }
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
   return (
@@ -99,21 +131,6 @@ function UserEdit({status}) {
                   Permitido *.jpeg, *.jpg, *.png tamaño maximo de 3 MB
                 </Typography>
 
-              </div>
-
-              <div style={{
-                width: '100%', display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', marginTop: '24px'
-              }}>
-                <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                  <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                    Estatus
-                  </Typography>
-                  <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                    Definir el estado de la cuenta
-                  </Typography>
-                </div>
-                <Switch defaultChecked sx={{ pl: 2 }} />
               </div>
 
               <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
@@ -191,9 +208,9 @@ function UserEdit({status}) {
                           <TextField
                             fullWidth
                             label="Nombre"
-                            {...getFieldProps('firstName')}
-                            error={Boolean(touched.firstName && errors.firstName)}
-                            helperText={touched.firstName && errors.firstName}
+                            {...getFieldProps('name')}
+                            error={Boolean(touched.name && errors.name)}
+                            helperText={touched.name && errors.name}
                           />
 
                           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -209,6 +226,8 @@ function UserEdit({status}) {
                                 fullWidth
                                 label="Apellido materno"
                                 {...getFieldProps('motherLastName')}
+                                error={Boolean(touched.motherLastName && errors.motherLastName)}
+                                helperText={touched.motherLastName && errors.motherLastName}
                               />
                           </Stack>
 
@@ -223,28 +242,15 @@ function UserEdit({status}) {
                               <TextField
                                 fullWidth
                                 label="Teléfono"
+                                onChange={(e) => {
+                                  handleInput(e);
+                                }}
+                                value={phone}
                                 {...getFieldProps('phone')}
                                 error={Boolean(touched.phone && errors.phone)}
                                 helperText={touched.phone && errors.phone}
                               />
                           </Stack>
-
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        label="Contraseña"
-                        disabled
-                        {...getFieldProps('password')}
-                      />
-
-                      <TextField
-                        fullWidth
-                        label="Teléfono"
-                        {...getFieldProps('phone')}
-                        error={Boolean(touched.phone && errors.phone)}
-                        helperText={touched.phone && errors.phone}
-                      />
-                    </Stack>
 
                     <Stack style={{ display: 'flex', alignItems: 'flex-end' }}>
                       <LoadingButton

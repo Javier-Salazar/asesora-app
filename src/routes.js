@@ -3,6 +3,7 @@ import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Advisers from './pages/Advisers';
 import ResetPassword from './pages/ResetPassword';
 import EndUserAgreement from './pages/EndUserAgreement'
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -44,6 +45,7 @@ function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'user-edit', element: <UserEdit /> },
+        { path: 'adviser', element: <Advisers /> },
         { path: 'my-profile', element: <MyProfile /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> }
