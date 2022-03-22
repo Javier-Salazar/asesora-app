@@ -14,6 +14,7 @@ import User from './pages/User';
 import UserEdit from './pages/UserEdit'
 import MyProfile from './pages/Myprofile'
 import NotFound from './pages/Page404';
+import AdvisorProfile from './components/_dashboard/advisers/AdvisorProfile';
 
 function Router() {
   return useRoutes([
@@ -46,6 +47,7 @@ function Router() {
         { path: 'user', element: <User /> },
         { path: 'user-edit', element: <UserEdit /> },
         { path: 'adviser', element: <Advisers /> },
+        { path: 'adviser-profile/:adviserID', element: <AdvisorProfile /> },
         { path: 'my-profile', element: <MyProfile /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> }
