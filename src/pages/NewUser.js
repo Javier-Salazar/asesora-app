@@ -22,9 +22,11 @@ const ContainerStyle = styled('div')(({theme}) => ({
 
 const options = ['Option 1', 'Option 2'];
 
-function UserEdit({status}) {
+function NewUser({status}) {
   status = 'inactivo';
 
+  const [admin, setAdmin] = useState(false);
+  const [advisor, setAdvisor] = useState(false);
   const [accountStatus, setStatus] = useState(status);
   
   const navigate = useNavigate();
@@ -62,11 +64,11 @@ function UserEdit({status}) {
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
   return (
-    <Page title="AsesoraApp | Mi perfil">
+    <Page title="AsesoraApp | Agregar usuario">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Mi perfil
+            Agregar Usuario
           </Typography>
         </Stack>
 
@@ -112,7 +114,7 @@ function UserEdit({status}) {
                     Definir el estado de la cuenta
                   </Typography>
                 </div>
-                <Switch sx={{pl: 2}} onChange={() => setStatus(accountStatus === 'inactivo' ? 'activo' : 'inactivo')} checked={accountStatus === 'inactivo' ? false : true} disabled/>
+                <Switch sx={{pl: 2}} onChange={() => setStatus(accountStatus === 'inactivo' ? 'activo' : 'inactivo')} checked={accountStatus === 'inactivo' ? false : true}/>
               </div>
 
               <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
@@ -126,7 +128,7 @@ function UserEdit({status}) {
                     Esta cuenta es asesor
                   </Typography>
                 </div>
-                <Switch sx={{pl: 2}} checked={false} disabled/>
+                <Switch sx={{pl: 2}} onChange={() => {setAdvisor(!advisor); setAdmin(false);}} checked={advisor}/>
               </div>
 
               <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
@@ -140,7 +142,7 @@ function UserEdit({status}) {
                     Esta cuenta es administrador
                   </Typography>
                 </div>
-                <Switch sx={{pl: 2}} checked={false} disabled/>
+                <Switch sx={{pl: 2}} onChange={() => {setAdmin(!admin); setAdvisor(false);}} checked={admin}/>
               </div>
                 
             </Card>
@@ -174,11 +176,11 @@ function UserEdit({status}) {
                           </Stack>
 
                           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                              <TextField
+                              <Autocomplete
                                 fullWidth
-                                label="Escuela"
-                                disabled
-                                {...getFieldProps('school')}
+                                disablePortal
+                                options={options}
+                                renderInput={(params) => <TextField {...params} label="Escuela" />}
                               />
 
                               <TextField
@@ -269,4 +271,4 @@ function UserEdit({status}) {
   );
 }
 
-export default UserEdit;
+export default NewUser;

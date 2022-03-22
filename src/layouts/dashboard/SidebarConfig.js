@@ -26,22 +26,22 @@ const sidebarConfig = [
   },
   {
     title: 'materias',
-    path: '/dashboard/materias',
+    path: '/dashboard/subject',
     icon: getIcon(fileTextFill)
   },
   {
     title: 'mis materias',
-    path: '/dashboard/mis-materias',
+    path: '/comming',
     icon: getIcon(fileTextFill)
   },
   {
     title: 'asesorias',
-    path: '/dashboard/asesorias',
+    path: '/dashboard/advises',
     icon: getIcon(bookFill)
   },
   {
     title: 'acerca de',
-    path: '/dashboard/acerca-de',
+    path: '/comming',
     icon: getIcon(infoFill)
   }
 ];
