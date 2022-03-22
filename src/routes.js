@@ -10,8 +10,6 @@ import ResetPassword from './pages/ResetPassword';
 import EndUserAgreement from './pages/EndUserAgreement'
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import DashboardApp from './pages/DashboardApp';
-import Products from './pages/Products';
-import Blog from './pages/Blog';
 import User from './pages/User';
 import NewUser from './pages/NewUser';
 import UserEdit from './pages/UserEdit'
@@ -57,8 +55,6 @@ function Router() {
         { path: 'advises', element: <Advises /> },
         { path: 'subject', element: <Subjects /> },
         { path: 'my-profile', element: <MyProfile /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
       ]
