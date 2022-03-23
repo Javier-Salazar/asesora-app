@@ -1,9 +1,7 @@
 import { useParams } from 'react-router-dom';
-import {
-    Typography, CardMedia, Card, CardContent, Box, BottomNavigation, BottomNavigationAction, Alert,
-    Container, Grid
-} from '@mui/material';
-import Profileinformation from './Profileinformation';
+import { Typography, CardMedia, Card, CardContent, Box, BottomNavigation, BottomNavigationAction, Alert,
+    Container, Grid } from '@mui/material';
+import ProfileInformation from './ProfileInformation';
 import ProfileComments from './ProfileComments';
 import { useEffect, useState, } from 'react';
 import axios from 'axios';
@@ -21,11 +19,13 @@ function AdvisorProfile() {
             setProfile(true);
             setComments(false);
             setSchedule(false);
-        } else if (valueNew === 1) {
+        } 
+        else if (valueNew === 1) {
             setProfile(false);
             setComments(true);
             setSchedule(false);
-        } else {
+        } 
+        else {
             setProfile(false);
             setComments(false);
             setSchedule(true);
@@ -47,8 +47,7 @@ function AdvisorProfile() {
 
     useEffect(() => {
         peticionesGet();
-    }, [])
-
+    })
 
     return (
         <>
@@ -94,7 +93,7 @@ function AdvisorProfile() {
                     <br></br>
                     {
                         profile ?
-                            <Profileinformation
+                            <ProfileInformation
                                 email={adviser.userx_email}
                                 rating={adviser.advisor_rating}
                                 biografia={adviser.advisor_comments}

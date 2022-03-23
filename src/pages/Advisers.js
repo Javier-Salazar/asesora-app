@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function Advisers() {
-    const baseUrl = "https://localhost:44397/api/advisors"
+    const baseUrl = "https://localhost:44397/api/advisors";
     const [advisers, setAdvisers] = useState([]);
 
     const peticionesGet = async () => {
