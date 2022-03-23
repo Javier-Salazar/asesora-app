@@ -15,6 +15,7 @@ import NewUser from './pages/NewUser';
 import UserEdit from './pages/UserEdit'
 import MyProfile from './pages/Myprofile'
 import NotFound from './pages/Page404';
+import { AdvisorProfile } from './components/_dashboard/advisers';
 import Next from './pages/Next';
 
 function Router() {
@@ -52,6 +53,7 @@ function Router() {
         { path: 'new-user', element: <NewUser /> },
         { path: 'user-edit', element: <UserEdit /> },
         { path: 'adviser', element: <Advisers /> },
+        { path: 'adviser-profile/:adviserID', element: <AdvisorProfile /> },
         { path: 'advises', element: <Advises /> },
         { path: 'subject', element: <Subjects /> },
         { path: 'my-profile', element: <MyProfile /> },

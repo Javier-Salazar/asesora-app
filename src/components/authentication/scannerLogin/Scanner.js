@@ -31,9 +31,8 @@ export default function Scanner() {
   var isFind = false;
 
   const searchUser = (finded) => {
-
     userTable.filter((element) => {
-      if (element.userx_code.toLowerCase() === finded.toLowerCase()) {
+      if (element.userx_code.toLowerCase() === `l${finded.toLowerCase()}`) {
         isFind = true;
         if (element.userx_type === "N") {
           const Url = `https://localhost:44397/api/students/${element.userx_code}`;
@@ -68,11 +67,11 @@ export default function Scanner() {
       </Typography>
       <br></br>
       {
-        activeAlert ? 
+        activeAlert ?
           <Alert border-radius="12px" severity="error">
             No se encuetra el usuario, intente de nuevo
           </Alert>
-        : <Alert border-radius="12px" severity="info">Escaneando credencial...</Alert>
+          : <Alert border-radius="12px" severity="info">Escaneando credencial...</Alert>
       }
       <br></br>
       <ScannerQuagga onDetected={_onDetected} />
