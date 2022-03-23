@@ -24,7 +24,7 @@ const MENU_OPTIONS = [
   {
     label: 'Configuraciones',
     icon: settingsFill,
-    linkTo: '#'
+    linkTo: '/comming'
   }
 ];
 

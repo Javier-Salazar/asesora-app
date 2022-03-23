@@ -121,7 +121,7 @@ function User() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="/dashboard/new-user"
             startIcon={<Icon icon={plusFill} />}
           >
             Agregar usuario
