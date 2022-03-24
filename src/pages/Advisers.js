@@ -10,11 +10,11 @@ function Advisers() {
 
     const peticionesGet = async () => {
         await axios.get(baseUrl)
-            .then(Response => {
-                setAdvisers(Response.data);
-            }).catch(error => {
-                console.log(error);
-            })
+        .then(Response => {
+            setAdvisers(Response.data);
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
     useEffect(() => {

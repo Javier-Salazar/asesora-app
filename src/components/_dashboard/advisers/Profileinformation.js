@@ -8,13 +8,12 @@ function Profileinformation(props) {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={6} md={4}>
-                <Card sx={{ height: 150 }}>
+            <Grid item xs={12} md={4}>
+                <Card>
                     <CardContent>
-                        <Typography variant="subtitle1" color="text.primary">
+                        <Typography variant="subtitle1" color="text.primary" sx={{mb: 2}}>
                             Información
                         </Typography>
-                        <br></br>
                         <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
                             <Icon icon={emailFill} />&nbsp; {props.email}
                         </Typography>
@@ -27,14 +26,14 @@ function Profileinformation(props) {
                     </CardContent>
                 </Card>
             </Grid>
-            <Grid item xs={6} md={8}>
-                <Card sx={{ height: 280 }}>
+            
+            <Grid item xs={12} md={8} >
+                <Card sx={{ minHeight: 230 }}>
                     <CardContent>
-                        <Typography variant="subtitle1" color="text.primary">
+                        <Typography variant="subtitle1" color="text.primary" sx={{mb: 2}}>
                             Biografía
                         </Typography>
-                        <br></br>
-                        <Typography variant="body2" color="text.secondary" align="justify">
+                        <Typography variant="body2" color="text.secondary">
                             {props.biografia}
                         </Typography>
                     </CardContent>

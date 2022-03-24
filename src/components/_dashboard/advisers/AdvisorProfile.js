@@ -51,29 +51,28 @@ function AdvisorProfile() {
 
     return (
         <>
-            <Container maxWidth="xl">
+            <Container minWidht="sm">
                 <Grid>
-                    <Card>
+                    <Card sx={{mb: 3}}>
                         <CardMedia
-                            component="img"
-                            height="175"
-                            bgcolor='primary.main'
-                            image="/static/components_images/advisers/front.png"
-                            alt="imagen"
+                            component="div"
+                            sx={{width: '100%', height: '175px', borderTopLeftRadius: '12px', borderTopRightRadius: '12px', bgcolor: 'primary.main'}}
                         />
-                        <CardContent>
-                            <Box
-                                component="img"
-                                src={`data:image/png;base64, ${adviser.userx_image}`}
-                                sx={{ position: 'absolute', left: 28, top: 80, width: 120, borderRadius: 8, mb: 3, height: 120 }}
-                            />
-                            <Box sx={{ position: 'absolute', left: 170, top: 130 }}>
-                                <Typography variant="h4" color="common.white">
-                                    {`${adviser.userx_name} ${adviser.userx_lastname}`}
-                                </Typography>
-                            </Box>
+                        <CardContent sx={{border: '1px yellow solid', display: 'flex', justifyContent: 'flex-end', padding: 0}}>
+                            <div style={{position: 'absolute', left: 28, top: 80, display: 'flex', alignItems: 'center'}}>
+                                <Box
+                                    component="img"
+                                    src={`data:image/png;base64, ${adviser.userx_image}`}
+                                    sx={{ width: 120, borderRadius: 12, height: 120 }}
+                                />
+                                <Box sx={{ pl: 4, pt: 2 }}>
+                                    <Typography variant="h4" color="common.white">
+                                        {`${adviser.userx_name} ${adviser.userx_lastname}`}
+                                    </Typography>
+                                </Box>
+                            </div>
 
-                            <Box sx={{ position: 'absolute', right: 1, top: 175, width: 300, height: 15 }}>
+                            <Box style={{borderBottomRightRadius: '12px' }}>
                                 <BottomNavigation
                                     showLabels
                                     value={value}
@@ -81,6 +80,7 @@ function AdvisorProfile() {
                                         setValue(newValue);
                                         mostrar(newValue);
                                     }}
+                                    style={{background: 'transparent'}}
                                 >
                                     <BottomNavigationAction label="Perfil" />
                                     <BottomNavigationAction label="Comentarios" />
@@ -89,19 +89,31 @@ function AdvisorProfile() {
                             </Box>
                         </CardContent>
                     </Card>
-                    <br></br>
-                    <br></br>
+
                     {
-                        profile ?
+                        profile
+                        ?
                             <ProfileInformation
                                 email={adviser.userx_email}
                                 rating={adviser.advisor_rating}
                                 biografia={adviser.advisor_comments}
                             />
-                            : null
+                        : null
                     }
-                    {comments ? <ProfileComments name={adviser.userx_name} /> : null}
-                    {schedule ? <Alert border-radius="12px" severity="warning">Se selecciona la opción agendar</Alert> : null}
+                    {
+                        comments
+                        ? 
+                            <ProfileComments name={adviser.userx_name} />
+                        : null
+                    }
+                    {
+                        schedule 
+                        ? 
+                            <Alert border-radius="12px" severity="warning">
+                                Se selecciona la opción agendar
+                            </Alert>
+                        : null
+                    }
                 </Grid>
             </Container>
         </>

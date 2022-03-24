@@ -7,7 +7,7 @@ function ProfileComments(props) {
             <Grid item xs={12}>
                 <Card>
                     <CardContent>
-                        <Typography variant="subtitle1" color="text.primary">
+                        <Typography variant="subtitle1" color="text.primary" sx={{mb: 1}}>
                             Hola, estos son los comentarios sobre las asesorías de {props.name}
                         </Typography>
                         <List>
@@ -18,7 +18,7 @@ function ProfileComments(props) {
                                     </ListItemAvatar>
                                     <ListItemText primary="Karina Sánchez" secondary="Excelente servicio..." />
                                 </ListItem>
-                                <br></br>
+
                                 <ListItem button key="student2">
                                     <ListItemAvatar>
                                         <Avatar alt="student" src="/static/mock-images/avatars/avatar_3.jpg" />
