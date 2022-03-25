@@ -10,23 +10,23 @@ import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 
-const ContainerStyle = styled('div')(({theme}) => ({
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    [theme.breakpoints.down('md')]: {
-        flexDirection: 'column',
-        alignItems: 'center'
-    }
+const ContainerStyle = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  [theme.breakpoints.down('md')]: {
+    flexDirection: 'column',
+    alignItems: 'center'
+  }
 }));
 
 const options = ['Option 1', 'Option 2'];
 
-function UserEdit({status}) {
+function UserEdit({ status }) {
   status = 'inactivo';
 
   const [accountStatus, setStatus] = useState(status);
-  
+
   const navigate = useNavigate();
 
   const RegisterSchema = Yup.object().shape({
@@ -71,198 +71,202 @@ function UserEdit({status}) {
         </Stack>
 
         <ContainerStyle>
-            <Card sx={ theme => ({
-                width: '32%',
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                [theme.breakpoints.down('md')]: {
-                    width: '100%',
-                    marginBottom: '24px'
-                }
-            })}>
-              <div style={{width: '100%', display: 'flex', flexDirection: 'row-reverse', marginBottom: '24px'}}>
-                <Label
-                    variant="ghost"
-                    color={(accountStatus === 'inactivo' && 'error') || 'success'}
-                >
-                    {sentenceCase(accountStatus)}
-                </Label>
-              </div>
+          <Card sx={theme => ({
+            width: '32%',
+            padding: '24px',
+            display: 'flex',
+            flexDirection: 'column',
+            [theme.breakpoints.down('md')]: {
+              width: '100%',
+              marginBottom: '24px'
+            }
+          })}>
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse', marginBottom: '24px' }}>
+              <Label
+                variant="ghost"
+                color={(accountStatus === 'inactivo' && 'error') || 'success'}
+              >
+                {sentenceCase(accountStatus)}
+              </Label>
+            </div>
 
-              <Avatar sx={{width: '106px', height: '106px', margin: 'auto'}} />
+            <Avatar sx={{ width: '106px', height: '106px', margin: 'auto' }} />
 
-              <div style={{width: '100%', display: 'flex', justifyContent: 'center',
-                alignItems: 'center', marginTop: '16px', marginBottom: '8px'
-              }}>
-                <Typography variant='caption' sx={{width: '70%', wordWrap: 'break-word', textAlign: 'center'}}>
-                  Permitido *.jpeg, *.jpg, *.png tamaño maximo de 3 MB
+            <div style={{
+              width: '100%', display: 'flex', justifyContent: 'center',
+              alignItems: 'center', marginTop: '16px', marginBottom: '8px'
+            }}>
+              <Typography variant='caption' sx={{ width: '70%', wordWrap: 'break-word', textAlign: 'center' }}>
+                Permitido *.jpeg, *.jpg, *.png tamaño maximo de 3 MB
+              </Typography>
+
+            </div>
+
+            <div style={{
+              width: '100%', display: 'flex', justifyContent: 'space-between',
+              alignItems: 'center', marginTop: '24px'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
+                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
+                  Estatus
                 </Typography>
-                  
+                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
+                  Definir el estado de la cuenta
+                </Typography>
               </div>
+              <Switch sx={{ pl: 2 }} onChange={() => setStatus(accountStatus === 'inactivo' ? 'activo' : 'inactivo')} checked={accountStatus === 'inactivo' ? false : true} disabled />
+            </div>
 
-              <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', marginTop: '24px'
-              }}>
-                <div style={{display: 'flex', flexDirection: 'column', maxWidth: '80%'}}>
-                  <Typography variant='subtitle2' sx={{wordWrap: 'break-word'}}>
-                    Estatus
-                  </Typography>
-                  <Typography variant='body2' sx={{wordWrap: 'break-word'}}>
-                    Definir el estado de la cuenta
-                  </Typography>
-                </div>
-                <Switch sx={{pl: 2}} onChange={() => setStatus(accountStatus === 'inactivo' ? 'activo' : 'inactivo')} checked={accountStatus === 'inactivo' ? false : true} disabled/>
+            <div style={{
+              width: '100%', display: 'flex', justifyContent: 'space-between',
+              alignItems: 'center', marginTop: '24px'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
+                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
+                  Asesor
+                </Typography>
+                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
+                  Esta cuenta es asesor
+                </Typography>
               </div>
+              <Switch sx={{ pl: 2 }} checked={false} disabled />
+            </div>
 
-              <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', marginTop: '24px'
-              }}>
-                <div style={{display: 'flex', flexDirection: 'column', maxWidth: '80%'}}>
-                  <Typography variant='subtitle2' sx={{wordWrap: 'break-word'}}>
-                    Asesor
-                  </Typography>
-                  <Typography variant='body2' sx={{wordWrap: 'break-word'}}>
-                    Esta cuenta es asesor
-                  </Typography>
-                </div>
-                <Switch sx={{pl: 2}} checked={false} disabled/>
+            <div style={{
+              width: '100%', display: 'flex', justifyContent: 'space-between',
+              alignItems: 'center', marginTop: '24px'
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
+                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
+                  Administrador
+                </Typography>
+                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
+                  Esta cuenta es administrador
+                </Typography>
               </div>
+              <Switch sx={{ pl: 2 }} checked={false} disabled />
+            </div>
 
-              <div style={{width: '100%', display: 'flex', justifyContent: 'space-between',
-                alignItems: 'center', marginTop: '24px'
-              }}>
-                <div style={{display: 'flex', flexDirection: 'column', maxWidth: '80%'}}>
-                  <Typography variant='subtitle2' sx={{wordWrap: 'break-word'}}>
-                    Administrador
-                  </Typography>
-                  <Typography variant='body2' sx={{wordWrap: 'break-word'}}>
-                    Esta cuenta es administrador
-                  </Typography>
-                </div>
-                <Switch sx={{pl: 2}} checked={false} disabled/>
-              </div>
-                
-            </Card>
+          </Card>
 
-            <Card sx={ theme => ({
-                width: '66%',
-                [theme.breakpoints.down('md')]: {
-                    width: '100%'
-                }
-            })}>
+          <Card sx={theme => ({
+            width: '66%',
+            [theme.breakpoints.down('md')]: {
+              width: '100%'
+            }
+          })}>
             <Scrollbar>
-                <FormikProvider value={formik} sx={{padding: '24px'}}>
-                    <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-                        <Stack spacing={2} sx={{padding: '24px'}}>
-                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                              <TextField
-                                fullWidth
-                                label="Clave"
-                                {...getFieldProps('code')}
-                                disabled
-                              />
-                              
-                              <TextField
-                                fullWidth
-                                type="email"
-                                label="Correo electrónico"
-                                {...getFieldProps('email')}
-                                error={Boolean(touched.email && errors.email)}
-                                helperText={touched.email && errors.email}
-                              />
-                          </Stack>
+              <FormikProvider value={formik} sx={{ padding: '24px' }}>
+                <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                  <Stack spacing={2} sx={{ padding: '24px' }}>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <TextField
+                        fullWidth
+                        label="Clave"
+                        {...getFieldProps('code')}
+                        disabled
+                      />
 
-                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                              <TextField
-                                fullWidth
-                                label="Escuela"
-                                disabled
-                                {...getFieldProps('school')}
-                              />
+                      <TextField
+                        fullWidth
+                        type="email"
+                        label="Correo electrónico"
+                        {...getFieldProps('email')}
+                        error={Boolean(touched.email && errors.email)}
+                        helperText={touched.email && errors.email}
+                      />
+                    </Stack>
 
-                              <TextField
-                                fullWidth
-                                label="fecha de registro"
-                                disabled
-                                {...getFieldProps('dateRegister')}
-                              />
-                          </Stack>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <TextField
+                        fullWidth
+                        label="Escuela"
+                        disabled
+                        {...getFieldProps('school')}
+                      />
 
-                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                              <Autocomplete
-                                fullWidth
-                                disablePortal
-                                options={options}
-                                renderInput={(params) => <TextField {...params} label="Carrera" />}
-                              />
-                              
-                              <Autocomplete
-                                fullWidth
-                                disablePortal
-                                options={options}
-                                renderInput={(params) => <TextField {...params} label="Especialidad" />}
-                              />
-                          </Stack>
+                      <TextField
+                        fullWidth
+                        label="fecha de registro"
+                        disabled
+                        {...getFieldProps('dateRegister')}
+                      />
+                    </Stack>
 
-                          <TextField
-                            fullWidth
-                            label="Nombre"
-                            {...getFieldProps('firstName')}
-                            error={Boolean(touched.firstName && errors.firstName)}
-                            helperText={touched.firstName && errors.firstName}
-                          />
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <Autocomplete
+                        fullWidth
+                        disablePortal
+                        options={options}
+                        renderInput={(params) => <TextField {...params} label="Carrera" />}
+                      />
 
-                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                              <TextField
-                                fullWidth
-                                label="Apellido paterno"
-                                {...getFieldProps('lastName')}
-                                error={Boolean(touched.lastName && errors.lastName)}
-                                helperText={touched.lastName && errors.lastName}
-                              />
+                      <Autocomplete
+                        fullWidth
+                        disablePortal
+                        options={options}
+                        renderInput={(params) => <TextField {...params} label="Especialidad" />}
+                      />
+                    </Stack>
 
-                              <TextField
-                                fullWidth
-                                label="Apellido materno"
-                                {...getFieldProps('motherLastName')}
-                              />
-                          </Stack>
+                    <TextField
+                      fullWidth
+                      label="Nombre"
+                      {...getFieldProps('firstName')}
+                      error={Boolean(touched.firstName && errors.firstName)}
+                      helperText={touched.firstName && errors.firstName}
+                    />
 
-                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                              <TextField
-                                fullWidth
-                                type="password"
-                                label="Contraseña"
-                                {...getFieldProps('password')}
-                                error={Boolean(touched.password && errors.password)}
-                                helperText={touched.password && errors.password}
-                              />
-                              
-                              <TextField
-                                fullWidth
-                                label="Teléfono"
-                                {...getFieldProps('phone')}
-                                error={Boolean(touched.phone && errors.phone)}
-                                helperText={touched.phone && errors.phone}
-                              />
-                          </Stack>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <TextField
+                        fullWidth
+                        label="Apellido paterno"
+                        {...getFieldProps('lastName')}
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        helperText={touched.lastName && errors.lastName}
+                      />
 
-                          <Stack style={{display: 'flex', alignItems: 'flex-end'}}>
-                            <LoadingButton
-                              type="submit"
-                              variant="contained"
-                              loading={isSubmitting}
-                              style={{width: 'fit-content'}}
-                            >
-                              Guardar cambios
-                            </LoadingButton>
-                          </Stack>
-                        </Stack>
-                    </Form>
-                </FormikProvider>
+                      <TextField
+                        fullWidth
+                        label="Apellido materno"
+                        {...getFieldProps('motherLastName')}
+                      />
+                    </Stack>
+
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <TextField
+                        fullWidth
+                        type="password"
+                        label="Contraseña"
+                        {...getFieldProps('password')}
+                        error={Boolean(touched.password && errors.password)}
+                        helperText={touched.password && errors.password}
+                      />
+
+                      <TextField
+                        fullWidth
+                        label="Teléfono"
+                        {...getFieldProps('phone')}
+                        error={Boolean(touched.phone && errors.phone)}
+                        helperText={touched.phone && errors.phone}
+                      />
+                    </Stack>
+
+                    <Stack style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      <LoadingButton
+                        type="submit"
+                        variant="contained"
+                        loading={isSubmitting}
+                        style={{ width: 'fit-content' }}
+                      >
+                        Guardar cambios
+                      </LoadingButton>
+                    </Stack>
+                  </Stack>
+                </Form>
+              </FormikProvider>
             </Scrollbar>
-            </Card>
+          </Card>
         </ContainerStyle>
       </Container>
     </Page>
