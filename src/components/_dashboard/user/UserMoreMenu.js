@@ -6,7 +6,7 @@ import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 
-function UserMoreMenu() {
+function UserMoreMenu(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,7 +33,7 @@ function UserMoreMenu() {
           <ListItemText primary="Borrar" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to="/dashboard/user-edit" sx={{ color: 'text.secondary' }}>
+        <MenuItem component={RouterLink} to={`${"/dashboard/user-edit/"}${props.idUser}`} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>

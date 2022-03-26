@@ -1,17 +1,19 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
-import { Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination } from '@mui/material';
+import {
+  Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination
+} from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
-import USERLIST from '../_mocks_/user';
+import axios from 'axios';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Nombre', alignRight: false },
@@ -51,13 +53,52 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+function changeLabelStatus(text) {
+  if (text === 'A') return 'activo';
+  if (text === 'I') return 'inactivo';
+}
+
+function changeLabelType(text) {
+  if (text === 'N') return 'Estudiante';
+  if (text === 'A') return 'Asesor';
+  if (text === 'S') return 'Administrador';
+}
+
 function User() {
+  const [data, setData] = useState([]);
+  const [dataTable, setDataTable] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [search, setSearch] = useState('');
+
+  const baseUrl = "https://localhost:44397/api/users"
+  const requestGet = async () => {
+    await axios.get(baseUrl)
+      .then(Response => {
+        setData(Response.data);
+        setDataTable(Response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  useEffect(() => {
+    requestGet();
+  }, [])
+
+  const USERLIST = data.map((element => ({
+    id: element.userx_code,
+    avatarUrl: element.userx_image,
+    name: element.userx_lastname + " " + element.userx_mother_lastname + " " + element.userx_name,
+    email: element.userx_email,
+    userCode: element.userx_code,
+    status: changeLabelStatus(element.userx_status),
+    role: changeLabelType(element.userx_type)
+  })));
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -101,13 +142,52 @@ function User() {
     setPage(0);
   };
 
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
-  };
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    filterTable(e.target.value);
+  }
+
+  const filterTable = (searchTerm) => {
+    var type = "";
+    var statusUser = "";
+
+    if ("estudiante".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+      type = "N";
+    }
+    if ("asesor".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+      type = "A";
+    }
+    if ("administrador".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+      type = "S";
+    }
+    if ("inactivo".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+      statusUser = "I";
+    }
+    if ("activo".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+      statusUser = "A";
+    }
+
+    var searchResults = dataTable.filter((element) => {
+      if (element.userx_code.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        || element.userx_name.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        || element.userx_lastname.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        || element.userx_mother_lastname.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        || element.userx_email.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        || element.userx_phone.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        || element.userx_type.toString().toLowerCase() === (type.toLowerCase())
+        || element.userx_status.toString().toLowerCase() === (statusUser.toLowerCase())
+      ) {
+        return element;
+      }
+      return setData(searchResults);
+    });
+    return setData(searchResults);
+  }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy));
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -131,8 +211,8 @@ function User() {
         <Card>
           <UserListToolbar
             numSelected={selected.length}
-            filterName={filterName}
-            onFilterName={handleFilterByName}
+            filterName={search}
+            onFilterName={handleChange}
           />
 
           <Scrollbar>
@@ -171,14 +251,22 @@ function User() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
+                              <Avatar alt={name} src={'data:image/png;base64,' + avatarUrl} />
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
+                          <TableCell align="left">
+                            <Label
+                              variant="ghost"
+                              color={(role === 'Estudiante' && 'success') || (role === 'Asesor' && 'info')
+                                || (role === 'Administrador' && 'warning')}
+                            >
+                              {sentenceCase(role)}
+                            </Label>
+                          </TableCell>
                           <TableCell align="left">{userCode}</TableCell>
                           <TableCell align="left">
                             <Label
@@ -190,7 +278,7 @@ function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu idUser={userCode} />
                           </TableCell>
                         </TableRow>
                       );
@@ -205,7 +293,7 @@ function User() {
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
+                        <SearchNotFound searchQuery={search} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -223,7 +311,7 @@ function User() {
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
             labelRowsPerPage="Resultados por página"
-            labelDisplayedRows={({from, to, count}) =>{
+            labelDisplayedRows={({ from, to, count }) => {
               return `Mostrando ${from} – ${to} de ${count !== -1 ? count : `más de ${to}`}`;
             }}
           />

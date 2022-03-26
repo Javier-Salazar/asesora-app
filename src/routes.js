@@ -51,7 +51,7 @@ function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'new-user', element: <NewUser /> },
-        { path: 'user-edit', element: <UserEdit /> },
+        { path: 'user-edit/:userID', element: <UserEdit /> },
         { path: 'adviser', element: <Advisers /> },
         { path: 'adviser-profile/:adviserID', element: <AdvisorProfile /> },
         { path: 'advises', element: <Advises /> },
