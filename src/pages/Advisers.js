@@ -1,6 +1,7 @@
 import { Container, Typography, Grid, Card } from '@mui/material';
 import Page from '../components/Page';
 import { Adviser } from '../components/_dashboard/advisers';
+import { Wrong } from '../components/_dashboard/errors';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -13,7 +14,7 @@ function Advisers() {
         .then(Response => {
             setAdvisers(Response.data);
         }).catch(error => {
-            console.log(error);
+            setAdvisers('-1');
         })
     }
 
@@ -29,20 +30,26 @@ function Advisers() {
                 </Typography>
 
                 <Grid container spacing={3}>
-                    {advisers.map(elemento => (
-                        <Grid item xs={12} sm={6} md={3}>
-                            <Card>
-                                <Adviser
-                                    image={elemento.userx_image}
-                                    name={`${elemento.userx_name} ${elemento.userx_lastname}`}
-                                    email={elemento.userx_email}
-                                    rating={elemento.advisor_rating}
-                                    comments="6"
-                                    id={elemento.advisor_code}
-                                />
-                            </Card>
-                        </Grid>
-                    ))}
+                    {
+                        advisers === '-1'
+                        ?
+                            <Wrong />
+                        :
+                        advisers.map(elemento => (
+                            <Grid item xs={12} sm={6} md={3}>
+                                <Card>
+                                    <Adviser
+                                        image={elemento.userx_image}
+                                        name={`${elemento.userx_name} ${elemento.userx_lastname}`}
+                                        email={elemento.userx_email}
+                                        rating={elemento.advisor_rating}
+                                        comments="6"
+                                        id={elemento.advisor_code}
+                                    />
+                                </Card>
+                            </Grid>
+                        ))
+                    }
                 </Grid>
             </Container>
         </Page>
