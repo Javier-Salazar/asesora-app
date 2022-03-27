@@ -33,7 +33,7 @@ function UserMoreMenu(props) {
           <ListItemText primary="Borrar" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
-        <MenuItem component={RouterLink} to={`${"/dashboard/user-edit/"}${props.idUser}`} sx={{ color: 'text.secondary' }}>
+        <MenuItem component={RouterLink} to={`/dashboard/user-edit/${props.idUser}`} sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Icon icon={editFill} width={24} height={24} />
           </ListItemIcon>

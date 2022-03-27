@@ -5,15 +5,13 @@ import { formatDistance } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
 import arrowIosForwardFill from '@iconify/icons-eva/arrow-ios-forward-fill';
 import { Box, Stack, Link, Card, Button, Divider, Typography, CardHeader } from '@mui/material';
-import { MockImgCover } from '../../../utils/mockImages';
 import Scrollbar from '../../Scrollbar';
 
 const NEWS = [...Array(5)].map((_, index) => {
-  const setIndex = index + 1;
   return {
     title: faker.name.title(),
     description: faker.lorem.paragraphs(),
-    image: MockImgCover(setIndex),
+    image: '',
     postedAt: faker.date.soon()
   };
 });

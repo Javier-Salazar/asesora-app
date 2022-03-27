@@ -21,12 +21,19 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-function UserEdit({ status }) {
+function UserEdit() {
+  const [admin, setAdmin] = useState(false);
+  const [advisor, setAdvisor] = useState(false);
+  const [phone, setPhone] = useState('');
+  // const [accountStatus, setStatus] = useState('');
 
+  const navigate = useNavigate();
+  
   var params = useParams();
   var idUser = params.userID;
 
   const baseUrl = `https://localhost:44397/api/users/${idUser}`;
+  
   const [user, setUser] = useState({
     userx_code: "",
     userx_name: "",
@@ -50,16 +57,7 @@ function UserEdit({ status }) {
 
   useEffect(() => {
     peticionesGet();
-  })
-
-  status = 'inactivo';
-  const [admin, setAdmin] = useState(false);
-  const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState(status);
-  const [phone, setPhone] = useState('');
-
-
-  const navigate = useNavigate();
+  });
 
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
@@ -79,11 +77,10 @@ function UserEdit({ status }) {
       .matches(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj.edu.mx/,
         'Ingrese su correo institucional, por ejemplo: user@itcj.edu.mx'),
     phone: Yup.string()
-      .min(7, 'El telefono es muy corto')
-      .max(10, 'El telefono es muy largo')
+      .min(7, 'El teléfono es muy corto')
+      .max(10, 'El teléfono es muy largo')
   });
 
-  //setFieldValue("email", user.userx_email, false);
   const formik = useFormik({
     initialValues: {
       code: user.userx_code,
@@ -92,6 +89,8 @@ function UserEdit({ status }) {
       motherLastName: user.userx_mother_lastname,
       email: user.userx_email,
       phone: user.userx_phone,
+      type: user.userx_type,
+      status: user.userx_status === 'A' ? 'activo' : 'inactivo',
       password: 'PasswordUser'
     },
     enableReinitialize: true,
@@ -128,6 +127,9 @@ function UserEdit({ status }) {
   }
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+
+  const [accountStatus, setStatus] = useState(formik.values.status);
+
   return (
     <Page title="AsesoraApp | Editar Usuario">
       <Container>
@@ -157,7 +159,7 @@ function UserEdit({ status }) {
               </Label>
             </div>
 
-            <Avatar src={'data:image/png;base64,' + user.userx_image} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
+            <Avatar src={`data:image/png;base64,${user.userx_image}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
 
             <div style={{
               width: '100%', display: 'flex', justifyContent: 'center',
@@ -196,7 +198,7 @@ function UserEdit({ status }) {
                   Activar convertir en asesor
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
+              <Switch sx={{ pl: 2 }} onChange={() => {setAdvisor(!advisor); setAdmin(false);}} checked={advisor} />
             </div>
 
             <div style={{
@@ -211,7 +213,7 @@ function UserEdit({ status }) {
                   Activar convertir en adnimistrador
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
+              <Switch sx={{ pl: 2 }} onChange={() => {setAdmin(!admin); setAdvisor(false);}} checked={admin} />
             </div>
 
           </Card>

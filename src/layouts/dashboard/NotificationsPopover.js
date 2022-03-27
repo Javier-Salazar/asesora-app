@@ -11,7 +11,7 @@ import doneAllFill from '@iconify/icons-eva/done-all-fill';
 import { alpha } from '@mui/material/styles';
 import { Box, List, Badge, Avatar, Tooltip, Divider, IconButton, Typography, ListItemText, 
   ListItemAvatar, ListItemButton } from '@mui/material';
-import { MockImgAvatar } from '../../utils/mockImages';
+import MockImgAvatar from '../../utils/mockImages';
 import Scrollbar from '../../components/Scrollbar';
 import MenuPopover from '../../components/MenuPopover';
 
@@ -29,7 +29,7 @@ const NOTIFICATIONS = [
     id: faker.datatype.uuid(),
     title: faker.name.findName(),
     description: 'answered to your comment on the Minimal',
-    avatar: MockImgAvatar(2),
+    avatar: MockImgAvatar,
     type: 'friend_interactive',
     createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
     isUnRead: true
