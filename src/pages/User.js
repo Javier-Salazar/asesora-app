@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination
-} from '@mui/material';
+import { Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
+import { Wrong } from '../components/_dashboard/errors';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
+import MockImgAvatar from '../utils/mockImages';
 import axios from 'axios';
 
 const TABLE_HEAD = [
@@ -54,14 +54,24 @@ function applySortFilter(array, comparator, query) {
 }
 
 function changeLabelStatus(text) {
-  if (text === 'A') return 'activo';
-  if (text === 'I') return 'inactivo';
+  if (text === 'A') {
+    return 'activo';
+  }
+  else {
+    return 'inactivo';
+  }
 }
 
 function changeLabelType(text) {
-  if (text === 'N') return 'Estudiante';
-  if (text === 'A') return 'Asesor';
-  if (text === 'S') return 'Administrador';
+  if (text === 'A') {
+    return 'asesor';
+  }
+  else if (text === 'S') {
+    return 'administrador';
+  }
+  else{
+    return 'estudiante';
+  } 
 }
 
 function User() {
@@ -71,28 +81,36 @@ function User() {
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [search, setSearch] = useState('');
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [filter, setFilter] = useState('');
+  const [noRequest, setNoRequest] = useState(false);
 
-  const baseUrl = "https://localhost:44397/api/users"
+  const baseUrl = "https://localhost:44397/api/users";
+
   const requestGet = async () => {
     await axios.get(baseUrl)
-      .then(Response => {
-        setData(Response.data);
-        setDataTable(Response.data);
+      .then(response => {
+        setData(response.data);
+        setDataTable(response.data);
       }).catch(error => {
-        console.log(error);
-      })
+        if(error.request){
+          console.log(error.request);
+          setNoRequest(true);
+        }
+        else{
+          console.log(error);
+        }
+      });
   }
 
   useEffect(() => {
     requestGet();
-  }, [])
+  }, []);
 
   const USERLIST = data.map((element => ({
     id: element.userx_code,
-    avatarUrl: element.userx_image,
-    name: element.userx_lastname + " " + element.userx_mother_lastname + " " + element.userx_name,
+    avatarUrl: element.userx_image !== '' ? element.userx_image : MockImgAvatar(),
+    name: `${element.userx_name} ${element.userx_lastname}`,
     email: element.userx_email,
     userCode: element.userx_code,
     status: changeLabelStatus(element.userx_status),
@@ -142,52 +160,50 @@ function User() {
     setPage(0);
   };
 
-
-  const handleChange = (e) => {
-    setSearch(e.target.value);
-    filterTable(e.target.value);
+  const handleFilter = (e) => {
+    setFilter(filterTable(e.target.value));
   }
 
-  const filterTable = (searchTerm) => {
-    var type = "";
+  const filterTable = (filterUser) => {
+    var typeUser = "";
     var statusUser = "";
 
-    if ("estudiante".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
-      type = "N";
+    if ("estudiante".toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      typeUser = "N";
     }
-    if ("asesor".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
-      type = "A";
+    if ("asesor".toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      typeUser = "A";
     }
-    if ("administrador".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
-      type = "S";
+    if ("administrador".toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      typeUser = "S";
     }
-    if ("inactivo".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+    if ("inactivo".toString().toLowerCase().includes(filterUser.toLowerCase())) {
       statusUser = "I";
     }
-    if ("activo".toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+    if ("activo".toString().toLowerCase().includes(filterUser.toLowerCase())) {
       statusUser = "A";
     }
 
-    var searchResults = dataTable.filter((element) => {
-      if (element.userx_code.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        || element.userx_name.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        || element.userx_lastname.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        || element.userx_mother_lastname.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        || element.userx_email.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        || element.userx_phone.toString().toLowerCase().includes(searchTerm.toLowerCase())
-        || element.userx_type.toString().toLowerCase() === (type.toLowerCase())
+    var filterResults = dataTable.filter((element) => {
+      if (element.userx_code.toString().toLowerCase().includes(filterUser.toLowerCase())
+        || element.userx_name.toString().toLowerCase().includes(filterUser.toLowerCase())
+        || element.userx_lastname.toString().toLowerCase().includes(filterUser.toLowerCase())
+        || element.userx_mother_lastname.toString().toLowerCase().includes(filterUser.toLowerCase())
+        || element.userx_email.toString().toLowerCase().includes(filterUser.toLowerCase())
+        || element.userx_phone.toString().toLowerCase().includes(filterUser.toLowerCase())
+        || element.userx_type.toString().toLowerCase() === (typeUser.toLowerCase())
         || element.userx_status.toString().toLowerCase() === (statusUser.toLowerCase())
       ) {
         return element;
       }
-      return setData(searchResults);
+      return setData(filterResults);
     });
-    return setData(searchResults);
+    return setData(filterResults);
   }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy));
+  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filter);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -198,124 +214,138 @@ function User() {
           <Typography variant="h4" gutterBottom>
             Usuarios
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="/dashboard/new-user"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            Agregar usuario
-          </Button>
+          {
+            data <= 0 && isUserNotFound
+            ?
+              null
+            :
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to="/dashboard/new-user"
+                startIcon={<Icon icon={plusFill} />}
+              >
+                Agregar usuario
+              </Button>
+          }
         </Stack>
 
-        <Card>
-          <UserListToolbar
-            numSelected={selected.length}
-            filterName={search}
-            onFilterName={handleChange}
-          />
+        {
 
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => {
-                      const { id, name, role, status, email, avatarUrl, userCode } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+          noRequest
+          ?
+            <Wrong />
+          :
+            <Card>
+              <UserListToolbar
+                numSelected={selected.length}
+                filterName={filter}
+                onFilterName={handleFilter}
+              />
 
-                      return (
-                        <TableRow
-                          hover
-                          key={id}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
-                            />
-                          </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={'data:image/png;base64,' + avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(role === 'Estudiante' && 'success') || (role === 'Asesor' && 'info')
-                                || (role === 'Administrador' && 'warning')}
+              <Scrollbar>
+            
+                <TableContainer sx={{ minWidth: 800 }}>
+                  <Table>
+                    <UserListHead
+                      order={order}
+                      orderBy={orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={USERLIST.length}
+                      numSelected={selected.length}
+                      onRequestSort={handleRequestSort}
+                      onSelectAllClick={handleSelectAllClick}
+                    />
+                    <TableBody>
+                      {filteredUsers
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row) => {
+                          const { id, name, role, status, email, avatarUrl, userCode } = row;
+                          const isItemSelected = selected.indexOf(name) !== -1;
+
+                          return (
+                            <TableRow
+                              hover
+                              key={id}
+                              tabIndex={-1}
+                              role="checkbox"
+                              selected={isItemSelected}
+                              aria-checked={isItemSelected}
                             >
-                              {sentenceCase(role)}
-                            </Label>
-                          </TableCell>
-                          <TableCell align="left">{userCode}</TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(status === 'inactivo' && 'error') || 'success'}
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell>
+                              <TableCell padding="checkbox">
+                                <Checkbox
+                                  checked={isItemSelected}
+                                  onChange={(event) => handleClick(event, name)}
+                                />
+                              </TableCell>
+                              <TableCell component="th" scope="row" padding="none">
+                                <Stack direction="row" alignItems="center" spacing={2}>
+                                  <Avatar alt={name} src={`data:image/png;base64,${avatarUrl}`} />
+                                  <Typography variant="subtitle2" noWrap>
+                                    {name}
+                                  </Typography>
+                                </Stack>
+                              </TableCell>
+                              <TableCell align="left">{email}</TableCell>
+                              <TableCell align="left">
+                                <Label
+                                  variant="ghost"
+                                  color={(role === 'asesor' && 'info') || (role === 'administrador' && 'warning')
+                                        || 'default'}
+                                >
+                                  {sentenceCase(role)}
+                                </Label>
+                              </TableCell>
+                              <TableCell align="left">{userCode}</TableCell>
+                              <TableCell align="left">
+                                <Label
+                                  variant="ghost"
+                                  color={(status === 'inactivo' && 'error') || 'success'}
+                                >
+                                  {sentenceCase(status)}
+                                </Label>
+                              </TableCell>
 
-                          <TableCell align="right">
-                            <UserMoreMenu idUser={userCode} />
+                              <TableCell align="right">
+                                <UserMoreMenu idUser={userCode} />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      {emptyRows > 0 && (
+                        <TableRow style={{ height: 53 * emptyRows }}>
+                          <TableCell colSpan={6} />
+                        </TableRow>
+                      )}
+                    </TableBody>
+                    {isUserNotFound && (
+                      <TableBody>
+                        <TableRow>
+                          <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                            <SearchNotFound searchQuery={filter} />
                           </TableCell>
                         </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-                {isUserNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={search} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+                      </TableBody>
+                    )}
+                  </Table>
+                </TableContainer>
+              </Scrollbar>
 
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            labelRowsPerPage="Resultados por página"
-            labelDisplayedRows={({ from, to, count }) => {
-              return `Mostrando ${from} – ${to} de ${count !== -1 ? count : `más de ${to}`}`;
-            }}
-          />
-        </Card>
+              <TablePagination
+                rowsPerPageOptions={[25, 50, 100]}
+                component="div"
+                count={USERLIST.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                labelRowsPerPage="Resultados por página"
+                labelDisplayedRows={({ from, to, count }) => {
+                  return `Mostrando ${from} – ${to} de ${count !== -1 ? count : `más de ${to}`}`;
+                }}
+              />
+            </Card>
+        }
       </Container>
     </Page>
   );

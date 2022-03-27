@@ -8,13 +8,20 @@ import axios from 'axios';
 function Advisers() {
     const baseUrl = "https://localhost:44397/api/advisors";
     const [advisers, setAdvisers] = useState([]);
+    const [noRequest, setNoRequest] = useState(false);
 
     const peticionesGet = async () => {
         await axios.get(baseUrl)
         .then(Response => {
             setAdvisers(Response.data);
         }).catch(error => {
-            setAdvisers('-1');
+            if(error.request){
+                console.log(error.request);
+                setNoRequest(true);
+            }
+            else{
+                console.log(error);
+            }
         })
     }
 
@@ -31,24 +38,24 @@ function Advisers() {
 
                 <Grid container spacing={3}>
                     {
-                        advisers === '-1'
+                        noRequest
                         ?
                             <Wrong />
                         :
-                        advisers.map(elemento => (
-                            <Grid item xs={12} sm={6} md={3}>
-                                <Card>
-                                    <Adviser
-                                        image={elemento.userx_image}
-                                        name={`${elemento.userx_name} ${elemento.userx_lastname}`}
-                                        email={elemento.userx_email}
-                                        rating={elemento.advisor_rating}
-                                        comments="6"
-                                        id={elemento.advisor_code}
-                                    />
-                                </Card>
-                            </Grid>
-                        ))
+                            advisers.map(elemento => (
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <Card>
+                                        <Adviser
+                                            image={elemento.userx_image}
+                                            name={`${elemento.userx_name} ${elemento.userx_lastname}`}
+                                            email={elemento.userx_email}
+                                            rating={elemento.advisor_rating}
+                                            comments="6"
+                                            id={elemento.advisor_code}
+                                        />
+                                    </Card>
+                                </Grid>
+                            ))
                     }
                 </Grid>
             </Container>
