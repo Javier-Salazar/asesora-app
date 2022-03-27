@@ -1,3 +1,12 @@
+import * as Yup from "yup";
+import { useEffect, useState } from "react";
+import { Icon } from "@iconify/react";
+import { useFormik, Form, FormikProvider } from "formik";
+import eyeFill from "@iconify/icons-eva/eye-fill";
+import eyeOffFill from "@iconify/icons-eva/eye-off-fill";
+import { Stack, TextField, IconButton, InputAdornment, Snackbar, Alert } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import axios from "axios";
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
@@ -14,6 +23,7 @@ function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertPost, setShowAlertPost] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
@@ -52,10 +62,10 @@ function RegisterForm() {
       searchUser(getFieldProps("email").value);
       if (isFind === false) {
         peticionPost();
-        setShowAlertPost(true);
-      } 
+      }
       else {
         setShowAlert(true);
+        setOpen(true);
       }
       setFieldValue("name", "", false);
       setFieldValue("lastName", "", false);
@@ -69,8 +79,7 @@ function RegisterForm() {
   const [data, setData] = useState([]);
 
   const peticionesGet = async () => {
-    await axios
-      .get(baseUrl)
+    await axios.get(baseUrl)
       .then((Response) => {
         setData(Response.data);
       })
@@ -80,29 +89,32 @@ function RegisterForm() {
   };
 
   const peticionPost = async () => {
-    await axios
-      .post(baseUrl, {
-        userx_code: getFieldProps("email").value.split("@", 1),
-        userx_name: getFieldProps("name").value,
-        userx_lastname: getFieldProps("lastName").value,
-        userx_mother_lastname: getFieldProps("motherLastName").value,
-        userx_email: getFieldProps("email").value,
-        userx_password: getFieldProps("password").value,
-        userx_remember: "N",
-        userx_phone: "",
-        userx_type: "N",
-        userx_istmp_password: "N",
-        userx_date: date.toISOString(),
-        userx_islockedout: "N",
-        userx_islockedout_date: date.toISOString(),
-        userx_islockedout_enable_date: date.toISOString(),
-        userx_last_login_date: date.toISOString(),
-        userx_lastfailed_login_date: date.toISOString(),
-        userx_status: "A",
-        userx_image: "",
-      })
+    var arrayCode = getFieldProps("email").value.split('@');
+    var arrayDate = date.toISOString().split('T');
+    await axios.post(baseUrl, {
+      userx_code: arrayCode[0],
+      userx_name: getFieldProps("name").value,
+      userx_lastname: getFieldProps("lastName").value,
+      userx_mother_lastname: getFieldProps("motherLastName").value,
+      userx_email: getFieldProps("email").value,
+      userx_password: getFieldProps("password").value,
+      userx_salt: "N",
+      userx_remember: "N",
+      userx_phone: "",
+      userx_type: "N",
+      userx_istmp_password: "N",
+      userx_date: arrayDate[0],
+      userx_islockedout: "N",
+      userx_islockedout_date: arrayDate[0],
+      userx_islockedout_enable_date: arrayDate[0],
+      userx_last_login_date: arrayDate[0],
+      userx_lastfailed_login_date: arrayDate[0],
+      userx_status: "A",
+      userx_image: ""
+    })
       .then((response) => {
-        setData(data.concat(response.data));
+        setShowAlertPost(true);
+        setOpen(true);
       })
       .catch((error) => {
         console.log(error);
@@ -114,11 +126,17 @@ function RegisterForm() {
     peticionesGet();
   }, []);
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
   var isFind = false;
 
   const searchUser = (finded) => {
     data.filter((element) => {
-      //Se busca el correo ingresado
       if (element.userx_email.toLowerCase() === finded.toLowerCase()) {
         console.log(element.userx_email.toLowerCase());
         console.log(finded.toLowerCase());
@@ -204,23 +222,25 @@ function RegisterForm() {
           </LoadingButton>
 
           {
-            showAlertPost
-            ? (
-              <Alert severity="success">
-                Se ha registrado con éxito, Inicie sesión y configure
-                su perfil para hacer uso de las funcionalidades
-              </Alert>
-            ) 
-            : null
+            showAlertPost ?
+              <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                  Se ha registrado con éxito, Inicie sesión y configure
+                  su perfil para hacer uso de las funcionalidades
+                </Alert>
+              </Snackbar>
+              :
+              null
           }
           {
-            showAlert 
-            ? (
-              <Alert border-radius="12px" severity="error">
-                Ya existe una cuenta asociada a este correo electrónico
-              </Alert>
-            ) 
-            : null
+            showAlert
+              ?
+              <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                  Ya existe una cuenta asociada a este correo electrónico
+                </Alert>
+              </Snackbar>
+              : null
           }
         </Stack>
       </Form>
