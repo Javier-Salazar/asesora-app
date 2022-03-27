@@ -1,22 +1,12 @@
-import * as Yup from "yup";
-import { useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
-import { useFormik, Form, FormikProvider } from "formik";
-import eyeFill from "@iconify/icons-eva/eye-fill";
-import eyeOffFill from "@iconify/icons-eva/eye-off-fill";
-import { Stack, TextField, IconButton, InputAdornment, Snackbar, Alert } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
-import axios from "axios";
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
-import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment, Snackbar, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
-import { Alert } from '@mui/material';
 
 function RegisterForm() {
   const date = new Date();
@@ -121,7 +111,6 @@ function RegisterForm() {
       });
   };
 
-  //Se ejecuta por defecto cada vez que se actualiza
   useEffect(() => {
     peticionesGet();
   }, []);
@@ -222,25 +211,27 @@ function RegisterForm() {
           </LoadingButton>
 
           {
-            showAlertPost ?
+            showAlertPost
+            ?
               <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                   Se ha registrado con éxito, Inicie sesión y configure
                   su perfil para hacer uso de las funcionalidades
                 </Alert>
               </Snackbar>
-              :
+            :
               null
           }
           {
             showAlert
-              ?
+            ?
               <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                   Ya existe una cuenta asociada a este correo electrónico
                 </Alert>
               </Snackbar>
-              : null
+            :
+              null
           }
         </Stack>
       </Form>

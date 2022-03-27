@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
-//import { Autocomplete } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
@@ -22,15 +21,24 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 }));
 
 function changeLabelStatus(text) {
-  if (text === 'A') return 'Activo';
-  if (text === 'I') return 'Inactivo';
+  if (text === 'A'){
+    return 'Activo';
+  }
+  else{
+    return 'Inactivo';
+  } 
 }
 
-//const options = ['Option 1', 'Option 2'];
-
 const cookies = new Cookies();
+
 function UserEdit({ status }) {
+  const [photo, setPhoto] = useState("");
+  const [changePhoto, setChangePhoto] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [open, setOpen] = useState(false);
+
   const baseUrl = `https://localhost:44397/api/users/${cookies.get('UserCode')}`;
+
   const [user, setUser] = useState({
     userx_code: "",
     userx_name: "",
@@ -43,10 +51,6 @@ function UserEdit({ status }) {
     userx_image: "",
     userx_date: ""
   });
-  const [photo, setPhoto] = useState("");
-  const [changePhoto, setChangePhoto] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [open, setOpen] = useState(false);
 
   const peticionesGet = async () => {
     await axios.get(baseUrl)
@@ -59,8 +63,7 @@ function UserEdit({ status }) {
 
   useEffect(() => {
     peticionesGet();
-  })
-
+  });
 
   const peticionPut = async () => {
     await axios.put(baseUrl, {
@@ -83,13 +86,12 @@ function UserEdit({ status }) {
       userx_lastfailed_login_date: user.userx_lastfailed_login_date,
       userx_status: user.userx_status,
       userx_image: changePhoto ? photo : user.userx_image
-    })
-      .then(response => {
+    }).then(response => {
         setShowAlert(true);
         setOpen(true);
-      }).catch(error => {
+    }).catch(error => {
         console.log(error);
-      })
+    });
   }
 
   const RegisterSchema = Yup.object().shape({
@@ -114,11 +116,10 @@ function UserEdit({ status }) {
       .required('La contraseña es obligatoria')
       .min(8, "La contraseña debe contener mínimo 8 caracteres"),
     phone: Yup.string()
-      .min(2, 'El telefono es muy corto')
-      .max(7, 'El telefono es muy largo')
+      .min(2, 'El teléfono es muy corto')
+      .max(7, 'El teléfono es muy largo')
       .matches(/[0-9]/, "Ingrese solamente números")
   });
-
 
   const formik = useFormik({
     initialValues: {
@@ -138,7 +139,6 @@ function UserEdit({ status }) {
       peticionPut();
     }
   });
-
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -185,18 +185,18 @@ function UserEdit({ status }) {
             <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse', marginBottom: '24px' }}>
               <Label
                 variant="ghost"
-                color={(user.userx_status === 'I' && 'error') || 'success'}
+                color={(user.userx_status === 'inactivo' && 'error') || 'success'}
               >
                 {changeLabelStatus(user.userx_status)}
               </Label>
             </div>
 
             {
-              changePhoto ?
-                <Avatar src={'data:image/png;base64,' + photo} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
-                :
-                <Avatar src={'data:image/png;base64,' + user.userx_image} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
-
+              changePhoto
+              ?
+                <Avatar src={`data:image/png;base64,'${photo}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
+              :
+                <Avatar src={`data:image/png;base64,'${user.userx_image}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
             }
 
             <input accept="image/*" id="icon-button-file" type="file" width="32px" onChange={(e) => convertBase64(e.target.files)} />
@@ -223,7 +223,7 @@ function UserEdit({ status }) {
                   Definir el estado de la cuenta
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} checked={user.userx_status === 'I' ? false : true} disabled />
+              <Switch sx={{ pl: 2 }} checked={user.userx_status === 'inactivo' ? false : true} disabled />
             </div>
 
             <div style={{
@@ -300,23 +300,7 @@ function UserEdit({ status }) {
                         {...getFieldProps('dateRegister')}
                       />
                     </Stack>
-                    {/** 
-                          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                              <Autocomplete
-                                fullWidth
-                                disablePortal
-                                options={options}
-                                renderInput={(params) => <TextField {...params} label="Carrera" />}
-                              />
-                              
-                              <Autocomplete
-                                fullWidth
-                                disablePortal
-                                options={options}
-                                renderInput={(params) => <TextField {...params} label="Especialidad" />}
-                              />
-                          </Stack>
-*/}
+
                     <TextField
                       fullWidth
                       label="Nombre"
@@ -373,13 +357,14 @@ function UserEdit({ status }) {
                 </Form>
               </FormikProvider>
               {
-                showAlert ?
+                showAlert
+                ?
                   <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                       ¡Se guardaron los cambios con éxito!
                     </Alert>
                   </Snackbar>
-                  :
+                :
                   null
               }
             </Scrollbar>
