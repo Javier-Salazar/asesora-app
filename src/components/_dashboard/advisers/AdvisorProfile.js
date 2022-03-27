@@ -47,7 +47,7 @@ function AdvisorProfile() {
 
     useEffect(() => {
         peticionesGet();
-    })
+    });
 
     return (
         <>
@@ -58,12 +58,12 @@ function AdvisorProfile() {
                             component="div"
                             sx={{width: '100%', height: '175px', borderTopLeftRadius: '12px', borderTopRightRadius: '12px', bgcolor: 'primary.main'}}
                         />
-                        <CardContent sx={{border: '1px yellow solid', display: 'flex', justifyContent: 'flex-end', padding: 0}}>
+                        <CardContent sx={{display: 'flex', justifyContent: 'flex-end', padding: 0, ':last-child': {pb: 0}}}>
                             <div style={{position: 'absolute', left: 28, top: 80, display: 'flex', alignItems: 'center'}}>
                                 <Box
                                     component="img"
                                     src={`data:image/png;base64, ${adviser.userx_image}`}
-                                    sx={{ width: 120, borderRadius: 12, height: 120 }}
+                                    sx={{ width: 120, borderRadius: 12, height: 120}}
                                 />
                                 <Box sx={{ pl: 4, pt: 2 }}>
                                     <Typography variant="h4" color="common.white">
