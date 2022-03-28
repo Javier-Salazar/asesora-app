@@ -1,9 +1,12 @@
+import { useEffect, useState, } from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography, CardMedia, Card, CardContent, Box, BottomNavigation, BottomNavigationAction, Alert,
     Container, Grid } from '@mui/material';
 import ProfileInformation from './ProfileInformation';
 import ProfileComments from './ProfileComments';
-import { useEffect, useState, } from 'react';
+import { Icon } from '@iconify/react';
+import startFill from '@iconify/icons-eva/star-fill';
+import startOutline from '@iconify/icons-eva/star-outline';
 import axios from 'axios';
 
 function AdvisorProfile() {
@@ -13,6 +16,12 @@ function AdvisorProfile() {
     const [profile, setProfile] = useState(true);
     const [comments, setComments] = useState(false);
     const [schedule, setSchedule] = useState(false);
+    const [adviser, setAdviser] = useState([]);
+
+    const setStyle = [];
+    var setRating = adviser.advisor_rating;
+
+    const baseUrl = `https://localhost:44397/api/advisors/${idUser}`;
 
     const mostrar = (valueNew) => {
         if (valueNew === 0) {
@@ -32,10 +41,6 @@ function AdvisorProfile() {
         }
     }
 
-    const baseUrl = `https://localhost:44397/api/advisors/${idUser}`;
-
-    const [adviser, setAdviser] = useState([]);
-
     const peticionesGet = async () => {
         await axios.get(baseUrl)
             .then(Response => {
@@ -48,6 +53,18 @@ function AdvisorProfile() {
     useEffect(() => {
         peticionesGet();
     });
+
+    for(var i = 1; i <= 5; i++) {
+        if(setRating !== 0) {
+            setStyle[i] = startFill;
+            setRating -= 1;
+        } 
+        else {
+            setStyle[i] = startOutline;
+        }
+        setStyle.push(setStyle[i]);
+    }
+    setStyle.pop(setStyle[6]);
 
     return (
         <>
@@ -69,6 +86,16 @@ function AdvisorProfile() {
                                     <Typography variant="h4" color="common.white">
                                         {`${adviser.userx_name} ${adviser.userx_lastname}`}
                                     </Typography>
+                                </Box>
+                            </div>
+
+                            <div style={{position: 'absolute', right: 24, top: 0, display: 'flex', alignItems: 'center'}}>
+                                <Box sx={{ pl: 4, pt: 2 }}>
+                                    {
+                                        setStyle.map(function(data, number) {
+                                            return(<Icon icon={setStyle[number]} width="24px" style={{marginLeft: '2px', color: '#FFF'}}/>);
+                                        })
+                                    }
                                 </Box>
                             </div>
 
@@ -98,13 +125,15 @@ function AdvisorProfile() {
                                 rating={adviser.advisor_rating}
                                 biografia={adviser.advisor_comments}
                             />
-                        : null
+                        :
+                            null
                     }
                     {
                         comments
                         ? 
                             <ProfileComments name={adviser.userx_name} />
-                        : null
+                        :
+                            null
                     }
                     {
                         schedule 
@@ -112,7 +141,8 @@ function AdvisorProfile() {
                             <Alert border-radius="12px" severity="warning">
                                 Se selecciona la opción agendar
                             </Alert>
-                        : null
+                        :
+                            null
                     }
                 </Grid>
             </Container>
