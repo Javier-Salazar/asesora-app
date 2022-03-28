@@ -194,9 +194,9 @@ function UserEdit({ status }) {
             {
               changePhoto
               ?
-                <Avatar src={`data:image/png;base64,'${photo}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
+                <Avatar src={`data:image/png;base64,${photo}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
               :
-                <Avatar src={`data:image/png;base64,'${user.userx_image}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
+                <Avatar src={`data:image/png;base64,${user.userx_image}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
             }
 
             <input accept="image/*" id="icon-button-file" type="file" width="32px" onChange={(e) => convertBase64(e.target.files)} />

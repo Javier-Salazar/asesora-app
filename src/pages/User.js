@@ -307,7 +307,7 @@ function User() {
                               </TableCell>
 
                               <TableCell align="right">
-                                <UserMoreMenu idUser={userCode} />
+                                <UserMoreMenu idUser={userCode} name={name} />
                               </TableCell>
                             </TableRow>
                           );

@@ -22,10 +22,10 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 }));
 
 function UserEdit() {
+  const [phone, setPhone] = useState('');
+  const [accountStatus, setStatus] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
-  const [phone, setPhone] = useState('');
-  // const [accountStatus, setStatus] = useState('');
 
   const navigate = useNavigate();
   
@@ -41,7 +41,7 @@ function UserEdit() {
     userx_mother_lastname: "",
     userx_email: "",
     userx_phone: "",
-    userx_type: "",
+    // userx_type: "",
     userx_status: "",
     userx_image: ""
   });
@@ -84,7 +84,7 @@ function UserEdit() {
   const formik = useFormik({
     initialValues: {
       code: user.userx_code,
-      name: user.userx_email,
+      name: user.userx_name,
       lastName: user.userx_lastname,
       motherLastName: user.userx_mother_lastname,
       email: user.userx_email,
@@ -126,9 +126,7 @@ function UserEdit() {
     return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
   }
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-
-  const [accountStatus, setStatus] = useState(formik.values.status);
+  const { errors, touched, handleSubmit, isSubmitting, getFieldProps, } = formik;
 
   return (
     <Page title="AsesoraApp | Editar Usuario">
@@ -155,7 +153,7 @@ function UserEdit() {
                 variant="ghost"
                 color={(accountStatus === 'inactivo' && 'error') || 'success'}
               >
-                {sentenceCase(accountStatus)}
+                {sentenceCase('test')}
               </Label>
             </div>
 
@@ -165,9 +163,6 @@ function UserEdit() {
               width: '100%', display: 'flex', justifyContent: 'center',
               alignItems: 'center', marginTop: '16px', marginBottom: '8px'
             }}>
-              <Typography variant='caption' sx={{ width: '70%', wordWrap: 'break-word', textAlign: 'center' }}>
-                Permitido *.jpeg, *.jpg, *.png tamaño maximo de 3 MB
-              </Typography>
 
             </div>
 
@@ -213,7 +208,7 @@ function UserEdit() {
                   Activar convertir en adnimistrador
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => {setAdmin(!admin); setAdvisor(false);}} checked={admin} />
+              <Switch sx={{ pl: 2 }} onChange={() => {setAdmin(!admin); setAdvisor(false); }} checked={admin} />
             </div>
 
           </Card>

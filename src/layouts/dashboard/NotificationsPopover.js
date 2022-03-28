@@ -1,6 +1,5 @@
 import faker from 'faker';
 import PropTypes from 'prop-types';
-import { noCase } from 'change-case';
 import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { set, sub, formatDistanceToNow } from 'date-fns';
@@ -18,47 +17,29 @@ import MenuPopover from '../../components/MenuPopover';
 const NOTIFICATIONS = [
   {
     id: faker.datatype.uuid(),
-    title: 'Your order is placed',
-    description: 'waiting for shipping',
+    title: 'Haz agendado una asesoría',
+    description: 'puedes consultarla en tu calendario',
     avatar: null,
-    type: 'order_placed',
+    type: 'new_advise',
     createdAt: set(new Date(), { hours: 10, minutes: 30 }),
     isUnRead: true
   },
   {
     id: faker.datatype.uuid(),
-    title: faker.name.findName(),
-    description: 'answered to your comment on the Minimal',
-    avatar: MockImgAvatar,
-    type: 'friend_interactive',
+    title: 'Margarita Bailón',
+    description: 'agregó una nueva asesoría',
+    avatar: MockImgAvatar(),
+    type: 'fav_advisor',
     createdAt: sub(new Date(), { hours: 3, minutes: 30 }),
-    isUnRead: true
+    isUnRead: false
   },
   {
     id: faker.datatype.uuid(),
-    title: 'You have new message',
-    description: '5 unread messages',
+    title: 'Haz agendado una asesoría',
+    description: 'puedes consultarla en tu calendario',
     avatar: null,
-    type: 'chat_message',
+    type: 'new_advise',
     createdAt: sub(new Date(), { days: 1, hours: 3, minutes: 30 }),
-    isUnRead: false
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'You have new mail',
-    description: 'sent from Guido Padberg',
-    avatar: null,
-    type: 'mail',
-    createdAt: sub(new Date(), { days: 2, hours: 3, minutes: 30 }),
-    isUnRead: false
-  },
-  {
-    id: faker.datatype.uuid(),
-    title: 'Delivery processing',
-    description: 'Your order is being shipped',
-    avatar: null,
-    type: 'order_shipped',
-    createdAt: sub(new Date(), { days: 3, hours: 3, minutes: 30 }),
     isUnRead: false
   }
 ];
@@ -68,20 +49,20 @@ function RenderContent(notification) {
     <Typography variant="subtitle2">
       {notification.title}
       <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {noCase(notification.description)}
+        &nbsp; {notification.description}
       </Typography>
     </Typography>
   );
 
-  if (notification.type === 'order_placed') {
+  if (notification.type === 'new_advise') {
     return {
       avatar: <img alt={notification.title} src="/static/icons/ic_notification_package.svg" />,
       title
     };
   }
-  if (notification.type === 'order_shipped') {
+  if (notification.type === 'fav_advisor') {
     return {
-      avatar: <img alt={notification.title} src="/static/icons/ic_notification_shipping.svg" />,
+      avatar: <img alt={notification.title} src={`data:image/png;base64,${notification.avatar}`} />,
       title
     };
   }
