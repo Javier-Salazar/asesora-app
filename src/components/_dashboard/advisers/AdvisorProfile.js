@@ -4,6 +4,7 @@ import { Typography, CardMedia, Card, CardContent, Box, BottomNavigation, Bottom
     Container, Grid } from '@mui/material';
 import ProfileInformation from './ProfileInformation';
 import ProfileComments from './ProfileComments';
+import { Wrong } from '../errors';
 import { Icon } from '@iconify/react';
 import startFill from '@iconify/icons-eva/star-fill';
 import startOutline from '@iconify/icons-eva/star-outline';
@@ -17,6 +18,7 @@ function AdvisorProfile() {
     const [comments, setComments] = useState(false);
     const [schedule, setSchedule] = useState(false);
     const [adviser, setAdviser] = useState([]);
+    const [noRequest, setNoRequest] = useState(false);
 
     const setStyle = [];
     var setRating = adviser.advisor_rating;
@@ -43,11 +45,17 @@ function AdvisorProfile() {
 
     const peticionesGet = async () => {
         await axios.get(baseUrl)
-            .then(Response => {
-                setAdviser(Response.data);
-            }).catch(error => {
+        .then(Response => {
+            setAdviser(Response.data);
+        }).catch(error => {
+            if(error.request){
+                console.log(error.request);
+                setNoRequest(true);
+            }
+            else{
                 console.log(error);
-            })
+            }
+        });
     }
 
     useEffect(() => {
@@ -68,84 +76,91 @@ function AdvisorProfile() {
 
     return (
         <>
-            <Container minWidht="sm">
-                <Grid>
-                    <Card sx={{mb: 3}}>
-                        <CardMedia
-                            component="div"
-                            sx={{width: '100%', height: '175px', borderTopLeftRadius: '12px', borderTopRightRadius: '12px', bgcolor: 'primary.main'}}
-                        />
-                        <CardContent sx={{display: 'flex', justifyContent: 'flex-end', padding: 0, ':last-child': {pb: 0}}}>
-                            <div style={{position: 'absolute', left: 28, top: 80, display: 'flex', alignItems: 'center'}}>
-                                <Box
-                                    component="img"
-                                    src={`data:image/png;base64, ${adviser.userx_image}`}
-                                    sx={{ width: 120, borderRadius: 12, height: 120}}
+            {
+                noRequest
+                ?
+                    <Wrong />
+                :
+                    <Container minWidht="sm">
+                        <Grid>
+                            <Card sx={{mb: 3}}>
+                                <CardMedia
+                                    component="div"
+                                    sx={{width: '100%', height: '175px', borderTopLeftRadius: '12px', borderTopRightRadius: '12px', bgcolor: 'primary.main'}}
                                 />
-                                <Box sx={{ pl: 4, pt: 2 }}>
-                                    <Typography variant="h4" color="common.white">
-                                        {`${adviser.userx_name} ${adviser.userx_lastname}`}
-                                    </Typography>
-                                </Box>
-                            </div>
+                                <CardContent sx={{display: 'flex', justifyContent: 'flex-end', padding: 0, ':last-child': {pb: 0}}}>
+                                    <div style={{position: 'absolute', left: 28, top: 80, display: 'flex', alignItems: 'center'}}>
+                                        <Box
+                                            component="img"
+                                            src={`data:image/png;base64, ${adviser.userx_image}`}
+                                            sx={{ width: 120, borderRadius: 12, height: 120}}
+                                        />
+                                        <Box sx={{ pl: 4, pt: 2 }}>
+                                            <Typography variant="h4" color="common.white">
+                                                {`${adviser.userx_name} ${adviser.userx_lastname}`}
+                                            </Typography>
+                                        </Box>
+                                    </div>
 
-                            <div style={{position: 'absolute', right: 24, top: 0, display: 'flex', alignItems: 'center'}}>
-                                <Box sx={{ pl: 4, pt: 2 }}>
-                                    {
-                                        setStyle.map(function(data, number) {
-                                            return(<Icon icon={setStyle[number]} width="24px" style={{marginLeft: '2px', color: '#FFF'}}/>);
-                                        })
-                                    }
-                                </Box>
-                            </div>
+                                    <div style={{position: 'absolute', right: 24, top: 0, display: 'flex', alignItems: 'center'}}>
+                                        <Box sx={{ pl: 4, pt: 2 }}>
+                                            {
+                                                setStyle.map(function(data, number) {
+                                                    return(<Icon icon={setStyle[number]} width="24px" style={{marginLeft: '2px', color: '#FFF'}}/>);
+                                                })
+                                            }
+                                        </Box>
+                                    </div>
 
-                            <Box style={{borderBottomRightRadius: '12px' }}>
-                                <BottomNavigation
-                                    showLabels
-                                    value={value}
-                                    onChange={(event, newValue) => {
-                                        setValue(newValue);
-                                        mostrar(newValue);
-                                    }}
-                                    style={{background: 'transparent'}}
-                                >
-                                    <BottomNavigationAction label="Perfil" />
-                                    <BottomNavigationAction label="Comentarios" />
-                                    <BottomNavigationAction label="Agendar" />
-                                </BottomNavigation>
-                            </Box>
-                        </CardContent>
-                    </Card>
+                                    <Box style={{borderBottomRightRadius: '12px' }}>
+                                        <BottomNavigation
+                                            showLabels
+                                            value={value}
+                                            onChange={(event, newValue) => {
+                                                setValue(newValue);
+                                                mostrar(newValue);
+                                            }}
+                                            style={{background: 'transparent'}}
+                                        >
+                                            <BottomNavigationAction label="Perfil" />
+                                            <BottomNavigationAction label="Comentarios" />
+                                            <BottomNavigationAction label="Agendar" />
+                                        </BottomNavigation>
+                                    </Box>
+                                </CardContent>
+                            </Card>
 
-                    {
-                        profile
-                        ?
-                            <ProfileInformation
-                                email={adviser.userx_email}
-                                rating={adviser.advisor_rating}
-                                biografia={adviser.advisor_comments}
-                            />
-                        :
-                            null
-                    }
-                    {
-                        comments
-                        ? 
-                            <ProfileComments name={adviser.userx_name} />
-                        :
-                            null
-                    }
-                    {
-                        schedule 
-                        ? 
-                            <Alert border-radius="12px" severity="warning">
-                                Se selecciona la opción agendar
-                            </Alert>
-                        :
-                            null
-                    }
-                </Grid>
-            </Container>
+                            {
+                                profile
+                                ?
+                                    <ProfileInformation
+                                        email={adviser.userx_email}
+                                        rating={adviser.advisor_rating}
+                                        biografia={adviser.advisor_comments}
+                                    />
+                                :
+                                    null
+                            }
+                            {
+                                comments
+                                ? 
+                                    <ProfileComments name={adviser.userx_name} />
+                                :
+                                    null
+                            }
+                            {
+                                schedule 
+                                ? 
+                                    <Alert border-radius="12px" severity="warning">
+                                        Se selecciona la opción agendar
+                                    </Alert>
+                                :
+                                    null
+                            }
+                        </Grid>
+                    </Container>
+            }
+
         </>
     );
 }

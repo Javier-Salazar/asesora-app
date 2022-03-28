@@ -27,7 +27,7 @@ function Advisers() {
 
     useEffect(() => {
         peticionesGet();
-    }, [])
+    }, []);
 
     return (
         <Page title="AsesoraApp | Asesores">
