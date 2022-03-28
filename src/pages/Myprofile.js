@@ -21,12 +21,12 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 }));
 
 function changeLabelStatus(text) {
-  if (text === 'A'){
+  if (text === 'A') {
     return 'Activo';
   }
-  else{
+  else {
     return 'Inactivo';
-  } 
+  }
 }
 
 const cookies = new Cookies();
@@ -87,10 +87,10 @@ function UserEdit({ status }) {
       userx_status: user.userx_status,
       userx_image: changePhoto ? photo : user.userx_image
     }).then(response => {
-        setShowAlert(true);
-        setOpen(true);
+      setShowAlert(true);
+      setOpen(true);
     }).catch(error => {
-        console.log(error);
+      console.log(error);
     });
   }
 
@@ -193,9 +193,9 @@ function UserEdit({ status }) {
 
             {
               changePhoto
-              ?
+                ?
                 <Avatar src={`data:image/png;base64,${photo}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
-              :
+                :
                 <Avatar src={`data:image/png;base64,${user.userx_image}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
             }
 
@@ -358,13 +358,13 @@ function UserEdit({ status }) {
               </FormikProvider>
               {
                 showAlert
-                ?
+                  ?
                   <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                       ¡Se guardaron los cambios con éxito!
                     </Alert>
                   </Snackbar>
-                :
+                  :
                   null
               }
             </Scrollbar>
