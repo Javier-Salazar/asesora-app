@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
-import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
+import { sentenceCase } from 'change-case';
+import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, 
+  Autocomplete, Alert } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import axios from "axios";
-
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -20,32 +21,19 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-function changeLabelStatus(bool) {
-  if (bool === true) return 'Activo';
-  if (bool === false) return 'Inactivo';
-}
-
 function NewUser() {
-
   const date = new Date();
+
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState(false);
-  const [photo, setPhoto] = useState("");
-  const [email, setEmail] = useState("");
-  const [changePhoto, setChangePhoto] = useState(false);
-  const [showAlert, setShowAlert] = useState({
-    message: '',
-    show: false,
-  }
-  );
-
+  const [accountStatus, setStatus] = useState('activo');
+  const [email, setEmail] = useState('');
+  const [showAlert, setShowAlert] = useState({message: '', show: false});
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [data, setData] = useState([]);
 
   const baseUrl = "https://localhost:44397/api/";
-  const [data, setData] = useState([]);
 
   const peticionesGet = async () => {
     await axios.get(baseUrl + "users")
@@ -72,6 +60,9 @@ function NewUser() {
       .max(30, 'El apellido es muy largo')
       .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios")
       .required('El apellido es obligatorio'),
+    email: Yup.string()
+      .email('El correo electrónico debe ser una dirección válida')
+      .required('El correo electrónico es obligatorio'),
     motherLastName: Yup.string()
       .min(2, 'El apellido es muy corto')
       .max(30, 'El apellido es muy largo')
@@ -122,7 +113,7 @@ function NewUser() {
         if (advisor === false && admin === false) {
           if (isTypeAorS) {
             setShowAlert({
-              message: 'Selecciona el rol que tiene el correo ingresado',
+              message: 'Selecciona el tipo de cuenta',
               show: true,
             });
             setOpen(true);
@@ -132,7 +123,7 @@ function NewUser() {
         } else if (advisor === true) {
           if (isStudent) {
             setShowAlert({
-              message: 'El correo le pertenece a un alumno, por el momento un alumno no puede ser asesor',
+              message: 'El correo le pertenece a un estudiante, por el momento un estudiante no puede ser asesor',
               show: true,
             });
             setOpen(true);
@@ -185,7 +176,6 @@ function NewUser() {
 
   function clearData() {
     setEmail("");
-    setPhoto("");
     setFieldValue("firstName", "", false);
     setFieldValue("lastName", "", false);
     setFieldValue("motherLastName", "", false);
@@ -196,15 +186,16 @@ function NewUser() {
       show: false,
     });
     setShowAlertPost(false);
-    setAdmin(false); setAdvisor(false); setStatus(false);
-    setChangePhoto(false);
+    setAdmin(false);
+    setAdvisor(false);
+    setStatus(false);
   }
 
   const peticionPostUser = async (type) => {
     var arrayCode = email.split('@');
     var arrayDate = date.toISOString().split('T');
 
-    await axios.post(baseUrl + "users", {
+    await axios.post(`${baseUrl}users`, {
       userx_code: arrayCode[0],
       userx_name: getFieldProps("firstName").value,
       userx_lastname: getFieldProps("lastName").value,
@@ -223,7 +214,7 @@ function NewUser() {
       userx_last_login_date: arrayDate[0],
       userx_lastfailed_login_date: arrayDate[0],
       userx_status: accountStatus ? 'A' : 'I',
-      userx_image: changePhoto ? photo : ""
+      userx_image: ""
     })
       .then((response) => {
         if (type === 'N') {
@@ -252,14 +243,14 @@ function NewUser() {
       student_semester: 1,
       student_status: accountStatus ? 'A' : 'I',
     })
-      .then((response) => {
-        clearData();
-        setShowAlertPost(true);
-        setOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .then((response) => {
+      clearData();
+      setShowAlertPost(true);
+      setOpen(true);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   const peticionPostAdvisor = async () => {
@@ -271,29 +262,15 @@ function NewUser() {
       advisor_comments: "",
       advisor_status: accountStatus ? 'A' : 'I',
     })
-      .then((response) => {
-        clearData();
-        setShowAlertPost(true);
-        setOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const convertBase64 = (photo) => {
-    Array.from(photo).forEach(ele => {
-      var reader = new FileReader();
-      reader.readAsDataURL(ele);
-      reader.onload = function () {
-        var arrayAux = [];
-        var base64 = reader.result;
-        arrayAux = base64.split(',');
-        setPhoto(arrayAux[1]);
-        setChangePhoto(true);
-      }
+    .then((response) => {
+      clearData();
+      setShowAlertPost(true);
+      setOpen(true);
     })
-  }
+    .catch((error) => {
+      console.log(error);
+    });
+  };
 
   const handleChange = (event) => {
     setEmail(event.target.value);
@@ -332,24 +309,16 @@ function NewUser() {
                 variant="ghost"
                 color={(accountStatus === false && 'error') || 'success'}
               >
-                {changeLabelStatus(accountStatus)}
+                {sentenceCase(accountStatus)}
               </Label>
             </div>
-            {
-              changePhoto ?
-                <Avatar src={'data:image/png;base64,' + photo} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
-                :
-                <Avatar sx={{ width: '106px', height: '106px', margin: 'auto' }} />
-            }
-            <input accept="image/*" id="icon-button-file" type="file" width="32px" onChange={(e) => convertBase64(e.target.files)} />
+
+            <Avatar sx={{ width: '106px', height: '106px', margin: 'auto' }} />
 
             <div style={{
               width: '100%', display: 'flex', justifyContent: 'center',
               alignItems: 'center', marginTop: '16px', marginBottom: '8px'
             }}>
-              <Typography variant='caption' sx={{ width: '70%', wordWrap: 'break-word', textAlign: 'center' }}>
-                Permitido *.jpeg, *.jpg, *.png tamaño maximo de 3 MB
-              </Typography>
 
             </div>
 
@@ -438,11 +407,28 @@ function NewUser() {
                         disabled
                         {...getFieldProps('school')}
                       />
+        
                       <TextField
                         fullWidth
                         label="fecha de registro"
                         disabled
                         {...getFieldProps('dateRegister')}
+                      />
+                    </Stack>
+
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <Autocomplete
+                        fullWidth
+                        disablePortal
+                        // options={options}
+                        renderInput={(params) => <TextField {...params} label="Carrera" />}
+                      />
+
+                      <Autocomplete
+                        fullWidth
+                        disablePortal
+                        // options={options}
+                        renderInput={(params) => <TextField {...params} label="Especialidad" />}
                       />
                     </Stack>
 
@@ -498,24 +484,26 @@ function NewUser() {
                         Guardar cambios
                       </LoadingButton>
                       {
-                        showAlertPost ?
+                        showAlertPost
+                        ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                              Se ha registrado con éxito el nuevo usuario
+                              Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
                       {
                         showAlert.show
-                          ?
+                        ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                          : null
+                        :
+                          null
                       }
                     </Stack>
                   </Stack>
