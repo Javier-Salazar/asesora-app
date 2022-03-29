@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { sentenceCase } from 'change-case';
-import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, 
-  Autocomplete, Alert } from '@mui/material';
+import {
+  Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar,
+  Autocomplete, Alert
+} from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
@@ -28,7 +30,7 @@ function NewUser() {
   const [advisor, setAdvisor] = useState(false);
   const [accountStatus, setStatus] = useState('activo');
   const [email, setEmail] = useState('');
-  const [showAlert, setShowAlert] = useState({message: '', show: false});
+  const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
@@ -243,14 +245,14 @@ function NewUser() {
       student_semester: 1,
       student_status: accountStatus ? 'A' : 'I',
     })
-    .then((response) => {
-      clearData();
-      setShowAlertPost(true);
-      setOpen(true);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        clearData();
+        setShowAlertPost(true);
+        setOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const peticionPostAdvisor = async () => {
@@ -262,14 +264,14 @@ function NewUser() {
       advisor_comments: "",
       advisor_status: accountStatus ? 'A' : 'I',
     })
-    .then((response) => {
-      clearData();
-      setShowAlertPost(true);
-      setOpen(true);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        clearData();
+        setShowAlertPost(true);
+        setOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleChange = (event) => {
@@ -407,7 +409,7 @@ function NewUser() {
                         disabled
                         {...getFieldProps('school')}
                       />
-        
+
                       <TextField
                         fullWidth
                         label="fecha de registro"
@@ -485,24 +487,24 @@ function NewUser() {
                       </LoadingButton>
                       {
                         showAlertPost
-                        ?
+                          ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                               Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                        :
+                          :
                           null
                       }
                       {
                         showAlert.show
-                        ?
+                          ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                        :
+                          :
                           null
                       }
                     </Stack>
