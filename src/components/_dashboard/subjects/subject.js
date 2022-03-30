@@ -79,7 +79,7 @@ function Subject(props) {
 
             <Grid container columnSpacing={0} sx={{mt: 3}}>
                 <Grid item xs={6} sm={6}>
-                    <Button fullWidth to="/dashboard/adviser" component={RouterLink}>
+                    <Button fullWidth to="/dashboard/advises" component={RouterLink}>
                         ver asesores
                     </Button>
                 </Grid>

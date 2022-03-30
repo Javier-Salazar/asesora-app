@@ -2,10 +2,7 @@ import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { sentenceCase } from 'change-case';
-import {
-  Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar,
-  Autocomplete, Alert
-} from '@mui/material';
+import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
@@ -38,7 +35,7 @@ function NewUser() {
   const baseUrl = "https://localhost:44397/api/";
 
   const peticionesGet = async () => {
-    await axios.get(baseUrl + "users")
+    await axios.get(`${baseUrl}users`)
       .then((Response) => {
         setData(Response.data);
       })
@@ -122,10 +119,10 @@ function NewUser() {
           } else {
             peticionPostUser('N');
           }
-        } else if (advisor === true) {
+        } else if (advisor) {
           if (isStudent) {
             setShowAlert({
-              message: 'El correo le pertenece a un estudiante, por el momento un estudiante no puede ser asesor',
+              message: 'La cuenta es de estudiante, por el momento un estudiante no puede ser asesor',
               show: true,
             });
             setOpen(true);
@@ -170,9 +167,11 @@ function NewUser() {
     var Aux = email.split('@');
     var code = Aux[0].slice(1);
     if (email.charAt(0) === "l" && /^[0-9]*$/.test(code)) {
-      isStudent = true; isTypeAorS = false;
+      isStudent = true;
+      isTypeAorS = false;
     } else {
-      isStudent = false; isTypeAorS = true;
+      isStudent = false;
+      isTypeAorS = true;
     }
   }
 
@@ -183,10 +182,7 @@ function NewUser() {
     setFieldValue("motherLastName", "", false);
     setFieldValue("phone", "", false);
     setFieldValue("password", "", false);
-    setShowAlert({
-      message: '',
-      show: false,
-    });
+    setShowAlert({message: '', show: false});
     setShowAlertPost(false);
     setAdmin(false);
     setAdvisor(false);
@@ -218,20 +214,20 @@ function NewUser() {
       userx_status: accountStatus ? 'A' : 'I',
       userx_image: ""
     })
-      .then((response) => {
-        if (type === 'N') {
-          peticionPostStudent();
-        } else if (type === 'A') {
-          peticionPostAdvisor();
-        } else {
-          clearData();
-          setShowAlertPost(true);
-          setOpen(true);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .then((response) => {
+      if (type === 'N') {
+        peticionPostStudent();
+      } else if (type === 'A') {
+        peticionPostAdvisor();
+      } else {
+        clearData();
+        setShowAlertPost(true);
+        setOpen(true);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   const peticionPostStudent = async () => {
@@ -245,14 +241,14 @@ function NewUser() {
       student_semester: 1,
       student_status: accountStatus ? 'A' : 'I',
     })
-      .then((response) => {
-        clearData();
-        setShowAlertPost(true);
-        setOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .then((response) => {
+      clearData();
+      setShowAlertPost(true);
+      setOpen(true);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   const peticionPostAdvisor = async () => {
@@ -264,14 +260,14 @@ function NewUser() {
       advisor_comments: "",
       advisor_status: accountStatus ? 'A' : 'I',
     })
-      .then((response) => {
-        clearData();
-        setShowAlertPost(true);
-        setOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    .then((response) => {
+      clearData();
+      setShowAlertPost(true);
+      setOpen(true);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   const handleChange = (event) => {
@@ -315,7 +311,7 @@ function NewUser() {
               </Label>
             </div>
 
-            <Avatar sx={{ width: '106px', height: '106px', margin: 'auto' }} />
+            <Avatar src="" sx={{ width: '106px', height: '106px', margin: 'auto' }} />
 
             <div style={{
               width: '100%', display: 'flex', justifyContent: 'center',
@@ -418,22 +414,6 @@ function NewUser() {
                       />
                     </Stack>
 
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <Autocomplete
-                        fullWidth
-                        disablePortal
-                        // options={options}
-                        renderInput={(params) => <TextField {...params} label="Carrera" />}
-                      />
-
-                      <Autocomplete
-                        fullWidth
-                        disablePortal
-                        // options={options}
-                        renderInput={(params) => <TextField {...params} label="Especialidad" />}
-                      />
-                    </Stack>
-
                     <TextField
                       fullWidth
                       label="Nombre"
@@ -487,24 +467,24 @@ function NewUser() {
                       </LoadingButton>
                       {
                         showAlertPost
-                          ?
+                        ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                               Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
                       {
                         showAlert.show
-                          ?
+                        ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
                     </Stack>
