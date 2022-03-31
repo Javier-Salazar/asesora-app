@@ -4,6 +4,8 @@ import { useTheme, styled } from '@mui/material/styles';
 import { Card, CardHeader } from '@mui/material';
 import { FNumber } from '../../../utils/formatNumber';
 import { BaseOptionChart } from '../../charts';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const CHART_HEIGHT = 372;
 const LEGEND_HEIGHT = 72;
@@ -24,19 +26,66 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-const CHART_DATA = [4344, 5435, 1443, 4443];
 
-function AppCurrentVisits() {
+
+function UserDistribution() {
+
+  const [data, setData] = useState([]);
+  const baseUrl = "https://localhost:44397/api/users";
+
+  const peticionesGet = async () => {
+    await axios.get(baseUrl)
+      .then(Response => {
+        setData(Response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  useEffect(() => {
+    peticionesGet();
+  });
+
+  const loadDataStu = () => {
+    var filterResults = data.filter((element) => {
+      if (element.userx_type === "N") {
+        return element;
+      }
+      return filterResults;
+    });
+    return filterResults;
+  };
+
+  const loadDataAdv = () => {
+    var filterResults = data.filter((element) => {
+      if (element.userx_type === "A") {
+        return element;
+      }
+      return filterResults;
+    });
+    return filterResults;
+  };
+
+  const loadDataAdm = () => {
+    var filterResults = data.filter((element) => {
+      if (element.userx_type === "S") {
+        return element;
+      }
+      return filterResults;
+    });
+    return filterResults;
+  };
+
+
   const theme = useTheme();
 
   const chartOptions = merge(BaseOptionChart(), {
     colors: [
-      theme.palette.primary.main,
+      theme.palette.grey[500],
       theme.palette.info.main,
       theme.palette.warning.main,
-      theme.palette.error.main
     ],
-    labels: ['America', 'Asia', 'Europe', 'Africa'],
+    labels: ['Estudiantes', 'Asesores', 'Administradores'],
     stroke: { colors: [theme.palette.background.paper] },
     legend: { floating: true, horizontalAlign: 'center' },
     dataLabels: { enabled: true, dropShadow: { enabled: false } },
@@ -48,6 +97,7 @@ function AppCurrentVisits() {
           formatter: (seriesName) => `#${seriesName}`
         }
       }
+
     },
     plotOptions: {
       pie: { donut: { labels: { show: false } } }
@@ -56,12 +106,12 @@ function AppCurrentVisits() {
 
   return (
     <Card>
-      <CardHeader title="Current Visits" />
+      <CardHeader title="Distribución de usuarios" />
       <ChartWrapperStyle dir="ltr">
-        <ReactApexChart type="pie" series={CHART_DATA} options={chartOptions} height={280} />
+        <ReactApexChart type="pie" series={[loadDataStu().length, loadDataAdv().length, loadDataAdm().length]} options={chartOptions} height={280} />
       </ChartWrapperStyle>
     </Card>
   );
 }
 
-export default AppCurrentVisits;
+export default UserDistribution;
