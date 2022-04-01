@@ -3,9 +3,11 @@ import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Link as RouterLink } from 'react-router-dom';
-import { Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination } from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import {
+  Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination
+} from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -14,6 +16,7 @@ import { Wrong } from '../components/_dashboard/errors';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
 import MockImgAvatar from '../utils/mockImages';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Nombre', alignRight: false },
@@ -69,12 +72,15 @@ function changeLabelType(text) {
   else if (text === 'S') {
     return 'administrador';
   }
-  else{
+  else {
     return 'estudiante';
-  } 
+  }
 }
 
 function User() {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
   const [data, setData] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const [page, setPage] = useState(0);
@@ -93,11 +99,11 @@ function User() {
         setData(response.data);
         setDataTable(response.data);
       }).catch(error => {
-        if(error.request){
+        if (error.request) {
           console.log(error.request);
           setNoRequest(true);
         }
-        else{
+        else {
           console.log(error);
         }
       });
@@ -106,6 +112,12 @@ function User() {
   useEffect(() => {
     requestGet();
   }, []);
+
+  useEffect(() => {
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
+  });
 
   const USERLIST = data.map((element => ({
     id: element.userx_code,
@@ -216,9 +228,9 @@ function User() {
           </Typography>
           {
             data <= 0 && isUserNotFound
-            ?
+              ?
               null
-            :
+              :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -233,9 +245,9 @@ function User() {
         {
 
           noRequest
-          ?
+            ?
             <Wrong />
-          :
+            :
             <Card>
               <UserListToolbar
                 numSelected={selected.length}
@@ -244,7 +256,7 @@ function User() {
               />
 
               <Scrollbar>
-            
+
                 <TableContainer sx={{ minWidth: 800 }}>
                   <Table>
                     <UserListHead
@@ -291,7 +303,7 @@ function User() {
                                 <Label
                                   variant="ghost"
                                   color={(role === 'asesor' && 'info') || (role === 'administrador' && 'warning')
-                                        || 'default'}
+                                    || 'default'}
                                 >
                                   {sentenceCase(role)}
                                 </Label>

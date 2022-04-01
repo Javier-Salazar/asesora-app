@@ -45,6 +45,8 @@ function AccountPopover() {
   const navigate = useNavigate();
 
   const onSubmit = () => {
+    cookies.remove('UserCode', { path: '/' });
+    cookies.remove('UserType', { path: '/' });
     navigate('/');
   }
 

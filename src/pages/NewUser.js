@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
@@ -29,6 +31,8 @@ function changeLabelStatus(bool) {
 }
 
 function NewUser() {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
   const date = new Date();
 
   const [admin, setAdmin] = useState(false);
@@ -55,6 +59,12 @@ function NewUser() {
   useEffect(() => {
     peticionesGet();
   }, []);
+
+  useEffect(() => {
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
+  });
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()

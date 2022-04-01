@@ -10,6 +10,7 @@ import Scrollbar from '../components/Scrollbar';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
+import { useNavigate } from 'react-router-dom';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -30,9 +31,12 @@ function changeLabelStatus(text) {
   }
 }
 
-const cookies = new Cookies();
+
 
 function UserEdit({ status }) {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
   const [photo, setPhoto] = useState("");
   const [changePhoto, setChangePhoto] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -64,6 +68,9 @@ function UserEdit({ status }) {
 
   useEffect(() => {
     peticionesGet();
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
   });
 
   const peticionPut = async () => {
