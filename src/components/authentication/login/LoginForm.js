@@ -45,10 +45,9 @@ function LoginForm() {
   const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
   const [open, setOpen] = useState(false);
 
-
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: cookies.get('UserEmail') ? cookies.get('UserEmail') : "",
       password: '',
       remember: true
     },
@@ -58,6 +57,11 @@ function LoginForm() {
       if (isFind) {
         if (correctPassword) {
           if (status === "A") {
+            if (getFieldProps('remember').value) {
+              cookies.set('UserEmail', getFieldProps("email").value, { path: '/' });
+            } else {
+              cookies.remove('UserEmail', { path: '/' });
+            }
             cookies.set('UserCode', code, { path: '/' });
             cookies.set('UserType', type, { path: '/' });
             navigate('/dashboard', { replace: true });
