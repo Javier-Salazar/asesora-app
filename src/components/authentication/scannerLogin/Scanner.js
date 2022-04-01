@@ -14,7 +14,7 @@ export default function Scanner() {
   const baseUrl = "https://localhost:44397/api/users"
 
   const [userTable, setUserTable] = useState([]);
-  const [activeAlert, setActiveAlert] = useState(false);
+  const [activeAlert, setActiveAlert] = useState({ message: '', show: false });
 
   const peticionesGet = async () => {
     await axios.get(baseUrl)
@@ -34,24 +34,34 @@ export default function Scanner() {
     userTable.filter((element) => {
       if (element.userx_code.toLowerCase() === `l${finded.toLowerCase()}`) {
         isFind = true;
-        if (element.userx_type === "N") {
-          const Url = `https://localhost:44397/api/students/${element.userx_code}`;
-          axios.get(Url)
-            .then(Response => { //Se llenan las Cookies con la información obtenida
-              cookies.set('UserCode', Response.data.student_code, { path: '/' });
-              cookies.set('UserType', Response.data.userx_type, { path: '/' });
-              Quagga.stop();
-              navigate('/dashboard', { replace: true });
-            }).catch(error => {
-              console.log(error);
-            })
+        if (element.userx_status === "A") {
+          if (element.userx_type === "N") {
+            const Url = `https://localhost:44397/api/students/${element.userx_code}`;
+            axios.get(Url)
+              .then(Response => { //Se llenan las Cookies con la información obtenida
+                cookies.set('UserCode', Response.data.student_code, { path: '/' });
+                cookies.set('UserType', Response.data.userx_type, { path: '/' });
+                Quagga.stop();
+                navigate('/dashboard', { replace: true });
+              }).catch(error => {
+                console.log(error);
+              })
+          }
+        } else {
+          setActiveAlert({
+            message: "No tienes permitido ingresar a tu cuenta",
+            show: true,
+          });
         }
       }
       return 0;
     })
 
     if (isFind === false) {
-      setActiveAlert(true);
+      setActiveAlert({
+        message: 'No se encuetra el usuario, intente de nuevo',
+        show: true,
+      });
     }
     return (finded)
   }
@@ -67,9 +77,10 @@ export default function Scanner() {
       </Typography>
       <br></br>
       {
-        activeAlert ?
+        activeAlert.show
+          ?
           <Alert border-radius="12px" severity="error">
-            No se encuetra el usuario, intente de nuevo
+            {activeAlert.message}
           </Alert>
           : <Alert border-radius="12px" severity="info">Escaneando credencial...</Alert>
       }

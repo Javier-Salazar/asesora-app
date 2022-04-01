@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
@@ -27,7 +27,22 @@ function LoginForm() {
   });
 
   const baseUrl = "https://localhost:44397/api/users";
-  const [showAlert, setShowAlert] = useState({ message: '', show: false });
+  const [user, setUser] = useState([]);
+
+  const peticionesGet = async () => {
+    await axios.get(baseUrl)
+      .then(Response => {
+        setUser(Response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  useEffect(() => {
+    peticionesGet();
+  });
+
+  const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
   const [open, setOpen] = useState(false);
 
 
@@ -39,28 +54,38 @@ function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      const Url = `${baseUrl}/${getFieldProps("email").value.split('@', 1)}`;
-      axios.get(Url)
-        .then(Response => {
-          if (decryptPassword(Response.data.userx_password, Response.data.userx_salt) === getFieldProps("password").value) {
-            cookies.set('UserCode', Response.data.userx_code, { path: '/' });
-            cookies.set('UserType', Response.data.userx_type, { path: '/' });
+      searchUser(getFieldProps("email").value);
+      if (isFind) {
+        if (correctPassword) {
+          if (status === "A") {
+            cookies.set('UserCode', code, { path: '/' });
+            cookies.set('UserType', type, { path: '/' });
             navigate('/dashboard', { replace: true });
           } else {
             setShowAlert({
-              message: 'Datos erróneos. Por favor, inténtelo otra vez',
+              message: 'No puedes ingresar a tu cuenta porque tiene status inactivo, acude con el administrador para mayor información',
               show: true,
+              duration: 8000,
             });
             setOpen(true);
           }
-        }).catch(error => {
+        } else {
           setShowAlert({
-            message: 'El correo ingresado no se encuentra registrado',
+            message: 'Datos erróneos. Por favor, inténtelo otra vez',
             show: true,
+            duration: 6000,
           });
           setOpen(true);
-        })
-    },
+        }
+      } else {
+        setShowAlert({
+          message: 'El correo ingresado no se encuentra registrado',
+          show: true,
+          duration: 6000,
+        });
+        setOpen(true);
+      }
+    }
   });
 
   const decryptPassword = (text, key) => {
@@ -68,6 +93,27 @@ function LoginForm() {
     var decryptedText = bytes.toString(CryptoJS.enc.Utf8);
     return decryptedText;
   }
+
+  var isFind = false;
+  var code = "";
+  var type = "";
+  var correctPassword = false;
+  var status = "";
+  const searchUser = (finded) => {
+    user.filter((element) => {
+      if (element.userx_email.toLowerCase() === finded.toLowerCase()) {
+        isFind = true;
+        if (decryptPassword(element.userx_password, element.userx_salt) === getFieldProps("password").value) {
+          correctPassword = true;
+          code = element.userx_code;
+          type = element.userx_type;
+          status = element.userx_status;
+        }
+      }
+      return 0;
+    });
+  };
+
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -141,7 +187,7 @@ function LoginForm() {
         {
           showAlert.show
             ?
-            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose}>
               <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                 {showAlert.message}
               </Alert>
