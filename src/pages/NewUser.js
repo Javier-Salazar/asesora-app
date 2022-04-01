@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
-import { sentenceCase } from 'change-case';
 import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
@@ -9,6 +8,7 @@ import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import axios from "axios";
+import CryptoJS from 'crypto-js';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -20,12 +20,20 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
+function changeLabelStatus(bool) {
+  if (bool) {
+    return 'Activo';
+  } else {
+    return 'Inactivo';
+  }
+}
+
 function NewUser() {
   const date = new Date();
 
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState('activo');
+  const [accountStatus, setStatus] = useState(true);
   const [email, setEmail] = useState('');
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
@@ -59,9 +67,6 @@ function NewUser() {
       .max(30, 'El apellido es muy largo')
       .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios")
       .required('El apellido es obligatorio'),
-    email: Yup.string()
-      .email('El correo electrónico debe ser una dirección válida')
-      .required('El correo electrónico es obligatorio'),
     motherLastName: Yup.string()
       .min(2, 'El apellido es muy corto')
       .max(30, 'El apellido es muy largo')
@@ -84,7 +89,7 @@ function NewUser() {
 
     if (email === "") {
       errors.email = 'El correo electrónico es obligatorio';
-    } else if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj.edu.mx/.test(email)) {
+    } else if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj\.edu\.mx/.test(email)) {
       errors.email = 'Ingrese un correo institucional, por ejemplo: user@itcj.edu.mx';
     } else if ((email.charAt(0) !== "l" && /^[0-9]*$/.test(code)) || (code.length !== 8 && /^[0-9]*$/.test(code))) {
       errors.email = 'El correo tiene estructura de alumno pero esta mal escrito';
@@ -98,7 +103,7 @@ function NewUser() {
       motherLastName: '',
       email: '',
       school: 'Instituto Tecnológico de Ciudad Juárez',
-      dateRegister: date.toISOString().split('T', 1),
+      dateRegister: date.toLocaleString().split(' ', 1),
       password: '',
       phone: ''
     },
@@ -182,7 +187,7 @@ function NewUser() {
     setFieldValue("motherLastName", "", false);
     setFieldValue("phone", "", false);
     setFieldValue("password", "", false);
-    setShowAlert({message: '', show: false});
+    setShowAlert({ message: '', show: false });
     setShowAlertPost(false);
     setAdmin(false);
     setAdvisor(false);
@@ -192,15 +197,14 @@ function NewUser() {
   const peticionPostUser = async (type) => {
     var arrayCode = email.split('@');
     var arrayDate = date.toISOString().split('T');
-
     await axios.post(`${baseUrl}users`, {
       userx_code: arrayCode[0],
       userx_name: getFieldProps("firstName").value,
       userx_lastname: getFieldProps("lastName").value,
       userx_mother_lastname: getFieldProps("motherLastName").value,
       userx_email: email,
-      userx_password: getFieldProps("password").value,
-      userx_salt: "N",
+      userx_password: encryptPassword(getFieldProps("password").value),
+      userx_salt: key,
       userx_remember: "N",
       userx_phone: getFieldProps("phone").value,
       userx_type: type,
@@ -214,20 +218,20 @@ function NewUser() {
       userx_status: accountStatus ? 'A' : 'I',
       userx_image: ""
     })
-    .then((response) => {
-      if (type === 'N') {
-        peticionPostStudent();
-      } else if (type === 'A') {
-        peticionPostAdvisor();
-      } else {
-        clearData();
-        setShowAlertPost(true);
-        setOpen(true);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        if (type === 'N') {
+          peticionPostStudent();
+        } else if (type === 'A') {
+          peticionPostAdvisor();
+        } else {
+          clearData();
+          setShowAlertPost(true);
+          setOpen(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const peticionPostStudent = async () => {
@@ -241,14 +245,14 @@ function NewUser() {
       student_semester: 1,
       student_status: accountStatus ? 'A' : 'I',
     })
-    .then((response) => {
-      clearData();
-      setShowAlertPost(true);
-      setOpen(true);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        clearData();
+        setShowAlertPost(true);
+        setOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const peticionPostAdvisor = async () => {
@@ -260,14 +264,14 @@ function NewUser() {
       advisor_comments: "",
       advisor_status: accountStatus ? 'A' : 'I',
     })
-    .then((response) => {
-      clearData();
-      setShowAlertPost(true);
-      setOpen(true);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then((response) => {
+        clearData();
+        setShowAlertPost(true);
+        setOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleChange = (event) => {
@@ -280,6 +284,18 @@ function NewUser() {
     }
     setOpen(false);
   };
+
+  const generateRandomString = (num) => {
+    let result1 = Math.random().toString(36).substring(0, num);
+    return result1;
+  }
+
+  var key = generateRandomString(20);
+  const encryptPassword = (text) => {
+    var encrypt = CryptoJS.AES.encrypt(text, key).toString();
+    return encrypt;
+  }
+
 
   const { errors, touched, handleSubmit, getFieldProps, setFieldValue } = formik;
   return (
@@ -307,7 +323,7 @@ function NewUser() {
                 variant="ghost"
                 color={(accountStatus === false && 'error') || 'success'}
               >
-                {sentenceCase(accountStatus)}
+                {changeLabelStatus(accountStatus)}
               </Label>
             </div>
 
@@ -467,24 +483,24 @@ function NewUser() {
                       </LoadingButton>
                       {
                         showAlertPost
-                        ?
+                          ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                               Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                        :
+                          :
                           null
                       }
                       {
                         showAlert.show
-                        ?
+                          ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                        :
+                          :
                           null
                       }
                     </Stack>

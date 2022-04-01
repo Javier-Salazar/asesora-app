@@ -50,6 +50,7 @@
     "apexcharts": "^3.28.3",
     "axios": "^0.26.0",
     "change-case": "^4.1.2",
+    "crypto-js": "^4.1.1",
     "date-fns": "^2.24.0",
     "faker": "^5.5.3",
     "formik": "^2.2.9",
