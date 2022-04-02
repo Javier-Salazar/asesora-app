@@ -13,7 +13,7 @@ import DashboardApp from './pages/DashboardApp';
 import User from './pages/User';
 import NewUser from './pages/NewUser';
 import UserEdit from './pages/UserEdit'
-import MyProfile from './pages/MyProfile'
+import MyProfile from './pages/MyProfile';
 import NotFound from './pages/Page404';
 import { AdvisorProfile } from './components/_dashboard/advisers';
 import Next from './pages/Next';
