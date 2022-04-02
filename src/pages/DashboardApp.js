@@ -1,35 +1,37 @@
 import { Box, Grid, Container, Typography } from '@mui/material';
 import Page from '../components/Page';
-import { AppTasks, AppNewUsers, AppBugReports, AppItemOrders, AppNewsUpdate, AppWeeklySales, AppOrderTimeline,
-  AppCurrentVisits, AppWebsiteVisits, AppTrafficBySite, AppCurrentSubject, AppConversionRates } from '../components/_dashboard/app';
+import {
+  AppTasks, AcceptedAdvice, CanceledAdvise, RequestedAdvice, AppNewsUpdate, TotalAdvice, AdviseOfTheDay,
+  UserDistribution, AppWebsiteVisits, AppTrafficBySite, AppCurrentSubject, AppConversionRates
+} from '../components/_dashboard/app';
 
 function DashboardApp() {
   return (
     <Page title="AsesoraApp | Inicio">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">Hi, Welcome back</Typography>
+          <Typography variant="h4">Hola, Bienvenido de nuevo</Typography>
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWeeklySales />
+            <TotalAdvice />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppNewUsers />
+            <AcceptedAdvice />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppItemOrders />
+            <RequestedAdvice />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <AppBugReports />
+            <CanceledAdvise />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={4} lg={8}>
             <AppWebsiteVisits />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentVisits />
+            <UserDistribution />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
@@ -45,7 +47,7 @@ function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
-            <AppOrderTimeline />
+            <AdviseOfTheDay />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
