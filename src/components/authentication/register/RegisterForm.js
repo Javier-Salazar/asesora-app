@@ -213,10 +213,10 @@ function RegisterForm() {
           {
             showAlertPost
             ?
-              <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                  Se ha registrado con éxito, Inicie sesión y configure
-                  su perfil para hacer uso de las funcionalidades
+              <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '60%' }}>
+                  Se ha registrado con éxito.
+                  Inicie sesión y configure su perfil para hacer uso de las funcionalidades
                 </Alert>
               </Snackbar>
             :

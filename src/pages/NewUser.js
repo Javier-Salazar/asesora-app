@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
+import MockImgAvatar from '../utils/mockImages';
 import axios from "axios";
 import CryptoJS from 'crypto-js';
 
@@ -38,7 +39,7 @@ function NewUser() {
 
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState(true);
+  const [accountStatus, setStatus] = useState(false);
   const [email, setEmail] = useState('');
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
@@ -269,7 +270,7 @@ function NewUser() {
   const peticionPostAdvisor = async () => {
     var arrayCode = email.split('@');
 
-    await axios.post(baseUrl + "advisors", {
+    await axios.post(`${baseUrl}advisors`, {
       advisor_code: arrayCode[0],
       advisor_rating: 5,
       advisor_comments: "",
@@ -338,7 +339,7 @@ function NewUser() {
               </Label>
             </div>
 
-            <Avatar src="" sx={{ width: '106px', height: '106px', margin: 'auto' }} />
+            <Avatar src={`data:image/png;base64,${MockImgAvatar()}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
 
             <div style={{
               width: '100%', display: 'flex', justifyContent: 'center',

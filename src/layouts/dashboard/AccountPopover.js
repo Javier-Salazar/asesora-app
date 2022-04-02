@@ -7,6 +7,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
 import MenuPopover from '../../components/MenuPopover';
+import MockImgAvatar from '../../utils/mockImages';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -61,7 +62,7 @@ function AccountPopover() {
 
   useEffect(() => {
     peticionesGet();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -85,7 +86,10 @@ function AccountPopover() {
           })
         }}
       >
-        <Avatar src={`data:image/png;base64, ${infoUser.userx_image}`} alt="photoURL" />
+        <Avatar src={`data:image/png;base64,
+          ${infoUser.userx_image !== '' ? infoUser.userx_image : MockImgAvatar()}`}
+          alt="photoURL"
+        />
       </IconButton>
 
       <MenuPopover

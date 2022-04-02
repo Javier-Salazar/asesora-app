@@ -11,7 +11,7 @@ export default function Scanner() {
   const navigate = useNavigate();
   const cookies = new Cookies();
 
-  const baseUrl = "https://localhost:44397/api/users"
+  const baseUrl = "https://localhost:44397/api/users";
 
   const [userTable, setUserTable] = useState([]);
   const [activeAlert, setActiveAlert] = useState({ message: '', show: false });
@@ -27,7 +27,8 @@ export default function Scanner() {
 
   useEffect(() => {
     peticionesGet();
-  }, [])
+  }, []);
+  
   var isFind = false;
 
   const searchUser = (finded) => {
@@ -59,7 +60,7 @@ export default function Scanner() {
 
     if (isFind === false) {
       setActiveAlert({
-        message: 'No se encuetra el usuario, intente de nuevo',
+        message: 'No se encuetra el usuario, intenta de nuevo',
         show: true,
       });
     }
