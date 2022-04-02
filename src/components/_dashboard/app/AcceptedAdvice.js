@@ -1,8 +1,10 @@
 import { Icon } from '@iconify/react';
-import appleFilled from '@iconify/icons-ant-design/apple-filled';
+import checkmarkFill from '@iconify/icons-eva/checkmark-circle-2-fill';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 import { FShortenNumber } from '../../../utils/formatNumber';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -28,20 +30,45 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   )} 100%)`
 }));
 
-const TOTAL = 1352831;
+function AcceptedAdvice() {
 
-function AppNewUsers() {
+  const [data, setData] = useState([]);
+  const baseUrl = "https://localhost:44397/api/advises";
+
+  const peticionesGet = async () => {
+    await axios.get(baseUrl)
+      .then(Response => {
+        setData(Response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  useEffect(() => {
+    peticionesGet();
+  });
+
+  const loadData = () => {
+    var filterResults = data.filter((element) => {
+      if (element.advise_status === "A") {
+        return element;
+      }
+      return filterResults;
+    });
+    return filterResults;
+  };
+
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={appleFilled} width={24} height={24} />
+        <Icon icon={checkmarkFill} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{FShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{FShortenNumber(loadData().length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        New Users
+        Asesorías Aceptadas
       </Typography>
     </RootStyle>
   );
 }
 
-export default AppNewUsers;
+export default AcceptedAdvice;

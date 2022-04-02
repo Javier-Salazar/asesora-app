@@ -1,8 +1,10 @@
 import { Icon } from '@iconify/react';
-import windowsFilled from '@iconify/icons-ant-design/windows-filled';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 import { FShortenNumber } from '../../../utils/formatNumber';
+import clockFill from '@iconify/icons-eva/clock-fill';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -28,20 +30,48 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   )} 100%)`
 }));
 
-const TOTAL = 1723315;
 
-function AppItemOrders() {
+
+function RequestedAdvice() {
+
+  const [data, setData] = useState([]);
+  const baseUrl = "https://localhost:44397/api/advises";
+
+  const peticionesGet = async () => {
+    await axios.get(baseUrl)
+      .then(Response => {
+        setData(Response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  useEffect(() => {
+    peticionesGet();
+  });
+
+  const loadData = () => {
+    var filterResults = data.filter((element) => {
+      if (element.advise_status === "S") {
+        return element;
+      }
+      return filterResults;
+    });
+    return filterResults;
+  };
+
+
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={windowsFilled} width={24} height={24} />
+        <Icon icon={clockFill} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{FShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{FShortenNumber(loadData().length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        Item Orders
+        Asesorías Solicitadas
       </Typography>
     </RootStyle>
   );
 }
 
-export default AppItemOrders;
+export default RequestedAdvice;
