@@ -1,6 +1,6 @@
-import ScannerQuagga from './ScannerQuagga'
+import ScannerQuagga from './ScannerQuagga';
 import { useNavigate } from 'react-router-dom';
-import Quagga from 'quagga'
+import Quagga from 'quagga';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import React, { useEffect, useState } from 'react';
@@ -79,10 +79,11 @@ export default function Scanner() {
       {
         activeAlert.show
           ?
-          <Alert border-radius="12px" severity="error">
-            {activeAlert.message}
-          </Alert>
-          : <Alert border-radius="12px" severity="info">Escaneando credencial...</Alert>
+            <Alert border-radius="12px" severity="error" sx={{boxShadow: 4}}>
+              {activeAlert.message}
+            </Alert>
+          :
+            <Alert border-radius="12px" severity="info" sx={{boxShadow: 4}}>Escaneando credencial...</Alert>
       }
       <br></br>
       <ScannerQuagga onDetected={_onDetected} />
