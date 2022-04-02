@@ -214,7 +214,7 @@ function RegisterForm() {
             showAlertPost
             ?
               <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '60%' }}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '60%', boxShadow: 10 }}>
                   Se ha registrado con éxito.
                   Inicie sesión y configure su perfil para hacer uso de las funcionalidades
                 </Alert>
@@ -226,7 +226,7 @@ function RegisterForm() {
             showAlert
             ?
               <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
                   Ya existe una cuenta asociada a este correo electrónico
                 </Alert>
               </Snackbar>
