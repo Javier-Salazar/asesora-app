@@ -49,7 +49,7 @@ function LoginForm() {
     initialValues: {
       email: cookies.get('UserEmail') ? cookies.get('UserEmail') : "",
       password: '',
-      remember: true
+      remember: false
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
@@ -67,7 +67,7 @@ function LoginForm() {
             navigate('/dashboard', { replace: true });
           } else {
             setShowAlert({
-              message: 'No puedes ingresar a tu cuenta porque tiene status inactivo, acude con el administrador para mayor información',
+              message: 'No puedes ingresar a tu cuenta, contacta a tu administrador de sistema para mayor información',
               show: true,
               duration: 8000,
             });
@@ -75,7 +75,7 @@ function LoginForm() {
           }
         } else {
           setShowAlert({
-            message: 'Datos erróneos. Por favor, inténtelo otra vez',
+            message: 'Datos erróneos. Por favor, inténtalo otra vez',
             show: true,
             duration: 6000,
           });
@@ -190,13 +190,13 @@ function LoginForm() {
         </LoadingButton>
         {
           showAlert.show
-            ?
-            <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose}>
+          ?
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose}>
               <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                 {showAlert.message}
               </Alert>
             </Snackbar>
-            :
+          :
             null
         }
       </Form>

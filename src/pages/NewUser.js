@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
+import { sentenceCase } from 'change-case';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
@@ -24,9 +25,9 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 
 function changeLabelStatus(bool) {
   if (bool) {
-    return 'Activo';
+    return sentenceCase('Activo');
   } else {
-    return 'Inactivo';
+    return sentenceCase('Inactivo');
   }
 }
 
@@ -306,8 +307,8 @@ function NewUser() {
     return encrypt;
   }
 
-
   const { errors, touched, handleSubmit, getFieldProps, setFieldValue } = formik;
+
   return (
     <Page title="AsesoraApp | Agregar usuario">
       <Container>

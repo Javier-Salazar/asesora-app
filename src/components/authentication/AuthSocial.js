@@ -6,7 +6,7 @@ import { Stack, Button, Divider, Typography, Tooltip, Dialog, DialogContent, Sna
 import Slide from '@mui/material/Slide';
 import Scanner from './scannerLogin/Scanner';
 import googleFill from '@iconify/icons-eva/google-fill';
-import Quagga from 'quagga'
+import Quagga from 'quagga';
 import GoogleLogin from 'react-google-login';
 import axios from "axios";
 import Cookies from 'universal-cookie';
@@ -56,7 +56,7 @@ function AuthSocial() {
       navigate('/dashboard', { replace: true });
     } if (isFind && status === "I") {
       setShowAlert({
-        message: 'No puedes ingresar a tu cuenta porque tiene status inactivo, acude con el administrador para mayor información',
+        message: 'No puedes ingresar a tu cuenta, contacta a tu administrador de sistema para mayor información',
         show: true,
         duration: 8000,
       });
@@ -99,7 +99,7 @@ function AuthSocial() {
     <>
       <Stack direction="row" spacing={2}>
         <Tooltip title="Escanear credencial" placement="top" enterDelay={200} arrow>
-          <Button style={{ width: '50%' }} size="large" color="inherit" variant="outlined" onClick={handleClickOpen}>
+          <Button fullWidth size="large" color="inherit" variant="outlined" onClick={handleClickOpen}>
             <Icon icon={upcScan} color="#454F5B" height={24} />
           </Button>
         </Tooltip>
@@ -108,8 +108,8 @@ function AuthSocial() {
           clientId="63267804571-95de0l4ta0351pi0k7lhsgt7n1kcr01e.apps.googleusercontent.com"
           render={renderProps => (
             <Tooltip title="Iniciar sesión con Google" placement="top" enterDelay={200} arrow>
-              <Button component="span" style={{ width: '50%' }} size="large" color="inherit" variant="outlined" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                <Icon icon={googleFill} height={24} />
+              <Button fullWidth size="large" color="inherit" variant="outlined" onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                <Icon icon={googleFill} color="#DF3E30"  height={24} />
               </Button>
             </Tooltip>
           )}
@@ -135,13 +135,13 @@ function AuthSocial() {
 
       {
         showAlert.show
-          ?
-          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={openAlert} autoHideDuration={showAlert.duration} onClose={handleCloseAlert}>
-            <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
-              {showAlert.message}
-            </Alert>
-          </Snackbar>
-          :
+        ?
+            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={showAlert.duration} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
+                  {showAlert.message}
+                </Alert> 
+            </Snackbar>
+        :
           null
       }
     </>

@@ -225,7 +225,7 @@ function RegisterForm() {
           {
             showAlert
             ?
-              <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
                   Ya existe una cuenta asociada a este correo electrónico
                 </Alert>
