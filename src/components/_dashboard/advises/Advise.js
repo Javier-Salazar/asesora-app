@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Icon } from '@iconify/react';
 import startFill from '@iconify/icons-eva/star-fill';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
-import { Typography, Box, Stack, Button, Grid, Tooltip, Chip, Avatar } from '@mui/material';
+import { Typography, Box, Stack, Button, Grid, Chip, Avatar } from '@mui/material';
 import MockImgAvatar from '../../../utils/mockImages';
 
 const ChipStyled = styled(Chip)(({theme}) => ({
