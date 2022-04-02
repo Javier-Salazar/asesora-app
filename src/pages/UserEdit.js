@@ -10,6 +10,7 @@ import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -22,18 +23,19 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 }));
 
 function UserEdit() {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
   const [phone, setPhone] = useState('');
   const [accountStatus, setStatus] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
 
-  const navigate = useNavigate();
-  
   var params = useParams();
   var idUser = params.userID;
 
   const baseUrl = `https://localhost:44397/api/users/${idUser}`;
-  
+
   const [user, setUser] = useState({
     userx_code: "",
     userx_name: "",
@@ -57,6 +59,9 @@ function UserEdit() {
 
   useEffect(() => {
     peticionesGet();
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
   });
 
   const RegisterSchema = Yup.object().shape({
@@ -193,7 +198,7 @@ function UserEdit() {
                   Activar convertir en asesor
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => {setAdvisor(!advisor); setAdmin(false);}} checked={advisor} />
+              <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
             </div>
 
             <div style={{
@@ -208,7 +213,7 @@ function UserEdit() {
                   Activar convertir en adnimistrador
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => {setAdmin(!admin); setAdvisor(false); }} checked={admin} />
+              <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
             </div>
 
           </Card>

@@ -3,26 +3,37 @@ import Page from '../components/Page';
 import { Adviser } from '../components/_dashboard/advisers';
 import { Wrong } from '../components/_dashboard/errors';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 import axios from 'axios';
 
 function Advisers() {
+    const cookies = new Cookies();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!cookies.get('UserCode')) {
+            navigate('/');
+        }
+    });
+
     const baseUrl = "https://localhost:44397/api/advisors";
     const [advisers, setAdvisers] = useState([]);
     const [noRequest, setNoRequest] = useState(false);
 
     const peticionesGet = async () => {
         await axios.get(baseUrl)
-        .then(Response => {
-            setAdvisers(Response.data);
-        }).catch(error => {
-            if(error.request){
-                console.log(error.request);
-                setNoRequest(true);
-            }
-            else{
-                console.log(error);
-            }
-        })
+            .then(Response => {
+                setAdvisers(Response.data);
+            }).catch(error => {
+                if (error.request) {
+                    console.log(error.request);
+                    setNoRequest(true);
+                }
+                else {
+                    console.log(error);
+                }
+            })
     }
 
     useEffect(() => {
@@ -39,9 +50,9 @@ function Advisers() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                        ?
+                            ?
                             <Wrong />
-                        :
+                            :
                             advisers.map(elemento => (
                                 <Grid item xs={12} sm={6} md={3}>
                                     <Card>

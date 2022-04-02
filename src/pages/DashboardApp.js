@@ -1,11 +1,22 @@
 import { Box, Grid, Container, Typography } from '@mui/material';
 import Page from '../components/Page';
-import {
-  AppTasks, AcceptedAdvice, CanceledAdvise, RequestedAdvice, AppNewsUpdate, TotalAdvice, AdviseOfTheDay,
-  UserDistribution, AppWebsiteVisits, AppTrafficBySite, AppCurrentSubject, AppConversionRates
-} from '../components/_dashboard/app';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Cookies from 'universal-cookie';
+import { AppTasks, AcceptedAdvice, CanceledAdvise, RequestedAdvice, AppNewsUpdate, TotalAdvice, 
+  AdviseOfTheDay, UserDistribution, AppWebsiteVisits, AppTrafficBySite, AppCurrentSubject, 
+  AppConversionRates } from '../components/_dashboard/app';
 
 function DashboardApp() {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
+  });
+
   return (
     <Page title="AsesoraApp | Inicio">
       <Container maxWidth="xl">

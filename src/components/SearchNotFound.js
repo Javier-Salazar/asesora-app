@@ -1,11 +1,23 @@
 import PropTypes from 'prop-types';
 import { Paper, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Cookies from 'universal-cookie';
 
 SearchNotFound.propTypes = {
   searchQuery: PropTypes.string
 };
 
 function SearchNotFound({ searchQuery = '', ...other }) {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
+  });
+
   return (
     <Paper {...other}>
       <Typography gutterBottom align="center" variant="subtitle1">

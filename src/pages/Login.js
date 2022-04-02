@@ -1,11 +1,14 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Card, Stack, Link, Container, Typography} from '@mui/material';
+import { Card, Stack, Link, Container, Typography } from '@mui/material';
 import AuthLayout from '../layouts/AuthLayout';
 import Page from '../components/Page';
 import { MHidden } from '../components/@material-extend';
 import { LoginForm } from '../components/authentication/login';
 import AuthSocial from '../components/authentication/AuthSocial';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Cookies from 'universal-cookie';
 
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -34,6 +37,15 @@ const ContentStyle = styled('div')(({ theme }) => ({
 }));
 
 function Login() {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cookies.get('UserCode')) {
+      navigate('/dashboard', { replace: true });
+    }
+  });
+
   return (
     <RootStyle title="AsesoraApp | Iniciar sesión">
       <AuthLayout>
@@ -45,7 +57,7 @@ function Login() {
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 12, mb: 3, alignSelf: 'flex-start'}}>
+          <Typography variant="h3" sx={{ px: 5, mt: 12, mb: 3, alignSelf: 'flex-start' }}>
             Hola, bienvenido de nuevo
           </Typography>
           <img src="/static/illustrations/illustration_login.png" alt="hi" width="80%" />

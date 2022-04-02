@@ -9,6 +9,8 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
+import { useNavigate } from 'react-router-dom';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -29,9 +31,12 @@ function changeLabelStatus(text) {
   }
 }
 
-const cookies = new Cookies();
+
 
 function UserEdit({ status }) {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
   const [photo, setPhoto] = useState("");
   const [changePhoto, setChangePhoto] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -63,6 +68,9 @@ function UserEdit({ status }) {
 
   useEffect(() => {
     peticionesGet();
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
   });
 
   const peticionPut = async () => {
@@ -72,8 +80,8 @@ function UserEdit({ status }) {
       userx_lastname: getFieldProps("lastName").value,
       userx_mother_lastname: getFieldProps("motherLastName").value,
       userx_email: getFieldProps("email").value,
-      userx_password: getFieldProps("password").value === "PasswordUser" ? user.userx_password : getFieldProps("password").value,
-      userx_salt: 'N',
+      userx_password: getFieldProps("password").value === "**********" ? user.userx_password : encryptPassword(getFieldProps("password").value),
+      userx_salt: getFieldProps("password").value === "**********" ? user.userx_salt : key,
       userx_remember: user.userx_remember,
       userx_phone: getFieldProps("phone").value,
       userx_type: user.userx_type,
@@ -98,17 +106,17 @@ function UserEdit({ status }) {
     firstName: Yup.string()
       .min(2, 'El nombre es muy corto')
       .max(30, 'El nombre es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras")
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/, "Ingrese solamente letras")
       .required('El nombre es obligatorio'),
     lastName: Yup.string()
       .min(2, 'El apellido es muy corto')
       .max(30, 'El apellido es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras")
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios")
       .required('El apellido es obligatorio'),
     motherLastName: Yup.string()
       .min(2, 'El apellido es muy corto')
       .max(30, 'El apellido es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras"),
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios"),
     email: Yup.string()
       .email('El correo electrónico debe ser una dirección válida')
       .required('El correo electrónico es obligatorio'),
@@ -130,7 +138,7 @@ function UserEdit({ status }) {
       email: user.userx_email,
       school: 'Instituto Tecnológico de Ciudad Juárez',
       dateRegister: (user.userx_date).split("T", 1),
-      password: 'PasswordUser',
+      password: '**********',
       phone: user.userx_phone
     },
     enableReinitialize: true,
@@ -159,6 +167,17 @@ function UserEdit({ status }) {
         setChangePhoto(true);
       }
     })
+  }
+
+  const generateRandomString = (num) => {
+    let result1 = Math.random().toString(36).substring(0, num);
+    return result1;
+  }
+
+  var key = generateRandomString(30);
+  const encryptPassword = (text) => {
+    var encrypt = CryptoJS.AES.encrypt(text, key).toString();
+    return encrypt;
   }
 
   const { errors, touched, handleSubmit, getFieldProps } = formik;
