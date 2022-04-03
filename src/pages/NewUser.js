@@ -139,7 +139,7 @@ function NewUser() {
         } else if (advisor) {
           if (isStudent) {
             setShowAlert({
-              message: 'La cuenta es de estudiante, por el momento un estudiante no puede ser asesor',
+              message: 'La cuenta es de un estudiante, por el momento un estudiante no puede ser asesor',
               show: true,
             });
             setOpen(true);
@@ -149,7 +149,7 @@ function NewUser() {
         } else {
           if (isStudent) {
             setShowAlert({
-              message: 'La cuenta es de un estudiante, y un estudiante no puede ser Administrador',
+              message: 'La cuenta es de un estudiante, no puede ser administrador',
               show: true,
             });
             setOpen(true);
@@ -495,24 +495,24 @@ function NewUser() {
                       </LoadingButton>
                       {
                         showAlertPost
-                          ?
-                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                        ?
+                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
                               Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
                       {
                         showAlert.show
-                          ?
-                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                        ?
+                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
                     </Stack>

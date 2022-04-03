@@ -58,14 +58,14 @@ function Advises() {
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Card>
                                         <Advise
-                                            subject={element.advise_subject}
+                                            subject={element.subjectx_name}
                                             tag1='matematicas'
                                             tag2='investigacion'
                                             tag3='test'
                                             tag4='programa'
-                                            image={element.userx_image !== '' ? element.userx_image : MockImgAvatar()}
-                                            adviser={`${element.userx_name} ${element.userx_lastname}.`}
-                                            rating={element.advise_modality}
+                                            image={element.advisorImage !== '' ? element.advisorImage : MockImgAvatar()}
+                                            adviser={`${element.advisorName} ${element.advisorLastName.charAt(0)}.`}
+                                            rating="4"
                                             comments={element.advise_comments}
                                             modality={element.advise_modality}
                                             id={element.advise_code}

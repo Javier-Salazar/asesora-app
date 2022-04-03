@@ -22,7 +22,6 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-
 function UserEdit() {
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -103,7 +102,7 @@ function UserEdit() {
       if (emailStudent) {
         if (currentUserType() === 'A') {
           setShowAlert({
-            message: 'La cuenta es de estudiante, por el momento un estudiante no puede ser Asesor',
+            message: 'La cuenta es de estudiante, por el momento un estudiante no puede ser asesor',
             show: true,
             color: 'error'
           });
@@ -111,7 +110,7 @@ function UserEdit() {
           setOpen(true);
         } else if (currentUserType() === 'S') {
           setShowAlert({
-            message: 'La cuenta es de un estudiante, y un estudiante no puede ser Administrador',
+            message: 'La cuenta es de un estudiante, no puede ser administrador',
             show: true,
             color: 'error'
           });
@@ -171,6 +170,7 @@ function UserEdit() {
 
   function currentUserType() {
     var typeUser = "";
+
     if (changeType === false) {
       typeUser = user.userx_type;
     } else {
@@ -187,6 +187,7 @@ function UserEdit() {
 
   function currentUserStatus() {
     var statusUser = "";
+
     if (accountStatus === "") {
       statusUser = user.userx_status;
     } else {
@@ -194,7 +195,6 @@ function UserEdit() {
     }
     return statusUser;
   }
-
 
   const changeSwitch = (type) => {
     if (type === "S") {
@@ -302,7 +302,6 @@ function UserEdit() {
     setOpen(false);
   };
 
-
   const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
@@ -330,9 +329,9 @@ function UserEdit() {
                 variant="ghost"
                 color={
                   accountStatus === ""
-                    ?
+                  ?
                     (user.userx_status === 'I' && 'error') || 'success'
-                    :
+                  :
                     (accountStatus === 'I' && 'error') || 'success'
                 }
               >
@@ -363,9 +362,9 @@ function UserEdit() {
               </div>
               {
                 accountStatus === ""
-                  ?
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(user.userx_status === 'I' ? 'A' : 'I')} checked={user.userx_status === 'I' ? false : true} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(accountStatus === 'I' ? 'A' : 'I')} checked={accountStatus === 'I' ? false : true} />
               }
             </div>
@@ -384,9 +383,9 @@ function UserEdit() {
               </div>
               {
                 advisor === ""
-                  ?
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('A')} checked={user.userx_type === 'A' ? true : false} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
               }
 
@@ -406,9 +405,9 @@ function UserEdit() {
               </div>
               {
                 admin === ""
-                  ?
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('S')} checked={user.userx_type === 'S' ? true : false} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
               }
 
@@ -502,13 +501,13 @@ function UserEdit() {
 
                       {
                         showAlert.show
-                          ?
-                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%' }}>
+                        ?
+                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
 
