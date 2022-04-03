@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { sentenceCase } from 'change-case';
 import styled from '@emotion/styled';
-import { Card, Stack, Avatar, Container, Typography, TextField, Switch } from '@mui/material';
+import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
@@ -22,14 +21,18 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
+
 function UserEdit() {
   const cookies = new Cookies();
   const navigate = useNavigate();
 
-  const [phone, setPhone] = useState('');
-  const [accountStatus, setStatus] = useState(false);
-  const [admin, setAdmin] = useState(false);
-  const [advisor, setAdvisor] = useState(false);
+  const [accountStatus, setStatus] = useState("");
+  const [admin, setAdmin] = useState("");
+  const [advisor, setAdvisor] = useState("");
+  const [changeType, setChangeType] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
+  const [open, setOpen] = useState(false);
 
   var params = useParams();
   var idUser = params.userID;
@@ -43,7 +46,7 @@ function UserEdit() {
     userx_mother_lastname: "",
     userx_email: "",
     userx_phone: "",
-    // userx_type: "",
+    userx_type: "",
     userx_status: "",
     userx_image: ""
   });
@@ -68,22 +71,17 @@ function UserEdit() {
     name: Yup.string()
       .min(2, 'El nombre es muy corto')
       .max(30, 'El nombre es muy largo')
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/, "Ingrese solamente letras")
       .required('El nombre es obligatorio'),
     lastName: Yup.string()
       .min(2, 'El apellido es muy corto')
       .max(30, 'El apellido es muy largo')
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios")
       .required('El apellido es obligatorio'),
     motherLastName: Yup.string()
-      .min(2, "El apellido es muy corto")
-      .max(30, "El apellido es muy largo"),
-    email: Yup.string()
-      .email('El correo electrónico debe ser una dirección válida')
-      .required('El correo electrónico es obligatorio')
-      .matches(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj.edu.mx/,
-        'Ingrese su correo institucional, por ejemplo: user@itcj.edu.mx'),
-    phone: Yup.string()
-      .min(7, 'El teléfono es muy corto')
-      .max(10, 'El teléfono es muy largo')
+      .min(2, 'El apellido es muy corto')
+      .max(30, 'El apellido es muy largo')
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios"),
   });
 
   const formik = useFormik({
@@ -94,44 +92,217 @@ function UserEdit() {
       motherLastName: user.userx_mother_lastname,
       email: user.userx_email,
       phone: user.userx_phone,
-      type: user.userx_type,
-      status: user.userx_status === 'A' ? 'activo' : 'inactivo',
-      password: 'PasswordUser'
+      password: '**********'
     },
     enableReinitialize: true,
     validationSchema: RegisterSchema,
     onSubmit: () => {
-      navigate('/');
+      setLoading(true);
+      validateEmailType();
+      if (emailStudent) {
+        if (currentUserType() === 'A') {
+          setShowAlert({
+            message: 'La cuenta es de estudiante, por el momento un estudiante no puede ser Asesor',
+            show: true,
+            color: 'error'
+          });
+          setLoading(false);
+          setOpen(true);
+        } else if (currentUserType() === 'S') {
+          setShowAlert({
+            message: 'La cuenta es de un estudiante, y un estudiante no puede ser Administrador',
+            show: true,
+            color: 'error'
+          });
+          setLoading(false);
+          setOpen(true);
+        } else {
+          peticionPutUser(currentUserStatus(), 'N');
+        }
+      } else if (emailTypeAorS) {
+        if (currentUserType() === 'N') {
+          setShowAlert({
+            message: 'El correo no es de un alumno, por favor selecciona el tipo de cuenta',
+            show: true,
+            color: 'error'
+          });
+          setLoading(false);
+          setOpen(true);
+        } else {
+          if ((currentUserType() === 'A')) {
+            peticionPutUser(currentUserStatus(), 'A');
+          } else if ((currentUserType() === 'S')) {
+            peticionPutUser(currentUserStatus(), 'S');
+          }
+        }
+      }
     }
   });
 
-  const handleInput = (e) => {
-    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
-    setPhone(formattedPhoneNumber);
-    console.log(phone);
-  };
-
-  function formatPhoneNumber(value) {
-    if (!value) {
-      return value;
+  var emailStudent = false;
+  var emailTypeAorS = false;
+  function validateEmailType() {
+    var Aux = user.userx_email.split('@');
+    var code = Aux[0].slice(1);
+    if (user.userx_email.charAt(0) === "l" && /^[0-9]*$/.test(code)) {
+      emailStudent = true;
+      emailTypeAorS = false;
+    } else {
+      emailStudent = false;
+      emailTypeAorS = true;
     }
-
-    const phoneNumber = value.replace(/[^\d]/g, '');
-
-    const phoneNumberLength = phoneNumber.length;
-
-    if (phoneNumberLength < 3) {
-      return phoneNumber;
-    }
-
-    if (phoneNumberLength < 7) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-    }
-
-    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
   }
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps, } = formik;
+  function changeLabelStatus(text) {
+    if (text === "") {
+      if (user.userx_status === 'I') {
+        return 'Inactivo';
+      } else {
+        return 'Activo';
+      }
+    } else if (text === 'A') {
+      return 'Activo';
+    }
+    else {
+      return 'Inactivo';
+    }
+  }
+
+  function currentUserType() {
+    var typeUser = "";
+    if (changeType === false) {
+      typeUser = user.userx_type;
+    } else {
+      if (advisor === false && admin === false) {
+        typeUser = 'N';
+      } else if (advisor) {
+        typeUser = 'A';
+      } else {
+        typeUser = 'S';
+      }
+    }
+    return typeUser;
+  }
+
+  function currentUserStatus() {
+    var statusUser = "";
+    if (accountStatus === "") {
+      statusUser = user.userx_status;
+    } else {
+      statusUser = accountStatus;
+    }
+    return statusUser;
+  }
+
+
+  const changeSwitch = (type) => {
+    if (type === "S") {
+      setAdmin(user.userx_type === 'S' ? false : true);
+      setAdvisor(false);
+      setChangeType(true);
+    }
+    if (type === "A") {
+      setAdvisor(user.userx_type === 'A' ? false : true);
+      setAdmin(false);
+      setChangeType(true);
+    }
+  }
+
+  const peticionPutUser = async (status, type) => {
+    await axios.put(baseUrl, {
+      userx_code: user.userx_code,
+      userx_name: getFieldProps("name").value,
+      userx_lastname: getFieldProps("lastName").value,
+      userx_mother_lastname: getFieldProps("motherLastName").value,
+      userx_email: user.userx_email,
+      userx_password: user.userx_password,
+      userx_salt: user.userx_salt,
+      userx_remember: user.userx_remember,
+      userx_phone: getFieldProps("phone").value,
+      userx_type: type,
+      userx_istmp_password: user.userx_istmp_password,
+      userx_date: user.userx_date,
+      userx_islockedout: user.userx_islockedout,
+      userx_islockedout_date: user.userx_islockedout_date,
+      userx_islockedout_enable_date: user.userx_islockedout_enable_date,
+      userx_last_login_date: user.userx_last_login_date,
+      userx_lastfailed_login_date: user.userx_lastfailed_login_date,
+      userx_status: status,
+      userx_image: user.userx_image
+    }).then(response => {
+      if (type === 'N') {
+        peticionPutStudent(status);
+      } else if (type === 'A') {
+        peticionPutAdvisor(status);
+      } else if (type === 'S') {
+        peticionPutAdvisor('I');
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  const peticionPutStudent = (status) => {
+    var UrlStudent = `https://localhost:44397/api/students/${idUser}`;
+    axios.get(UrlStudent)
+      .then(Response => {
+        axios.put(UrlStudent, {
+          student_code: Response.data.student_code,
+          student_school: Response.data.student_school,
+          student_career: Response.data.student_career,
+          student_major: Response.data.student_major,
+          student_semester: Response.data.student_semester,
+          student_status: status,
+        }).then(response => {
+          setShowAlert({
+            message: '¡Se guardaron los cambios con éxito!',
+            show: true,
+            color: 'success'
+          });
+          setLoading(false);
+          setOpen(true);
+        }).catch(error => {
+          console.log(error);
+        });
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  const peticionPutAdvisor = (status) => {
+    var UrlAdvisor = `https://localhost:44397/api/advisors/${idUser}`;
+    axios.get(UrlAdvisor)
+      .then(Response => {
+        axios.put(UrlAdvisor, {
+          advisor_code: idUser,
+          advisor_rating: Response.data.advisor_rating,
+          advisor_comments: Response.data.advisor_comments,
+          advisor_status: status,
+        }).then(response => {
+          setShowAlert({
+            message: '¡Se guardaron los cambios con éxito!',
+            show: true,
+            color: 'success'
+          });
+          setLoading(false);
+          setOpen(true);
+        }).catch(error => {
+          console.log(error);
+        });
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
     <Page title="AsesoraApp | Editar Usuario">
@@ -156,9 +327,15 @@ function UserEdit() {
             <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse', marginBottom: '24px' }}>
               <Label
                 variant="ghost"
-                color={(accountStatus === 'inactivo' && 'error') || 'success'}
+                color={
+                  accountStatus === ""
+                    ?
+                    (user.userx_status === 'I' && 'error') || 'success'
+                    :
+                    (accountStatus === 'I' && 'error') || 'success'
+                }
               >
-                {sentenceCase('test')}
+                {changeLabelStatus(accountStatus)}
               </Label>
             </div>
 
@@ -183,7 +360,13 @@ function UserEdit() {
                   Definir el estado de la cuenta
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => setStatus(accountStatus === 'inactivo' ? 'activo' : 'inactivo')} checked={accountStatus === 'inactivo' ? false : true} />
+              {
+                accountStatus === ""
+                  ?
+                  <Switch sx={{ pl: 2 }} onChange={() => setStatus(user.userx_status === 'I' ? 'A' : 'I')} checked={user.userx_status === 'I' ? false : true} />
+                  :
+                  <Switch sx={{ pl: 2 }} onChange={() => setStatus(accountStatus === 'I' ? 'A' : 'I')} checked={accountStatus === 'I' ? false : true} />
+              }
             </div>
 
             <div style={{
@@ -198,7 +381,14 @@ function UserEdit() {
                   Activar convertir en asesor
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
+              {
+                advisor === ""
+                  ?
+                  <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('A')} checked={user.userx_type === 'A' ? true : false} />
+                  :
+                  <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
+              }
+
             </div>
 
             <div style={{
@@ -213,7 +403,14 @@ function UserEdit() {
                   Activar convertir en adnimistrador
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
+              {
+                admin === ""
+                  ?
+                  <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('S')} checked={user.userx_type === 'S' ? true : false} />
+                  :
+                  <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
+              }
+
             </div>
 
           </Card>
@@ -243,6 +440,7 @@ function UserEdit() {
                         {...getFieldProps('email')}
                         error={Boolean(touched.email && errors.email)}
                         helperText={touched.email && errors.email}
+                        disabled
                       />
                     </Stack>
 
@@ -284,13 +482,10 @@ function UserEdit() {
                       <TextField
                         fullWidth
                         label="Teléfono"
-                        onChange={(e) => {
-                          handleInput(e);
-                        }}
-                        value={phone}
                         {...getFieldProps('phone')}
                         error={Boolean(touched.phone && errors.phone)}
                         helperText={touched.phone && errors.phone}
+                        disabled
                       />
                     </Stack>
 
@@ -298,11 +493,24 @@ function UserEdit() {
                       <LoadingButton
                         type="submit"
                         variant="contained"
-                        loading={isSubmitting}
+                        loading={loading}
                         style={{ width: 'fit-content' }}
                       >
                         Guardar cambios
                       </LoadingButton>
+
+                      {
+                        showAlert.show
+                          ?
+                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%' }}>
+                              {showAlert.message}
+                            </Alert>
+                          </Snackbar>
+                          :
+                          null
+                      }
+
                     </Stack>
                   </Stack>
                 </Form>
