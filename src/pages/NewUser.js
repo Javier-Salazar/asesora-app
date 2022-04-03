@@ -39,7 +39,7 @@ function NewUser() {
 
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState(false);
+  const [accountStatus, setStatus] = useState(true);
   const [email, setEmail] = useState('');
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
@@ -234,11 +234,9 @@ function NewUser() {
         if (type === 'N') {
           peticionPostStudent();
         } else if (type === 'A') {
-          peticionPostAdvisor();
-        } else {
-          clearData();
-          setShowAlertPost(true);
-          setOpen(true);
+          peticionPostAdvisor(accountStatus);
+        } else if (type === 'S') {
+          peticionPostAdvisor(false);
         }
       })
       .catch((error) => {
@@ -267,14 +265,14 @@ function NewUser() {
       });
   };
 
-  const peticionPostAdvisor = async () => {
+  const peticionPostAdvisor = async (status) => {
     var arrayCode = email.split('@');
 
     await axios.post(`${baseUrl}advisors`, {
       advisor_code: arrayCode[0],
       advisor_rating: 5,
       advisor_comments: "",
-      advisor_status: accountStatus ? 'A' : 'I',
+      advisor_status: status ? 'A' : 'I',
     })
       .then((response) => {
         clearData();
