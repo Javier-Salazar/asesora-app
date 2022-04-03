@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { sentenceCase } from 'change-case';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
@@ -156,15 +157,15 @@ function UserEdit() {
   function changeLabelStatus(text) {
     if (text === "") {
       if (user.userx_status === 'I') {
-        return 'Inactivo';
+        return sentenceCase('Inactivo');
       } else {
-        return 'Activo';
+        return sentenceCase('Activo');
       }
     } else if (text === 'A') {
-      return 'Activo';
+      return sentenceCase('Activo');
     }
     else {
-      return 'Inactivo';
+      return sentenceCase('Inactivo');
     }
   }
 
