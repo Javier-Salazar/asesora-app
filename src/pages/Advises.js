@@ -4,6 +4,7 @@ import { Advise } from '../components/_dashboard/advises';
 import { Wrong } from '../components/_dashboard/errors';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MockImgAvatar from '../utils/mockImages';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -53,20 +54,21 @@ function Advises() {
                         ?
                             <Wrong />
                         :
-                            advises.map(elemento => (
-                                <Grid item xs={12} sm={6} md={3}>
+                            advises.map(element => (
+                                <Grid item xs={12} sm={6} md={4}>
                                     <Card>
                                         <Advise
-                                            subject='materia'
-                                            tag1='test1'
-                                            tag2='test2'
-                                            tag3='test3'
-                                            tag4='test4'
-                                            image={elemento.userx_image}
-                                            adviser={`${elemento.userx_name} ${elemento.userx_lastname}`}
-                                            rating={elemento.advisor_rating}
-                                            comments="6"
-                                            id={elemento.advisor_code}
+                                            subject={element.advise_subject}
+                                            tag1='matematicas'
+                                            tag2='investigacion'
+                                            tag3='test'
+                                            tag4='programa'
+                                            image={element.userx_image !== '' ? element.userx_image : MockImgAvatar()}
+                                            adviser={`${element.userx_name} ${element.userx_lastname}.`}
+                                            rating={element.advise_modality}
+                                            comments={element.advise_comments}
+                                            modality={element.advise_modality}
+                                            id={element.advise_code}
                                         />
                                     </Card>
                                 </Grid>

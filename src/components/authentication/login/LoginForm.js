@@ -125,7 +125,7 @@ function LoginForm() {
     }
     setOpen(false);
     setShowAlert(false);
-  };
+  }
 
 
   const { errors, touched, values, handleSubmit, getFieldProps } = formik;
@@ -192,7 +192,7 @@ function LoginForm() {
           showAlert.show
           ?
             <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose}>
-              <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+              <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
                 {showAlert.message}
               </Alert>
             </Snackbar>

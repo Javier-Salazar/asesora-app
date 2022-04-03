@@ -79,6 +79,12 @@ const ERROR = {
   contrastText: '#FFF'
 };
 
+const VIRTUAL = {
+  main: '#7142FF',
+  dark: '#4421b7',
+  contrastText: '#4421b7'
+};
+
 const GRADIENTS = {
   primary: CreateGradient(PRIMARY.light, PRIMARY.main),
   info: CreateGradient(INFO.light, INFO.main),
@@ -103,6 +109,7 @@ const palette = {
   success: { ...SUCCESS },
   warning: { ...WARNING },
   error: { ...ERROR },
+  virtual: { ...VIRTUAL },
   grey: GREY,
   gradients: GRADIENTS,
   chart: CHART_COLORS,

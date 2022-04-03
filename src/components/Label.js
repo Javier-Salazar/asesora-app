@@ -72,6 +72,7 @@ Label.propTypes = {
     'primary',
     'secondary',
     'info',
+    'virtual',
     'success',
     'warning',
     'error'

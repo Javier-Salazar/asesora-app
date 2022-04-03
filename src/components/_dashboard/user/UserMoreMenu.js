@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
-DialogActions, Button, DialogTitle } from '@mui/material';
+  DialogActions, Button, DialogTitle } from '@mui/material';
 import Slide from '@mui/material/Slide';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -63,9 +63,9 @@ function UserMoreMenu(props) {
           ¿Estas seguro de querer eliminar al usuario <b>{props.name}</b>?
           Esta acción no se podrá revertir
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Aceptar</Button>
-          <Button variant="contained" size="medium" onClick={handleClose}>Cancelar</Button>
+        <DialogActions sx={{pb: 2, pr: 3, maxWidth: '50%', ml: '50%'}}>
+          <Button fullWidth onClick={handleClose}>Aceptar</Button>
+          <Button fullWidth variant="contained" onClick={handleClose}>Cancelar</Button>
         </DialogActions>
       </Dialog>
     </>
