@@ -495,24 +495,24 @@ function NewUser() {
                       </LoadingButton>
                       {
                         showAlertPost
-                        ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                          ?
+                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
                               Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                        :
+                          :
                           null
                       }
                       {
                         showAlert.show
-                        ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                          ?
+                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                        :
+                          :
                           null
                       }
                     </Stack>
