@@ -49,7 +49,7 @@ function LoginForm() {
     initialValues: {
       email: cookies.get('UserEmail') ? cookies.get('UserEmail') : "",
       password: '',
-      remember: false
+      remember: true
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
@@ -190,13 +190,13 @@ function LoginForm() {
         </LoadingButton>
         {
           showAlert.show
-          ?
+            ?
             <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose}>
               <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
                 {showAlert.message}
               </Alert>
             </Snackbar>
-          :
+            :
             null
         }
       </Form>
