@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination } from '@mui/material';
+import {
+  Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination
+} from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -226,9 +228,9 @@ function User() {
           </Typography>
           {
             data <= 0 && isUserNotFound
-            ?
+              ?
               null
-            :
+              :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -243,9 +245,9 @@ function User() {
         {
 
           noRequest
-          ?
+            ?
             <Wrong />
-          :
+            :
             <Card>
               <UserListToolbar
                 numSelected={selected.length}

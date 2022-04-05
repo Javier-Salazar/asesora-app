@@ -1,12 +1,16 @@
 import { Icon } from '@iconify/react';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import editFill from '@iconify/icons-eva/edit-fill';
-import { Link as RouterLink } from 'react-router-dom';
-import trash2Outline from '@iconify/icons-eva/trash-2-outline';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import slashOutline from '@iconify/icons-eva/slash-outline';
+import axios from 'axios';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
-  DialogActions, Button, DialogTitle } from '@mui/material';
+import {
+  Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
+  DialogActions, Button, DialogTitle, Snackbar, Alert
+} from '@mui/material';
 import Slide from '@mui/material/Slide';
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -14,8 +18,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function UserMoreMenu(props) {
   const ref = useRef(null);
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const[open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
+  const [openAlert, setOpenAlert] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,6 +32,127 @@ function UserMoreMenu(props) {
   const handleClose = () => {
     setOpen(false);
   }
+
+
+  const [user, setUser] = useState([]);
+  const baseUrl = `https://localhost:44397/api/users/${props.idUser}`;
+
+  const requestGet = async () => {
+    await axios.get(baseUrl)
+      .then(response => {
+        setUser(response.data);
+      }).catch(error => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    requestGet();
+  });
+
+  const inactivateUser = () => {
+    setOpen(false);
+    if (user.userx_status === 'I') {
+      setShowAlert({
+        message: 'El usuario ya se encuentra inactivo',
+        show: true,
+        color: 'warning'
+      });
+      setOpenAlert(true);
+    } else {
+      if (user.userx_type === 'N') {
+        peticionPutUser('N');
+      } else if (user.userx_type === 'A') {
+        peticionPutUser('A');
+      } else {
+        peticionPutUser('S');
+      }
+    }
+  }
+
+  const peticionPutUser = async (modification) => {
+    await axios.put(baseUrl, {
+      userx_code: user.userx_code,
+      userx_name: user.userx_name,
+      userx_lastname: user.userx_lastname,
+      userx_mother_lastname: user.userx_mother_lastname,
+      userx_email: user.userx_email,
+      userx_password: user.userx_password,
+      userx_salt: user.userx_salt,
+      userx_remember: user.userx_remember,
+      userx_phone: user.userx_phone,
+      userx_type: user.userx_type,
+      userx_istmp_password: user.userx_istmp_password,
+      userx_date: user.userx_date,
+      userx_islockedout: user.userx_islockedout,
+      userx_islockedout_date: user.userx_islockedout_date,
+      userx_islockedout_enable_date: user.userx_islockedout_enable_date,
+      userx_last_login_date: user.userx_last_login_date,
+      userx_lastfailed_login_date: user.userx_lastfailed_login_date,
+      userx_status: 'I',
+      userx_image: user.userx_image
+    }).then(response => {
+      if (modification === 'N') {
+        peticionPutStudent();
+      } else if (modification === 'A') {
+        peticionPutAdvisor();
+      } else if (modification === 'S') {
+        navigate('/dashboard/user-edit/' + props.idUser);
+        navigate('/dashboard/user');
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  const peticionPutStudent = () => {
+    var UrlStudent = `https://localhost:44397/api/students/${props.idUser}`;
+    axios.get(UrlStudent)
+      .then(Response => {
+        axios.put(UrlStudent, {
+          student_code: Response.data.student_code,
+          student_school: Response.data.student_school,
+          student_career: Response.data.student_career,
+          student_major: Response.data.student_major,
+          student_semester: Response.data.student_semester,
+          student_status: 'I',
+        }).then(response => {
+          navigate('/dashboard/user-edit/' + props.idUser);
+          navigate('/dashboard/user');
+        }).catch(error => {
+          console.log(error);
+        });
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  const peticionPutAdvisor = () => {
+    var UrlAdvisor = `https://localhost:44397/api/advisors/${props.idUser}`;
+    axios.get(UrlAdvisor)
+      .then(Response => {
+        axios.put(UrlAdvisor, {
+          advisor_code: Response.data.advisor_code,
+          advisor_rating: Response.data.advisor_rating,
+          advisor_comments: Response.data.advisor_comments,
+          advisor_status: 'I',
+        }).then(response => {
+          navigate('/dashboard/user-edit/' + props.idUser);
+          navigate('/dashboard/user');
+        }).catch(error => {
+          console.log(error);
+        });
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+  };
 
   return (
     <>
@@ -44,9 +172,9 @@ function UserMoreMenu(props) {
       >
         <MenuItem sx={{ color: 'error.main' }} onClick={handleClickOpen}>
           <ListItemIcon>
-            <Icon icon={trash2Outline} width={24} height={24} />
+            <Icon icon={slashOutline} width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Borrar" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary="Inactivar" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
         <MenuItem component={RouterLink} to={`/dashboard/user-edit/${props.idUser}`} sx={{ color: 'text.secondary' }}>
@@ -58,16 +186,28 @@ function UserMoreMenu(props) {
       </Menu>
 
       <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
-        <DialogTitle>Eliminar usuario</DialogTitle>
+        <DialogTitle>Inactivar usuario</DialogTitle>
         <DialogContent>
-          ¿Estas seguro de querer eliminar al usuario <b>{props.name}</b>?
-          Esta acción no se podrá revertir
+          ¿Estas seguro de querer inactivar al usuario <b>{props.name}</b>?
+          Esta acción se podrá revertir editando el usuario
         </DialogContent>
-        <DialogActions sx={{pb: 2, pr: 3, maxWidth: '50%', ml: '50%'}}>
-          <Button fullWidth onClick={handleClose}>Aceptar</Button>
+        <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
+          <Button fullWidth onClick={inactivateUser}>Aceptar</Button>
           <Button fullWidth variant="contained" onClick={handleClose}>Cancelar</Button>
         </DialogActions>
       </Dialog>
+
+      {
+        showAlert.show
+          ?
+          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity={showAlert.color} sx={{ width: '100%' }}>
+              {showAlert.message}
+            </Alert>
+          </Snackbar>
+          :
+          null
+      }
     </>
   );
 }
