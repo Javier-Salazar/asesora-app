@@ -118,7 +118,6 @@ function LoginForm() {
     });
   };
 
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -126,7 +125,6 @@ function LoginForm() {
     setOpen(false);
     setShowAlert(false);
   }
-
 
   const { errors, touched, values, handleSubmit, getFieldProps } = formik;
 

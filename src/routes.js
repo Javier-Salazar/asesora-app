@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Advisers from './pages/Advisers';
 import Advises from './pages/Advises';
+import MyAdvises from './pages/MyAdvises';
 import Subjects from './pages/Subjects';
 import ResetPassword from './pages/ResetPassword';
 import EndUserAgreement from './pages/EndUserAgreement'
@@ -55,6 +56,7 @@ function Router() {
         { path: 'adviser', element: <Advisers /> },
         { path: 'adviser-profile/:adviserID', element: <AdvisorProfile /> },
         { path: 'advises', element: <Advises /> },
+        { path: 'my-advises', element: <MyAdvises /> },
         { path: 'subject', element: <Subjects /> },
         { path: 'my-profile', element: <MyProfile /> },
         { path: '404', element: <NotFound /> },

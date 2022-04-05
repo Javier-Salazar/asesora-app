@@ -135,13 +135,13 @@ function AuthSocial() {
 
       {
         showAlert.show
-          ?
+        ?
           <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={showAlert.duration} onClose={handleCloseAlert}>
             <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
               {showAlert.message}
             </Alert>
           </Snackbar>
-          :
+        :
           null
       }
     </>

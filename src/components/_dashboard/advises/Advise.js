@@ -135,30 +135,30 @@ function Advise(props) {
                 <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
                     {
                         props.tag1 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag1} sx={{ mb: 1, mr: 1 }} />
-                            :
+                        :
                             null
                     }
                     {
                         props.tag2 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag2} sx={{ mb: 1 }} />
-                            :
+                        :
                             null
                     }
                     {
                         props.tag3 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag3} />
-                            :
+                        :
                             null
                     }
                     {
                         props.tag4 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag4} />
-                            :
+                        :
                             null
                     }
                 </div>

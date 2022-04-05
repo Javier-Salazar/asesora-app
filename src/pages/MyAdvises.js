@@ -32,41 +32,41 @@ function changeLabelStatus(bool) {
   }
 }
 
-function NewUser() {
-  const cookies = new Cookies();
+function MyAdvises() {
+//   const cookies = new Cookies();
   const navigate = useNavigate();
   const date = new Date();
 
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState(true);
+  const [accountStatus, setStatus] = useState(false);
   const [email, setEmail] = useState('');
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
 
-  const baseUrl = "https://localhost:44397/api/";
+//   const baseUrl = "https://localhost:44397/api/";
 
-  const peticionesGet = async () => {
-    await axios.get(`${baseUrl}users`)
-      .then((Response) => {
-        setData(Response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+//   const peticionesGet = async () => {
+//     await axios.get(`${baseUrl}users`)
+//       .then((Response) => {
+//         setData(Response.data);
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   };
 
-  useEffect(() => {
-    peticionesGet();
-  }, []);
+//   useEffect(() => {
+//     peticionesGet();
+//   }, []);
 
-  useEffect(() => {
-    if (!cookies.get('UserCode')) {
-      navigate('/');
-    }
-  });
+//   useEffect(() => {
+//     if (!cookies.get('UserCode')) {
+//       navigate('/');
+//     }
+//   });
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -134,27 +134,7 @@ function NewUser() {
             });
             setOpen(true);
           } else {
-            peticionPostUser('N');
-          }
-        } else if (advisor) {
-          if (isStudent) {
-            setShowAlert({
-              message: 'La cuenta es de un estudiante, por el momento un estudiante no puede ser asesor',
-              show: true,
-            });
-            setOpen(true);
-          } else {
-            peticionPostUser('A');
-          }
-        } else {
-          if (isStudent) {
-            setShowAlert({
-              message: 'La cuenta es de un estudiante, no puede ser administrador',
-              show: true,
-            });
-            setOpen(true);
-          } else {
-            peticionPostUser('S');
+            // peticionPostUser('N');
           }
         }
       }
@@ -178,16 +158,13 @@ function NewUser() {
     });
   };
 
-  var isStudent = false;
   var isTypeAorS = false;
   function validateUserType() {
     var Aux = email.split('@');
     var code = Aux[0].slice(1);
     if (email.charAt(0) === "l" && /^[0-9]*$/.test(code)) {
-      isStudent = true;
       isTypeAorS = false;
     } else {
-      isStudent = false;
       isTypeAorS = true;
     }
   }
@@ -206,83 +183,85 @@ function NewUser() {
     setStatus(false);
   }
 
-  const peticionPostUser = async (type) => {
-    var arrayCode = email.split('@');
-    var arrayDate = date.toISOString().split('T');
-    await axios.post(`${baseUrl}users`, {
-      userx_code: arrayCode[0],
-      userx_name: getFieldProps("firstName").value,
-      userx_lastname: getFieldProps("lastName").value,
-      userx_mother_lastname: getFieldProps("motherLastName").value,
-      userx_email: email,
-      userx_password: encryptPassword(getFieldProps("password").value),
-      userx_salt: key,
-      userx_remember: "N",
-      userx_phone: getFieldProps("phone").value,
-      userx_type: type,
-      userx_istmp_password: "N",
-      userx_date: arrayDate[0],
-      userx_islockedout: "N",
-      userx_islockedout_date: arrayDate[0],
-      userx_islockedout_enable_date: arrayDate[0],
-      userx_last_login_date: arrayDate[0],
-      userx_lastfailed_login_date: arrayDate[0],
-      userx_status: accountStatus ? 'A' : 'I',
-      userx_image: ""
-    })
-      .then((response) => {
-        if (type === 'N') {
-          peticionPostStudent();
-        } else if (type === 'A') {
-          peticionPostAdvisor(accountStatus);
-        } else if (type === 'S') {
-          peticionPostAdvisor(false);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+//   const peticionPostUser = async (type) => {
+//     var arrayCode = email.split('@');
+//     var arrayDate = date.toISOString().split('T');
+//     await axios.post(`${baseUrl}users`, {
+//       userx_code: arrayCode[0],
+//       userx_name: getFieldProps("firstName").value,
+//       userx_lastname: getFieldProps("lastName").value,
+//       userx_mother_lastname: getFieldProps("motherLastName").value,
+//       userx_email: email,
+//       userx_password: encryptPassword(getFieldProps("password").value),
+//       userx_salt: key,
+//       userx_remember: "N",
+//       userx_phone: getFieldProps("phone").value,
+//       userx_type: type,
+//       userx_istmp_password: "N",
+//       userx_date: arrayDate[0],
+//       userx_islockedout: "N",
+//       userx_islockedout_date: arrayDate[0],
+//       userx_islockedout_enable_date: arrayDate[0],
+//       userx_last_login_date: arrayDate[0],
+//       userx_lastfailed_login_date: arrayDate[0],
+//       userx_status: accountStatus ? 'A' : 'I',
+//       userx_image: ""
+//     })
+//       .then((response) => {
+//         if (type === 'N') {
+//           peticionPostStudent();
+//         } else if (type === 'A') {
+//           peticionPostAdvisor();
+//         } else {
+//           clearData();
+//           setShowAlertPost(true);
+//           setOpen(true);
+//         }
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   };
 
-  const peticionPostStudent = async () => {
-    var arrayCode = email.split('@');
+//   const peticionPostStudent = async () => {
+//     var arrayCode = email.split('@');
 
-    await axios.post(baseUrl + "students", {
-      student_code: arrayCode[0],
-      student_school: "ITCJC1",
-      student_career: "SINCS",
-      student_major: "SINES",
-      student_semester: 1,
-      student_status: accountStatus ? 'A' : 'I',
-    })
-      .then((response) => {
-        clearData();
-        setShowAlertPost(true);
-        setOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+//     await axios.post(baseUrl + "students", {
+//       student_code: arrayCode[0],
+//       student_school: "ITCJC1",
+//       student_career: "SINCS",
+//       student_major: "SINES",
+//       student_semester: 1,
+//       student_status: accountStatus ? 'A' : 'I',
+//     })
+//       .then((response) => {
+//         clearData();
+//         setShowAlertPost(true);
+//         setOpen(true);
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   };
 
-  const peticionPostAdvisor = async (status) => {
-    var arrayCode = email.split('@');
+//   const peticionPostAdvisor = async () => {
+//     var arrayCode = email.split('@');
 
-    await axios.post(`${baseUrl}advisors`, {
-      advisor_code: arrayCode[0],
-      advisor_rating: 5,
-      advisor_comments: "",
-      advisor_status: status ? 'A' : 'I',
-    })
-      .then((response) => {
-        clearData();
-        setShowAlertPost(true);
-        setOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+//     await axios.post(`${baseUrl}advisors`, {
+//       advisor_code: arrayCode[0],
+//       advisor_rating: 5,
+//       advisor_comments: "",
+//       advisor_status: accountStatus ? 'A' : 'I',
+//     })
+//       .then((response) => {
+//         clearData();
+//         setShowAlertPost(true);
+//         setOpen(true);
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   };
 
   const handleChange = (event) => {
     setEmail(event.target.value);
@@ -295,25 +274,14 @@ function NewUser() {
     setOpen(false);
   };
 
-  const generateRandomString = (num) => {
-    let result1 = Math.random().toString(36).substring(0, num);
-    return result1;
-  }
-
-  var key = generateRandomString(20);
-  const encryptPassword = (text) => {
-    var encrypt = CryptoJS.AES.encrypt(text, key).toString();
-    return encrypt;
-  }
-
   const { errors, touched, handleSubmit, getFieldProps, setFieldValue } = formik;
 
   return (
-    <Page title="AsesoraApp | Agregar usuario">
+    <Page title="AsesoraApp | Mis Asesorías">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Agregar Usuario
+            Agregar Asesoría
           </Typography>
         </Stack>
 
@@ -525,4 +493,4 @@ function NewUser() {
   );
 }
 
-export default NewUser;
+export default MyAdvises;
