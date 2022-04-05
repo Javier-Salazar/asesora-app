@@ -105,11 +105,11 @@ function AuthSocial() {
         </Tooltip>
 
         <GoogleLogin
-          clientId="63267804571-95de0l4ta0351pi0k7lhsgt7n1kcr01e.apps.googleusercontent.com"
+          clientId="403325894307-riktnlopiv84g0mjisqa6b9rgclkeigo.apps.googleusercontent.com"
           render={renderProps => (
             <Tooltip title="Iniciar sesión con Google" placement="top" enterDelay={200} arrow>
               <Button fullWidth size="large" color="inherit" variant="outlined" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                <Icon icon={googleFill} color="#DF3E30"  height={24} />
+                <Icon icon={googleFill} color="#DF3E30" height={24} />
               </Button>
             </Tooltip>
           )}
@@ -135,13 +135,13 @@ function AuthSocial() {
 
       {
         showAlert.show
-        ?
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={showAlert.duration} onClose={handleCloseAlert}>
-                <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
-                  {showAlert.message}
-                </Alert> 
-            </Snackbar>
-        :
+          ?
+          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={showAlert.duration} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
+              {showAlert.message}
+            </Alert>
+          </Snackbar>
+          :
           null
       }
     </>
