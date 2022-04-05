@@ -49,7 +49,7 @@ function LoginForm() {
     initialValues: {
       email: cookies.get('UserEmail') ? cookies.get('UserEmail') : "",
       password: '',
-      remember: false
+      remember: true
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
@@ -118,7 +118,6 @@ function LoginForm() {
     });
   };
 
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -126,7 +125,6 @@ function LoginForm() {
     setOpen(false);
     setShowAlert(false);
   }
-
 
   const { errors, touched, values, handleSubmit, getFieldProps } = formik;
 

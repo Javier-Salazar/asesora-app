@@ -13,13 +13,12 @@ const ChipStyled = styled(Chip)(({ theme }) => ({
     backgroundColor: '#EBF8F6'
 }));
 
-var gapi = window.gapi
+var gapi = window.gapi;
 
-var CLIENT_ID = "403325894307-riktnlopiv84g0mjisqa6b9rgclkeigo.apps.googleusercontent.com"
-var API_KEY = "AIzaSyAN18U9TJjC3nVndaQM6ovngAAnJvOvgZU"
-var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
-var SCOPES = "https://www.googleapis.com/auth/calendar"
-
+var CLIENT_ID = "403325894307-riktnlopiv84g0mjisqa6b9rgclkeigo.apps.googleusercontent.com";
+var API_KEY = "AIzaSyAN18U9TJjC3nVndaQM6ovngAAnJvOvgZU";
+var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+var SCOPES = "https://www.googleapis.com/auth/calendar";
 
 const handleClick = () => {
     gapi.load('client:auth2', () => {
@@ -76,10 +75,7 @@ const handleClick = () => {
                 })
 
             })
-
-
-
-    })
+    });
 }
 
 function Advise(props) {
@@ -135,30 +131,30 @@ function Advise(props) {
                 <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
                     {
                         props.tag1 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag1} sx={{ mb: 1, mr: 1 }} />
-                            :
+                        :
                             null
                     }
                     {
                         props.tag2 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag2} sx={{ mb: 1 }} />
-                            :
+                        :
                             null
                     }
                     {
                         props.tag3 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag3} />
-                            :
+                        :
                             null
                     }
                     {
                         props.tag4 !== ''
-                            ?
+                        ?
                             <ChipStyled label={props.tag4} />
-                            :
+                        :
                             null
                     }
                 </div>

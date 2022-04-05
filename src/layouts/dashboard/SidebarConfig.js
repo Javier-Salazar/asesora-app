@@ -30,8 +30,8 @@ const sidebarConfig = [
     icon: getIcon(fileTextFill)
   },
   {
-    title: 'mis materias',
-    path: '/comming',
+    title: 'mis asesorías',
+    path: '/dashboard/my-advises',
     icon: getIcon(fileTextFill)
   },
   {

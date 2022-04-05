@@ -5,12 +5,9 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import slashOutline from '@iconify/icons-eva/slash-outline';
 import axios from 'axios';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-import {
-  Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
-  DialogActions, Button, DialogTitle, Snackbar, Alert
-} from '@mui/material';
+import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
+  DialogActions, Button, DialogTitle, Snackbar, Alert } from '@mui/material';
 import Slide from '@mui/material/Slide';
-
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -32,7 +29,6 @@ function UserMoreMenu(props) {
   const handleClose = () => {
     setOpen(false);
   }
-
 
   const [user, setUser] = useState([]);
   const baseUrl = `https://localhost:44397/api/users/${props.idUser}`;
@@ -199,13 +195,13 @@ function UserMoreMenu(props) {
 
       {
         showAlert.show
-          ?
+        ?
           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
             <Alert onClose={handleCloseAlert} severity={showAlert.color} sx={{ width: '100%' }}>
               {showAlert.message}
             </Alert>
           </Snackbar>
-          :
+        :
           null
       }
     </>

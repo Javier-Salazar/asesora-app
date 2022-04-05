@@ -7,30 +7,33 @@ import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { Stack, TextField, IconButton, InputAdornment, Snackbar, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 function RegisterForm() {
   const date = new Date();
   const [showPassword, setShowPassword] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [showAlertPost, setShowAlertPost] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
   const [open, setOpen] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
-      .min(2, "El nombre es muy corto")
-      .max(30, "El nombre es muy largo")
-      .required("El nombre es obligatorio"),
+      .min(2, 'El nombre es muy corto')
+      .max(30, 'El nombre es muy largo')
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/, "Ingrese solamente letras")
+      .required('El nombre es obligatorio'),
     lastName: Yup.string()
-      .min(2, "El apellido es muy corto")
-      .max(30, "El apellido es muy largo")
-      .required("El apellido es obligatorio"),
+      .min(2, 'El apellido es muy corto')
+      .max(30, 'El apellido es muy largo')
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios")
+      .required('El apellido es obligatorio'),
     motherLastName: Yup.string()
-      .min(2, "El apellido es muy corto")
-      .max(30, "El apellido es muy largo"),
+      .min(2, 'El apellido es muy corto')
+      .max(30, 'El apellido es muy largo')
+      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios"),
     email: Yup.string()
       .email("El correo electrónico debe ser una dirección válida")
       .required("El correo electrónico es obligatorio")
-      .matches(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj.edu.mx/,
+      .matches(/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj\.edu\.mx/,
         'Ingrese su correo institucional, por ejemplo: user@itcj.edu.mx'),
     password: Yup.string()
       .required("La contraseña es obligatoria")
@@ -47,64 +50,57 @@ function RegisterForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
-      setShowAlert(false);
-      setShowAlertPost(false);
       searchUser(getFieldProps("email").value);
+      validateUserType();
+
       if (isFind === false) {
-        peticionPost();
-      }
-      else {
-        setShowAlert(true);
+        if (isTypeAorS) {
+          peticionPostUser('A');
+        } else if (isStudent) {
+          peticionPostUser('N');
+        }
+      } else {
+        setShowAlert({
+          message: 'Ya se tiene una cuenta asociada al correo ingresado',
+          show: true,
+          color: 'error'
+        });
         setOpen(true);
       }
-      setFieldValue("name", "", false);
-      setFieldValue("lastName", "", false);
-      setFieldValue("motherLastName", "", false);
-      setFieldValue("email", "", false);
-      setFieldValue("password", "", false);
     },
   });
 
-  const baseUrl = "https://localhost:44397/api/users";
+  var isFind = false;
+  const searchUser = (finded) => {
+    data.filter((element) => {
+      if (element.userx_email.toLowerCase() === finded.toLowerCase()) {
+        isFind = true;
+      }
+      return 0;
+    });
+  };
+
+  var isStudent = false;
+  var isTypeAorS = false;
+  function validateUserType() {
+    var Aux = getFieldProps("email").value.split('@');
+    var code = Aux[0].slice(1);
+    if (getFieldProps("email").value.charAt(0) === "l" && /^[0-9]*$/.test(code)) {
+      isStudent = true;
+      isTypeAorS = false;
+    } else {
+      isStudent = false;
+      isTypeAorS = true;
+    }
+  }
+
+  const baseUrl = "https://localhost:44397/api/";
   const [data, setData] = useState([]);
 
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${baseUrl}users`)
       .then((Response) => {
         setData(Response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const peticionPost = async () => {
-    var arrayCode = getFieldProps("email").value.split('@');
-    var arrayDate = date.toISOString().split('T');
-    await axios.post(baseUrl, {
-      userx_code: arrayCode[0],
-      userx_name: getFieldProps("name").value,
-      userx_lastname: getFieldProps("lastName").value,
-      userx_mother_lastname: getFieldProps("motherLastName").value,
-      userx_email: getFieldProps("email").value,
-      userx_password: getFieldProps("password").value,
-      userx_salt: "N",
-      userx_remember: "N",
-      userx_phone: "",
-      userx_type: "N",
-      userx_istmp_password: "N",
-      userx_date: arrayDate[0],
-      userx_islockedout: "N",
-      userx_islockedout_date: arrayDate[0],
-      userx_islockedout_enable_date: arrayDate[0],
-      userx_last_login_date: arrayDate[0],
-      userx_lastfailed_login_date: arrayDate[0],
-      userx_status: "A",
-      userx_image: ""
-    })
-      .then((response) => {
-        setShowAlertPost(true);
-        setOpen(true);
       })
       .catch((error) => {
         console.log(error);
@@ -115,6 +111,94 @@ function RegisterForm() {
     peticionesGet();
   }, []);
 
+  const peticionPostUser = async (type) => {
+    var arrayCode = getFieldProps("email").value.split('@');
+    var arrayDate = date.toISOString().split('T');
+    await axios.post(`${baseUrl}users`, {
+      userx_code: arrayCode[0],
+      userx_name: getFieldProps("name").value,
+      userx_lastname: getFieldProps("lastName").value,
+      userx_mother_lastname: getFieldProps("motherLastName").value,
+      userx_email: getFieldProps("email").value,
+      userx_password: encryptPassword(getFieldProps("password").value),
+      userx_salt: key,
+      userx_remember: "N",
+      userx_phone: getFieldProps("phone").value,
+      userx_type: type,
+      userx_istmp_password: "N",
+      userx_date: arrayDate[0],
+      userx_islockedout: "N",
+      userx_islockedout_date: arrayDate[0],
+      userx_islockedout_enable_date: arrayDate[0],
+      userx_last_login_date: arrayDate[0],
+      userx_lastfailed_login_date: arrayDate[0],
+      userx_status: 'A',
+      userx_image: ""
+    })
+      .then((response) => {
+        if (type === 'N') {
+          peticionPostStudent(arrayCode[0]);
+        } else if (type === 'A') {
+          peticionPostAdvisor(arrayCode[0]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const peticionPostStudent = async (code) => {
+    await axios.post(`${baseUrl}students`, {
+      student_code: code,
+      student_school: "ITCJC1",
+      student_career: "SINCS",
+      student_major: "SINES",
+      student_semester: 1,
+      student_status: 'A',
+    })
+      .then((response) => {
+        setShowAlert({
+          message: '¡Se registró con éxito el correo de alumno ingresado!',
+          show: true,
+          color: 'success'
+        });
+        setOpen(true);
+        setFieldValue("name", "", false);
+        setFieldValue("lastName", "", false);
+        setFieldValue("motherLastName", "", false);
+        setFieldValue("email", "", false);
+        setFieldValue("password", "", false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const peticionPostAdvisor = async (code) => {
+    await axios.post(`${baseUrl}advisors`, {
+      advisor_code: code,
+      advisor_rating: 5,
+      advisor_comments: "",
+      advisor_status: 'A',
+    })
+      .then((response) => {
+        setShowAlert({
+          message: '¡Se registró con éxito el correo de asesor ingresado!',
+          show: true,
+          color: 'success'
+        });
+        setOpen(true);
+        setFieldValue("name", "", false);
+        setFieldValue("lastName", "", false);
+        setFieldValue("motherLastName", "", false);
+        setFieldValue("email", "", false);
+        setFieldValue("password", "", false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -122,19 +206,17 @@ function RegisterForm() {
     setOpen(false);
   };
 
-  var isFind = false;
+  const generateRandomString = (num) => {
+    let result1 = Math.random().toString(36).substring(0, num);
+    return result1;
+  }
 
-  const searchUser = (finded) => {
-    data.filter((element) => {
-      if (element.userx_email.toLowerCase() === finded.toLowerCase()) {
-        console.log(element.userx_email.toLowerCase());
-        console.log(finded.toLowerCase());
-        isFind = true;
-        console.log(isFind);
-      }
-      return 0;
-    });
-  };
+  var key = generateRandomString(20);
+  const encryptPassword = (text) => {
+    var encrypt = CryptoJS.AES.encrypt(text, key).toString();
+    return encrypt;
+  }
+
 
   const { errors, touched, handleSubmit, getFieldProps, setFieldValue } = formik;
 
@@ -211,28 +293,17 @@ function RegisterForm() {
           </LoadingButton>
 
           {
-            showAlertPost
+            showAlert.show
             ?
               <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '60%', boxShadow: 10 }}>
-                  Se ha registrado con éxito.
-                  Inicie sesión y configure su perfil para hacer uso de las funcionalidades
+                <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
+                  {showAlert.message}
                 </Alert>
               </Snackbar>
             :
               null
           }
-          {
-            showAlert
-            ?
-              <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
-                  Ya existe una cuenta asociada a este correo electrónico
-                </Alert>
-              </Snackbar>
-            :
-              null
-          }
+
         </Stack>
       </Form>
     </FormikProvider>
