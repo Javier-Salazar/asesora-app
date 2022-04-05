@@ -9,7 +9,6 @@ import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
-
 function RegisterForm() {
   const date = new Date();
   const [showPassword, setShowPassword] = useState(false);
@@ -295,13 +294,13 @@ function RegisterForm() {
 
           {
             showAlert.show
-              ?
+            ?
               <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
                   {showAlert.message}
                 </Alert>
               </Snackbar>
-              :
+            :
               null
           }
 
