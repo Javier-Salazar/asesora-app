@@ -14,8 +14,7 @@ import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import MockImgAvatar from '../utils/mockImages';
-import axios from "axios";
-import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -36,147 +35,99 @@ function changeLabelModality(bool) {
 }
 
 function MyAdvises() {
-//   const cookies = new Cookies();
+  const cookies = new Cookies();
   const navigate = useNavigate();
 
   const [modality, setModality] = useState(false);
-  const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState([]);
-  const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
+  const [valueStart, setValueStart] = React.useState(new Date('2014-08-18T21:11:54'));
+  const [valueEnd, setValueEnd] = React.useState(new Date('2014-08-18T21:11:54'));
 
-  const handleDateChange = (newValue) => {
-    setValue(newValue);
-  }
+  const baseUrl = 'https://localhost:44397/api/';
 
-//   const baseUrl = "https://localhost:44397/api/";
-
-//   const peticionesGet = async () => {
-//     await axios.get(`${baseUrl}users`)
-//       .then((Response) => {
-//         setData(Response.data);
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   };
-
-//   useEffect(() => {
-//     peticionesGet();
-//   }, []);
-
-//   useEffect(() => {
-//     if (!cookies.get('UserCode')) {
-//       navigate('/');
-//     }
-//   });
+  useEffect(() => {
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
+  });
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(2, 'El nombre es muy corto')
-      .max(30, 'El nombre es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/, "Ingrese solamente letras")
-      .required('El nombre es obligatorio')
+    subject: Yup.string()
+      .min(2, 'El nombre de la matería es muy corto')
+      .max(30, 'El nombre de la matería es muy largo')
+      .required('La matería es obligatoria'),
+    tag1: Yup.string()
+      .min(2, 'La etiqueta es muy corta')
+      .max(30, 'La etiqueta es muy larga'),
+    tag2: Yup.string()
+      .min(2, 'La etiqueta es muy corta')
+      .max(30, 'La etiqueta es muy larga'),
+    tag3: Yup.string()
+      .min(2, 'La etiqueta es muy corta')
+      .max(30, 'La etiqueta es muy larga'),
+    tag4: Yup.string()
+      .min(2, 'La etiqueta es muy corta')
+      .max(30, 'La etiqueta es muy larga'),
   });
 
   const formik = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: ''
+      dateStart: '',
+      dateEnd: '',
+      subject: '',
+      topic: '',
+      tag1: '',
+      tag2: '',
+      tag3: '',
+      tag4: '',
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
-
+      PostAdvise();
     },
   });
 
   function clearData() {
-    setFieldValue("firstName", "", false);
-    setShowAlert({ message: '', show: false });
+    setFieldValue('dateStart', '', false);
+    setFieldValue('dateEnd', '', false);
+    setFieldValue('subject', '', false);
+    setFieldValue('topic', '', false);
+    setFieldValue('tag1', '', false);
+    setFieldValue('tag2', '', false);
+    setFieldValue('tag3', '', false);
+    setFieldValue('tag4', '', false);
     setShowAlertPost(false);
     setModality(false);
   }
 
-//   const peticionPostUser = async (type) => {
-//     var arrayCode = email.split('@');
-//     var arrayDate = date.toISOString().split('T');
-//     await axios.post(`${baseUrl}users`, {
-//       userx_code: arrayCode[0],
-//       userx_name: getFieldProps("firstName").value,
-//       userx_lastname: getFieldProps("lastName").value,
-//       userx_mother_lastname: getFieldProps("motherLastName").value,
-//       userx_email: email,
-//       userx_password: encryptPassword(getFieldProps("password").value),
-//       userx_salt: key,
-//       userx_remember: "N",
-//       userx_phone: getFieldProps("phone").value,
-//       userx_type: type,
-//       userx_istmp_password: "N",
-//       userx_date: arrayDate[0],
-//       userx_islockedout: "N",
-//       userx_islockedout_date: arrayDate[0],
-//       userx_islockedout_enable_date: arrayDate[0],
-//       userx_last_login_date: arrayDate[0],
-//       userx_lastfailed_login_date: arrayDate[0],
-//       userx_status: accountStatus ? 'A' : 'I',
-//       userx_image: ""
-//     })
-//       .then((response) => {
-//         if (type === 'N') {
-//           peticionPostStudent();
-//         } else if (type === 'A') {
-//           peticionPostAdvisor();
-//         } else {
-//           clearData();
-//           setShowAlertPost(true);
-//           setOpen(true);
-//         }
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   };
-
-//   const peticionPostStudent = async () => {
-//     var arrayCode = email.split('@');
-
-//     await axios.post(baseUrl + "students", {
-//       student_code: arrayCode[0],
-//       student_school: "ITCJC1",
-//       student_career: "SINCS",
-//       student_major: "SINES",
-//       student_semester: 1,
-//       student_status: accountStatus ? 'A' : 'I',
-//     })
-//       .then((response) => {
-//         clearData();
-//         setShowAlertPost(true);
-//         setOpen(true);
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   };
-
-//   const peticionPostAdvisor = async () => {
-//     var arrayCode = email.split('@');
-
-//     await axios.post(`${baseUrl}advisors`, {
-//       advisor_code: arrayCode[0],
-//       advisor_rating: 5,
-//       advisor_comments: "",
-//       advisor_status: accountStatus ? 'A' : 'I',
-//     })
-//       .then((response) => {
-//         clearData();
-//         setShowAlertPost(true);
-//         setOpen(true);
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   };
+  const PostAdvise = async (type) => {
+    await axios.post(`${baseUrl}advises`, {
+      advise_code: 0,
+      advise_student: '1',
+      advise_topic: '',
+      advise_subject: '2',
+      advise_advisor: '1',
+      advise_school: 'ITCJ',
+      advise_building: '100',
+      advise_classroom: '102',
+      advise_date_request: valueStart,
+      advise_date_start: valueStart,
+      advise_date_ends: valueEnd,
+      advise_modality: modality ? 'V' : 'P',
+      advise_url: '',
+      advise_comments: '',
+      advise_status: 'A'
+    })
+      .then((response) => {
+        clearData();
+        setShowAlertPost(true);
+        setOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -274,9 +225,9 @@ function MyAdvises() {
                         <DateTimePicker
                           renderInput={(props) => <TextField fullWidth {...props} />}
                           label="Fecha de inicio"
-                          value={value}
+                          value={valueStart}
                           onChange={(newValue) => {
-                            setValue(newValue);
+                            setValueStart(newValue);
                           }}
                           ampm={false}
                         />
@@ -284,9 +235,9 @@ function MyAdvises() {
                         <DateTimePicker
                           renderInput={(props) => <TextField fullWidth {...props} />}
                           label="Fecha de fin"
-                          value={value}
+                          value={valueEnd}
                           onChange={(newValue) => {
-                            setValue(newValue);
+                            setValueEnd(newValue);
                           }}
                           ampm={false}
                         />
@@ -359,17 +310,6 @@ function MyAdvises() {
                           <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
                               Se ha registrado con éxito
-                            </Alert>
-                          </Snackbar>
-                        :
-                          null
-                      }
-                      {
-                        showAlert.show
-                        ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
-                              {showAlert.message}
                             </Alert>
                           </Snackbar>
                         :

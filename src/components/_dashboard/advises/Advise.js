@@ -20,64 +20,6 @@ var API_KEY = "AIzaSyAN18U9TJjC3nVndaQM6ovngAAnJvOvgZU";
 var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 var SCOPES = "https://www.googleapis.com/auth/calendar";
 
-const handleClick = () => {
-    gapi.load('client:auth2', () => {
-        console.log('loaded client')
-
-        gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES,
-        })
-
-        gapi.client.load('calendar', 'v3', () => console.log('bam!'))
-
-        gapi.auth2.getAuthInstance().signIn()
-            .then(() => {
-                var event = {
-                    'summary': 'PruebaParaAsesora',
-                    'location': 'Instituto Tecnologico de Ciudad Juarez',
-                    'description': 'Esto es una prueba para el funicionamiento de la api',
-                    'start': {
-                        'dateTime': '2022-04-03T20:00:00',
-                        'timeZone': 'America/Los_Angeles'
-                    },
-                    'end': {
-                        'dateTime': '2022-04-03T20:30:00',
-                        'timeZone': 'America/Los_Angeles'
-                    },
-                    'reminders': {
-                        'useDefault': false,
-                        'overrides': [
-                            { 'method': 'email', 'minutes': 24 * 60 },
-                            { 'method': 'popup', 'minutes': 10 },
-                        ],
-                    },
-                    "conferenceData": {
-                        "createRequest": {
-                            "conferenceSolutionKey": {
-                                "type": "hangoutsMeet"
-                            },
-                            "requestId": "AsesoraApp"
-                        }
-                    },
-                }
-
-                var request = gapi.client.calendar.events.insert({
-                    'calendarId': 'primary',
-                    'resource': event,
-                    'conferenceDataVersion': 1
-                })
-
-                request.execute(event => {
-                    window.open(event.htmlLink);
-                })
-
-            })
-    });
-}
-
 function Advise(props) {
     const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
     const [open, setOpen] = useState(false);
@@ -90,6 +32,66 @@ function Advise(props) {
             duration: 5000,
         });
         setOpen(true);
+    }
+
+    const handleClick = () => {
+        gapi.load('client:auth2', () => {
+            console.log('loaded client');
+    
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES,
+            });
+    
+            gapi.client.load('calendar', 'v3', () => console.log('bam!'));
+    
+            gapi.auth2.getAuthInstance().signIn()
+                .then(() => {
+                    var event = {
+                        'summary': 'PruebaParaAsesora',
+                        'location': 'Instituto Tecnologico de Ciudad Juarez',
+                        'description': 'Esto es una prueba para el funicionamiento de la api',
+                        'start': {
+                            'dateTime': '2022-04-03T20:00:00',
+                            'timeZone': 'America/Los_Angeles'
+                        },
+                        'end': {
+                            'dateTime': '2022-04-03T20:30:00',
+                            'timeZone': 'America/Los_Angeles'
+                        },
+                        'reminders': {
+                            'useDefault': false,
+                            'overrides':
+                            [
+                                { 'method': 'email', 'minutes': 24 * 60 },
+                                { 'method': 'popup', 'minutes': 10 },
+                            ],
+                        },
+                        'conferenceData': {
+                            'createRequest': {
+                                'conferenceSolutionKey': {
+                                    'type': 'hangoutsMeet'
+                                },
+                                'requestId': 'AsesoraApp'
+                            }
+                        },
+                    }
+    
+                    var request = gapi.client.calendar.events.insert({
+                        'calendarId': 'primary',
+                        'resource': event,
+                        'conferenceDataVersion': 1
+                    });
+    
+                    request.execute(event => {
+                        window.open(event.htmlLink);
+                        handleClickOpen();
+                    });
+    
+                });
+        });
     }
 
     const handleClose = (event, reason) => {
@@ -106,7 +108,6 @@ function Advise(props) {
     else {
         modality = 'presencial';
     }
-
 
     return (
         <Stack

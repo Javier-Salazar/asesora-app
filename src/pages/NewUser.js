@@ -11,7 +11,7 @@ import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import MockImgAvatar from '../utils/mockImages';
-import axios from "axios";
+import axios from 'axios';
 import CryptoJS from 'crypto-js';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
