@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { sentenceCase } from 'change-case';
@@ -7,6 +7,9 @@ import styled from '@emotion/styled';
 import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
 import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
@@ -24,27 +27,28 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-function changeLabelStatus(bool) {
+function changeLabelModality(bool) {
   if (bool) {
-    return sentenceCase('Activo');
+    return sentenceCase('virtual');
   } else {
-    return sentenceCase('Inactivo');
+    return sentenceCase('presencial');
   }
 }
 
 function MyAdvises() {
 //   const cookies = new Cookies();
   const navigate = useNavigate();
-  const date = new Date();
 
-  const [admin, setAdmin] = useState(false);
-  const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState(false);
-  const [email, setEmail] = useState('');
+  const [modality, setModality] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
+  const [value, setValue] = React.useState(new Date('2014-08-18T21:11:54'));
+
+  const handleDateChange = (newValue) => {
+    setValue(newValue);
+  }
 
 //   const baseUrl = "https://localhost:44397/api/";
 
@@ -73,114 +77,25 @@ function MyAdvises() {
       .min(2, 'El nombre es muy corto')
       .max(30, 'El nombre es muy largo')
       .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/, "Ingrese solamente letras")
-      .required('El nombre es obligatorio'),
-    lastName: Yup.string()
-      .min(2, 'El apellido es muy corto')
-      .max(30, 'El apellido es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios")
-      .required('El apellido es obligatorio'),
-    motherLastName: Yup.string()
-      .min(2, 'El apellido es muy corto')
-      .max(30, 'El apellido es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios"),
-    password: Yup.string()
-      .required('La contraseña es obligatoria')
-      .min(8, "La contraseña debe contener mínimo 8 caracteres"),
-    phone: Yup.string()
-      .min(2, 'El teléfono es muy corto')
-      .max(7, 'El teléfono es muy largo')
-      .matches(/[0-9]/, "Ingrese solamente números")
+      .required('El nombre es obligatorio')
   });
 
-  const validate = () => {
-    const errors = {};
-    setEmail(email.toLowerCase());
-
-    var AuxEmail = email.split('@');
-    var code = AuxEmail[0].slice(1);
-
-    if (email === "") {
-      errors.email = 'El correo electrónico es obligatorio';
-    } else if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj\.edu\.mx/.test(email)) {
-      errors.email = 'Ingrese un correo institucional, por ejemplo: user@itcj.edu.mx';
-    } else if ((email.charAt(0) !== "l" && /^[0-9]*$/.test(code)) || (code.length !== 8 && /^[0-9]*$/.test(code))) {
-      errors.email = 'El correo tiene estructura de alumno pero esta mal escrito';
-    }
-    return errors;
-  };
   const formik = useFormik({
     initialValues: {
       firstName: '',
-      lastName: '',
-      motherLastName: '',
-      email: '',
-      school: 'Instituto Tecnológico de Ciudad Juárez',
-      dateRegister: date.toLocaleString().split(' ', 1),
-      password: '',
-      phone: ''
+      lastName: ''
     },
     validationSchema: RegisterSchema,
-    validate,
     onSubmit: () => {
-      searchUser();
-      validateUserType();
 
-      if (isFind === false) {
-        if (advisor === false && admin === false) {
-          if (isTypeAorS) {
-            setShowAlert({
-              message: 'Selecciona el tipo de cuenta',
-              show: true,
-            });
-            setOpen(true);
-          } else {
-            // peticionPostUser('N');
-          }
-        }
-      }
-      else {
-        setShowAlert({
-          message: 'Ya existe una cuenta asociada al correo electrónico ingresado',
-          show: true,
-        });
-        setOpen(true);
-      }
     },
   });
 
-  var isFind = false;
-  const searchUser = () => {
-    data.filter((element) => {
-      if (element.userx_email.toLowerCase() === email.toLowerCase()) {
-        isFind = true;
-      }
-      return 0;
-    });
-  };
-
-  var isTypeAorS = false;
-  function validateUserType() {
-    var Aux = email.split('@');
-    var code = Aux[0].slice(1);
-    if (email.charAt(0) === "l" && /^[0-9]*$/.test(code)) {
-      isTypeAorS = false;
-    } else {
-      isTypeAorS = true;
-    }
-  }
-
   function clearData() {
-    setEmail("");
     setFieldValue("firstName", "", false);
-    setFieldValue("lastName", "", false);
-    setFieldValue("motherLastName", "", false);
-    setFieldValue("phone", "", false);
-    setFieldValue("password", "", false);
     setShowAlert({ message: '', show: false });
     setShowAlertPost(false);
-    setAdmin(false);
-    setAdvisor(false);
-    setStatus(false);
+    setModality(false);
   }
 
 //   const peticionPostUser = async (type) => {
@@ -263,10 +178,6 @@ function MyAdvises() {
 //       });
 //   };
 
-  const handleChange = (event) => {
-    setEmail(event.target.value);
-  };
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -299,9 +210,9 @@ function MyAdvises() {
             <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse', marginBottom: '24px' }}>
               <Label
                 variant="ghost"
-                color={(accountStatus === false && 'error') || 'success'}
+                color={(modality === false && 'default') || 'virtual'}
               >
-                {changeLabelStatus(accountStatus)}
+                {changeLabelModality(modality)}
               </Label>
             </div>
 
@@ -320,43 +231,13 @@ function MyAdvises() {
             }}>
               <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
                 <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Estatus
+                  Modalidad
                 </Typography>
                 <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Definir el estado de la cuenta
+                  Definir la modalidad de la asesoría
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => setStatus(!accountStatus)} checked={accountStatus} />
-            </div>
-
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
-              alignItems: 'center', marginTop: '24px'
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Asesor
-                </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Esta cuenta es asesor
-                </Typography>
-              </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
-            </div>
-
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
-              alignItems: 'center', marginTop: '24px'
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Administrador
-                </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Esta cuenta es administrador
-                </Typography>
-              </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
+              <Switch sx={{ pl: 2 }} onChange={() => setModality(!modality)} checked={modality} />
             </div>
 
           </Card>
@@ -374,25 +255,11 @@ function MyAdvises() {
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <TextField
                         fullWidth
-                        label="Clave"
-                        value={email.split('@', 1)}
+                        label="Nombre"
+                        value="Margarita Bailón"
                         disabled
                       />
-
-                      <TextField
-                        fullWidth
-                        id="email"
-                        name="email"
-                        type="email"
-                        label="Correo electrónico"
-                        value={email}
-                        onChange={handleChange}
-                        error={Boolean(touched.email && errors.email)}
-                        helperText={touched.email && errors.email}
-                      />
-                    </Stack>
-
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      
                       <TextField
                         fullWidth
                         label="Escuela"
@@ -400,54 +267,81 @@ function MyAdvises() {
                         {...getFieldProps('school')}
                       />
 
-                      <TextField
-                        fullWidth
-                        label="fecha de registro"
-                        disabled
-                        {...getFieldProps('dateRegister')}
-                      />
                     </Stack>
 
-                    <TextField
-                      fullWidth
-                      label="Nombre"
-                      {...getFieldProps('firstName')}
-                      error={Boolean(touched.firstName && errors.firstName)}
-                      helperText={touched.firstName && errors.firstName}
-                    />
-
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <TextField
-                        fullWidth
-                        label="Apellido paterno"
-                        {...getFieldProps('lastName')}
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        helperText={touched.lastName && errors.lastName}
-                      />
-
-                      <TextField
-                        fullWidth
-                        label="Apellido materno"
-                        {...getFieldProps('motherLastName')}
-                      />
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateTimePicker
+                          renderInput={(props) => <TextField fullWidth {...props} />}
+                          label="Fecha de inicio"
+                          value={value}
+                          onChange={(newValue) => {
+                            setValue(newValue);
+                          }}
+                          ampm={false}
+                        />
+                        
+                        <DateTimePicker
+                          renderInput={(props) => <TextField fullWidth {...props} />}
+                          label="Fecha de fin"
+                          value={value}
+                          onChange={(newValue) => {
+                            setValue(newValue);
+                          }}
+                          ampm={false}
+                        />
+                      </LocalizationProvider>
                     </Stack>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <TextField
                         fullWidth
-                        type="password"
-                        label="Contraseña"
-                        {...getFieldProps('password')}
-                        error={Boolean(touched.password && errors.password)}
-                        helperText={touched.password && errors.password}
+                        label="Materia"
+                        {...getFieldProps('subject')}
+                        error={Boolean(touched.subject && errors.subject)}
+                        helperText={touched.subject && errors.subject}
                       />
 
                       <TextField
                         fullWidth
-                        label="Teléfono"
-                        {...getFieldProps('phone')}
-                        error={Boolean(touched.phone && errors.phone)}
-                        helperText={touched.phone && errors.phone}
+                        label="Tema"
+                        {...getFieldProps('topic')}
+                      />
+                    </Stack>
+
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <TextField
+                        fullWidth
+                        label="Etiqueta uno"
+                        {...getFieldProps('tag1')}
+                        error={Boolean(touched.tag1 && errors.tag1)}
+                        helperText={touched.tag1 && errors.tag1}
+                      />
+
+                      <TextField
+                        fullWidth
+                        label="Etiqueta dos"
+                        {...getFieldProps('tag2')}
+                        error={Boolean(touched.tag2 && errors.tag2)}
+                        helperText={touched.tag2 && errors.tag2}
+                      />
+                    </Stack>
+
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <TextField
+                        fullWidth
+                        label="Etiqueta tres"
+                        {...getFieldProps('tag3')}
+                        error={Boolean(touched.tag3 && errors.tag3)}
+                        helperText={touched.tag3 && errors.tag3}
+                      />
+
+                      <TextField
+                        fullWidth
+                        label="Etiqueta cuatro"
+                        {...getFieldProps('tag4')}
+                        error={Boolean(touched.tag4 && errors.tag4)}
+                        helperText={touched.tag4 && errors.tag4}
                       />
                     </Stack>
 
