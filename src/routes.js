@@ -13,8 +13,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import DashboardApp from './pages/DashboardApp';
 import User from './pages/User';
 import NewUser from './pages/NewUser';
-import UserEdit from './pages/UserEdit'
+import UserEdit from './pages/UserEdit';
 import MyProfile from './pages/MyProfile';
+import Reports from './pages/Reports';
 import NotFound from './pages/Page404';
 import { AdvisorProfile } from './components/_dashboard/advisers';
 import Next from './pages/Next';
@@ -59,6 +60,7 @@ function Router() {
         { path: 'my-advises', element: <MyAdvises /> },
         { path: 'subject', element: <Subjects /> },
         { path: 'my-profile', element: <MyProfile /> },
+        { path: 'reports', element: <Reports /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
       ]
