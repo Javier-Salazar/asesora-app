@@ -42,7 +42,7 @@ function showDateTime(text) {
     return (dateArray[1] + "/" + dateArray[0] + "/" + dateArray[0] + " " + dateTimeArray[1])
 }
 
-export default function BasicExampleDataGrid() {
+function Reports() {
     const cookies = new Cookies();
     const navigate = useNavigate();
     useEffect(() => {
@@ -258,4 +258,5 @@ export default function BasicExampleDataGrid() {
 
     );
 }
+export default Reports;
 
