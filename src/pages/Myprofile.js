@@ -1,7 +1,14 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
-import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert } from '@mui/material';
+import { Icon } from '@iconify/react';
+import editFill from '@iconify/icons-eva/edit-fill';
+import cameraFill from '@iconify/icons-eva/camera-fill';
+import {
+  Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert, Button, IconButton,
+  Tooltip, DialogActions, Dialog, DialogTitle, DialogContent
+} from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
@@ -10,8 +17,14 @@ import Scrollbar from '../components/Scrollbar';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
+import startFill from '@iconify/icons-eva/star-fill';
 import { useNavigate } from 'react-router-dom';
+import Slide from '@mui/material/Slide';
 
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'flex-start',
@@ -32,16 +45,22 @@ function changeLabelStatus(text) {
 }
 
 
+const Input = styled('input')({
+  display: 'none',
+});
 
-function UserEdit({ status }) {
+
+function MyProfile({ status }) {
   const cookies = new Cookies();
   const navigate = useNavigate();
 
   const [photo, setPhoto] = useState("");
   const [changePhoto, setChangePhoto] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [open, setOpen] = useState(false);
-
+  const [biography, setBiography] = useState('Escriba su biografía...');
+  const [advisor, setAdvisor] = useState([]);
+  const [errorBiography, setErrorBiography] = useState(false);
   const baseUrl = `https://localhost:44397/api/users/${cookies.get('UserCode')}`;
 
   const [user, setUser] = useState({
@@ -95,7 +114,10 @@ function UserEdit({ status }) {
       userx_status: user.userx_status,
       userx_image: changePhoto ? photo : user.userx_image
     }).then(response => {
-      setShowAlert(true);
+      setShowAlert({
+        message: '¡Se guardaron los cambios con éxito!',
+        show: true,
+      });
       setOpen(true);
     }).catch(error => {
       console.log(error);
@@ -153,6 +175,7 @@ function UserEdit({ status }) {
       return;
     }
     setOpen(false);
+    setShowAlert({ message: '', show: false });
   };
 
   const convertBase64 = (photo) => {
@@ -179,6 +202,61 @@ function UserEdit({ status }) {
     var encrypt = CryptoJS.AES.encrypt(text, key).toString();
     return encrypt;
   }
+
+  const peticionesGetAdvisor = async () => {
+    await axios.get(`https://localhost:44397/api/advisors/${cookies.get('UserCode')}`)
+      .then(Response => {
+        setAdvisor(Response.data);
+        if (Response.data.advisor_comments !== '') {
+          setBiography(Response.data.advisor_comments);
+        }
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleEventClick = () => {
+    peticionesGetAdvisor();
+    setOpenDialog(true);
+  }
+
+  const dialogClose = () => {
+    setOpenDialog(false);
+    setBiography('Escriba su biografía...');
+  }
+
+  const handleChange = (event) => {
+    setBiography(event.target.value);
+  };
+
+  const peticionPutAdvisor = async () => {
+    await axios.put(`https://localhost:44397/api/advisors/${cookies.get('UserCode')}`, {
+      advisor_code: advisor.advisor_code,
+      advisor_rating: advisor.advisor_rating,
+      advisor_comments: biography === 'Escriba su biografía...' ? advisor.advisor_comments : biography,
+      advisor_status: advisor.advisor_status,
+    })
+      .then((response) => {
+        setOpenDialog(false);
+        setShowAlert({
+          message: '¡Se actualizó la biografía!',
+          show: true,
+        });
+        setOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const saveBiography = () => {
+    if (biography.length > 250) {
+      setErrorBiography(true);
+    } else {
+      peticionPutAdvisor();
+    }
+  }
+
 
   const { errors, touched, handleSubmit, getFieldProps } = formik;
   return (
@@ -217,8 +295,17 @@ function UserEdit({ status }) {
                 :
                 <Avatar src={`data:image/png;base64,${user.userx_image}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
             }
-
-            <input accept="image/*" id="icon-button-file" type="file" width="32px" onChange={(e) => convertBase64(e.target.files)} />
+            <div style={{ position: 'absolute', right: '31%', top: '30%', display: 'flex', alignItems: 'center' }}>
+              <label htmlFor="icon-button-file">
+                <Input accept="image/*" id="icon-button-file" type="file" onChange={(e) => convertBase64(e.target.files)}
+                  hidden />
+                <IconButton color="primary" aria-label="upload picture" component="span">
+                  <Tooltip title="Subir imagen" placement="top" arrow>
+                    <Icon icon={cameraFill} width="26px" />
+                  </Tooltip>
+                </IconButton>
+              </label>
+            </div>
 
             <div style={{
               width: '100%', display: 'flex', justifyContent: 'center',
@@ -229,21 +316,36 @@ function UserEdit({ status }) {
               </Typography>
 
             </div>
-
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
-              alignItems: 'center', marginTop: '24px'
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Estatus
-                </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Definir el estado de la cuenta
-                </Typography>
-              </div>
-              <Switch sx={{ pl: 2 }} checked={user.userx_status === 'inactivo' ? false : true} disabled />
-            </div>
+            {
+              cookies.get('UserType') === 'A'
+                ?
+                <div style={{
+                  width: '100%', display: 'flex', justifyContent: 'center',
+                  alignItems: 'center', marginTop: '4px', marginBottom: '8px'
+                }}>
+                  <Button
+                    startIcon={<Icon icon={editFill} />}
+                    onClick={handleEventClick}
+                  >
+                    Editar Biografía
+                  </Button>
+                </div>
+                :
+                <div style={{
+                  width: '100%', display: 'flex', justifyContent: 'space-between',
+                  alignItems: 'center', marginTop: '24px'
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
+                    <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
+                      Estatus
+                    </Typography>
+                    <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
+                      Definir el estado de la cuenta
+                    </Typography>
+                  </div>
+                  <Switch sx={{ pl: 2 }} checked={user.userx_status === 'inactivo' ? false : true} disabled />
+                </div>
+            }
 
             <div style={{
               width: '100%', display: 'flex', justifyContent: 'space-between',
@@ -362,7 +464,6 @@ function UserEdit({ status }) {
                         helperText={touched.phone && errors.phone}
                       />
                     </Stack>
-
                     <Stack style={{ display: 'flex', alignItems: 'flex-end' }}>
                       <LoadingButton
                         type="submit"
@@ -376,11 +477,11 @@ function UserEdit({ status }) {
                 </Form>
               </FormikProvider>
               {
-                showAlert
+                showAlert.show
                   ?
                   <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                      ¡Se guardaron los cambios con éxito!
+                      {showAlert.message}
                     </Alert>
                   </Snackbar>
                   :
@@ -390,8 +491,60 @@ function UserEdit({ status }) {
           </Card>
         </ContainerStyle>
       </Container>
-    </Page>
+      <Dialog open={openDialog} TransitionComponent={Transition} onClose={dialogClose} fullWidth={true}
+        maxWidth={'xs'}>
+        <DialogTitle>
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <Typography gutterBottom variant="h7" sx={{ m: 0, mr: 1 }}>
+              Información de biografía
+            </Typography>
+
+            <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
+              {`${advisor.advisor_rating}${".0"}`}&nbsp;
+              <Icon icon={startFill} style={{ color: '#E7CC13' }} />
+            </Typography>
+          </div>
+        </DialogTitle>
+        <DialogContent>
+          {
+            <Stack spacing={2} sx={{ padding: '12px' }}>
+              <TextField
+                fullWidth
+                label="Ocupación"
+                value={'Asesor en ITCJ'}
+                disabled
+              />
+              {
+                errorBiography
+                  ?
+                  <TextField
+                    multiline
+                    label="Biografía"
+                    value={biography}
+                    onChange={handleChange}
+                    error
+                    helperText="Máximo 250 caracteres"
+                  />
+                  :
+                  <TextField
+                    multiline
+                    label="Biografía"
+                    value={biography}
+                    onChange={handleChange}
+                  />
+              }
+
+            </Stack>
+          }
+        </DialogContent>
+        <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '75%', ml: '75%' }}>
+          <Button fullWidth onClick={saveBiography}>Guardar</Button>
+          <Button fullWidth variant="contained" onClick={dialogClose}>Cerrar</Button>
+        </DialogActions>
+      </Dialog>
+    </Page >
   );
 }
 
-export default UserEdit;
+export default MyProfile;
