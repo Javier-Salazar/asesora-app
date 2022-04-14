@@ -200,7 +200,7 @@ function Reports() {
         counselingLocationInfo:
             element.advise_modality === 'V'
                 ?
-                'https://meet.google.com/iak-rjwk-oof'
+                element.advise_url
                 :
                 `${'Edificio:'} ${element.building_name} ${'-'} ${element.classroom_name}`,
         adviseDateRequest: dateTimeFormat(element.advise_date_request),
