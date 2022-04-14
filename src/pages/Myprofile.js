@@ -7,7 +7,7 @@ import editFill from '@iconify/icons-eva/edit-fill';
 import cameraFill from '@iconify/icons-eva/camera-fill';
 import {
   Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert, Button, IconButton,
-  Tooltip, DialogActions, Dialog, DialogTitle, DialogContent, CircularProgress
+  Tooltip, DialogActions, Dialog, DialogTitle, DialogContent
 } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
@@ -50,7 +50,7 @@ const Input = styled('input')({
 });
 
 
-function UserEdit({ status }) {
+function MyProfile({ status }) {
   const cookies = new Cookies();
   const navigate = useNavigate();
 
@@ -547,4 +547,4 @@ function UserEdit({ status }) {
   );
 }
 
-export default UserEdit;
+export default MyProfile;
