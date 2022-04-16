@@ -8,5 +8,6 @@ export { default as AcceptedAdvice } from './AcceptedAdvice';
 export { default as AdviseOfTheDay } from './AdviseOfTheDay';
 export { default as AppTasks } from './AppTasks';
 export { default as AppTrafficBySite } from './AppTrafficBySite';
-export { default as AppWebsiteVisits } from './AppWebsiteVisits';
+export { default as CarouselInfographics } from './CarouselInfographics';
 export { default as TotalAdvice } from './TotalAdvice';
+export { default as WebAppAdvise } from './WebAppAdvise';

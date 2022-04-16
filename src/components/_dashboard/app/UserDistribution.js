@@ -7,7 +7,7 @@ import { BaseOptionChart } from '../../charts';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const CHART_HEIGHT = 372;
+const CHART_HEIGHT = 360;
 const LEGEND_HEIGHT = 72;
 
 const ChartWrapperStyle = styled('div')(({ theme }) => ({
