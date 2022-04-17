@@ -6,6 +6,7 @@ import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import heartOutline from '@iconify/icons-eva/heart-outline';
 import heartFill from '@iconify/icons-eva/heart-fill';
 import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip } from '@mui/material';
+import MockImgAvatar from '../../../utils/mockImages';
 
 function Adviser(props) {
     const [like, setLike] = useState(false);
@@ -23,12 +24,12 @@ function Adviser(props) {
             <IconButton color="error" size="small" onClick={handleLike} style={{ alignSelf: 'flex-end' }}>
                 {
                     like
-                    ?
+                        ?
                         <Tooltip title="Quitar de favoritos" placement="top" arrow>
                             <Icon icon={heartFill} width="32px" />
                         </Tooltip>
 
-                    :
+                        :
                         <Tooltip title="Añadir a favoritos" placement="top" arrow>
                             <Icon icon={heartOutline} width="32px" />
                         </Tooltip>
@@ -36,7 +37,7 @@ function Adviser(props) {
             </IconButton>
             <Box
                 component="img"
-                src={`data:image/png;base64, ${props.image}`}
+                src={`data:image/png;base64,${props.image !== '' ? props.image : MockImgAvatar()}`}
                 alt="avatar_1"
                 sx={{ width: 80, borderRadius: 8, mb: 3, height: 80 }}
             />
