@@ -12,20 +12,20 @@ import Cookies from 'universal-cookie';
 
 function changeLabelModality(text) {
     if (text === 'P') {
-        return 'Presencial';
+        return sentenceCase('presencial');
     }
     else {
-        return 'Virtual';
+        return sentenceCase('virtual');
     }
 }
 
 function changeLabelStatus(text) {
     if (text === 'A') {
-        return 'Aceptada';
+        return sentenceCase('aceptada');
     } else if (text === 'C') {
-        return 'Cancelada'
+        return sentenceCase('cancelada');
     } else {
-        return 'Solicitada'
+        return sentenceCase('solicitada');
     }
 }
 
@@ -33,13 +33,13 @@ function dateTimeFormat(date) {
     var dateTimeArray = date.split('T');
     var dateArray = dateTimeArray[0].split('-');
     var timeArray = dateTimeArray[1].split(':');
-    return (dateArray[1] + "/" + dateArray[2] + "/" + dateArray[0] + " " + timeArray[0] + ":" + timeArray[1])
+    return `${dateArray[1]}/${dateArray[2]}/${dateArray[0]} ${timeArray[0]}:${timeArray[1]}`;
 }
 
 function showDateTime(text) {
     var dateTimeArray = text.split(" ");
     var dateArray = text.split("/");
-    return (dateArray[1] + "/" + dateArray[0] + "/" + dateArray[0] + " " + dateTimeArray[1])
+    return `${dateArray[1]}/${dateArray[0]}/${dateArray[0]} ${dateTimeArray[1]}`;
 }
 
 function Reports() {
@@ -52,49 +52,17 @@ function Reports() {
     });
 
     const columns = [
-        { field: 'adviseStudent', headerName: 'Código est.', width: 100, description: 'El código del estudiante' },
-        {
-            field: 'studentImage', headerName: 'Estudiante', width: 100, disableExport: true,
-            renderCell: (params) => {
-                return (
-                    <>
-                        {
-                            params.value === ''
-                                ?
-                                <Avatar src={`data:image/png;base64,${MockImgAvatar()}`} />
-                                :
-                                <Avatar src={`data:image/png;base64,${params.value}`} />
-                        }
-                    </>
-                )
-            }
-        },
-        { field: 'studentName', headerName: 'Nombre del estudiante', width: 325 },
-        { field: 'studentEmail', headerName: 'Correo de est.', width: 200 },
-        { field: 'studentPhone', headerName: 'Teléfono est.', width: 150 },
+        { field: 'adviseStudent', headerName: 'Estudiante', width: 80 },
+        { field: 'studentName', headerName: 'Nombre del estudiante', width: 300 },
+        { field: 'studentEmail', headerName: 'Correo del estudiante', width: 200 },
+        { field: 'studentPhone', headerName: 'Teléfono', width: 100 },
         { field: 'adviseTopic', headerName: 'Tema', width: 250 },
         { field: 'subjectName', headerName: 'Materia', width: 250 },
-        { field: 'adviseAdvisor', headerName: 'Código ases.', width: 125 },
-        {
-            field: 'advisorImage', headerName: 'Asesor', width: 100, disableExport: true,
-            renderCell: (params) => {
-                return (
-                    <>
-                        {
-                            params.value === ''
-                                ?
-                                <Avatar src={`data:image/png;base64,${MockImgAvatar()}`} />
-                                :
-                                <Avatar src={`data:image/png;base64,${params.value}`} />
-                        }
-                    </>
-                )
-            }
-        },
-        { field: 'advisorName', headerName: 'Nombre del asesor', width: 325 },
-        { field: 'advisorEmail', headerName: 'Correo de ases.', width: 230 },
-        { field: 'advisorPhone', headerName: 'Teléfono ases.', width: 150 },
-        { field: 'counselingLocationInfo', headerName: 'Información de lugar', width: 350 },
+        { field: 'adviseAdvisor', headerName: 'Asesor', width: 80 },
+        { field: 'advisorName', headerName: 'Nombre del asesor', width: 300 },
+        { field: 'advisorEmail', headerName: 'Correo del asesor', width: 200 },
+        { field: 'advisorPhone', headerName: 'Teléfono', width: 80 },
+        { field: 'counselingLocationInfo', headerName: 'Lugar', width: 300 },
         {
             field: 'adviseDateRequest', headerName: 'Fecha de solicitud', width: 160, type: 'dateTime',
             renderCell: (params) => {
@@ -150,7 +118,7 @@ function Reports() {
             }
         },
         {
-            field: 'adviseStatus', headerName: 'Estatus', width: 120,
+            field: 'adviseStatus', headerName: 'Estado', width: 100,
             renderCell: (params) => {
                 return (
                     <>
@@ -166,8 +134,7 @@ function Reports() {
             }
         },
         { field: 'adviseComments', headerName: 'Comentarios', width: 450 }
-
-    ]
+    ];
 
     const [data, setData] = useState([]);
     const baseUrl = "https://localhost:44397/api/advises";
@@ -185,7 +152,7 @@ function Reports() {
         requestGet();
     }, []);
 
-    const adviceList = data.map((element => ({
+    const adviseList = data.map((element => ({
         id: element.advise_code,
         adviseStudent: element.advise_student,
         studentName: `${element.studentName} ${element.studentLastName} ${element.studentLastMotherName}`,
@@ -199,10 +166,10 @@ function Reports() {
         advisorPhone: element.advisorPhone,
         counselingLocationInfo:
             element.advise_modality === 'V'
-                ?
+            ?
                 element.advise_url
-                :
-                `${'Edificio:'} ${element.building_name} ${'-'} ${element.classroom_name}`,
+            :
+                `Edificio: ${element.building_name} - ${element.classroom_name}`,
         adviseDateRequest: dateTimeFormat(element.advise_date_request),
         adviseDateStart: dateTimeFormat(element.advise_date_start),
         adviseDateEnds: dateTimeFormat(element.advise_date_ends),
@@ -221,14 +188,12 @@ function Reports() {
                         Asesorías
                     </Typography>
                 </Stack>
-                <Card style={{ height: 472, width: '100%' }}>
-                    <div style={{ height: '100%', width: '100%' }}>
+                <Card style={{ height: 472, padding: '24px' }}>
+                    <div style={{ height: '100%'}}>
                         <DataGrid
-                            rows={adviceList}
+                            rows={adviseList}
                             columns={columns}
-                            components={{
-                                Toolbar: GridToolbar,
-                            }}
+                            components={{Toolbar: GridToolbar}}
                             componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                             initialState={{
@@ -255,8 +220,6 @@ function Reports() {
                 </Card>
             </Container>
         </Page >
-
     );
 }
 export default Reports;
-

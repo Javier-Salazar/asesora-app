@@ -1,9 +1,7 @@
 import { useEffect, useState, } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-    Typography, CardMedia, Card, CardContent, Box, BottomNavigation, BottomNavigationAction, Alert,
-    Container, Grid
-} from '@mui/material';
+import { Typography, CardMedia, Card, CardContent, Box, BottomNavigation, BottomNavigationAction, Alert,
+    Container, Grid } from '@mui/material';
 import ProfileInformation from './ProfileInformation';
 import ProfileComments from './ProfileComments';
 import { Wrong } from '../errors';
@@ -88,9 +86,9 @@ function AdvisorProfile() {
         <>
             {
                 noRequest
-                    ?
+                ?
                     <Wrong />
-                    :
+                :
                     <Container minWidht="sm">
                         <Grid>
                             <Card sx={{ mb: 3 }}>
@@ -142,35 +140,34 @@ function AdvisorProfile() {
 
                             {
                                 profile
-                                    ?
+                                ?
                                     <ProfileInformation
                                         email={adviser.userx_email}
                                         rating={adviser.advisor_rating}
                                         biografia={adviser.advisor_comments}
                                     />
-                                    :
+                                :
                                     null
                             }
                             {
                                 comments
-                                    ?
+                                ?
                                     <ProfileComments name={adviser.userx_name} adviser={idUser} />
-                                    :
+                                :
                                     null
                             }
                             {
                                 schedule
-                                    ?
+                                ?
                                     <Alert border-radius="12px" severity="warning">
                                         Se selecciona la opción agendar
                                     </Alert>
-                                    :
+                                :
                                     null
                             }
                         </Grid>
                     </Container>
             }
-
         </>
     );
 }

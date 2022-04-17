@@ -3,10 +3,8 @@ import Page from '../components/Page';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
-import {
-  AcceptedAdvice, CanceledAdvise, RequestedAdvice, TotalAdvice,
-  AdviseOfTheDay, UserDistribution, CarouselInfographics, WebAppAdvise
-} from '../components/_dashboard/app';
+import { AcceptedAdvice, CanceledAdvise, RequestedAdvice, TotalAdvice,
+  AdviseOfTheDay, UserDistribution, CarouselInfographics, WebAppAdvise } from '../components/_dashboard/app';
 
 function DashboardApp() {
   const cookies = new Cookies();
@@ -27,7 +25,7 @@ function DashboardApp() {
         <Grid container spacing={3}>
           {
             cookies.get('UserType') === 'N'
-              ?
+            ?
               <>
                 <Grid item xs={12} md={4} lg={8}>
                   <CarouselInfographics />
@@ -37,13 +35,13 @@ function DashboardApp() {
                   <AdviseOfTheDay />
                 </Grid>
               </>
-              :
+            :
               null
           }
 
           {
             cookies.get('UserType') === 'A'
-              ?
+            ?
               <>
 
                 <Grid item xs={12} md={4} lg={8}>
@@ -54,13 +52,13 @@ function DashboardApp() {
                   <AdviseOfTheDay />
                 </Grid>
               </>
-              :
+            :
               null
           }
 
           {
             cookies.get('UserType') === 'S'
-              ?
+            ?
               <>
                 <Grid item xs={12} sm={6} md={3}>
                   <TotalAdvice />
@@ -81,7 +79,7 @@ function DashboardApp() {
                   <UserDistribution />
                 </Grid>
               </>
-              :
+            :
               null
           }
 

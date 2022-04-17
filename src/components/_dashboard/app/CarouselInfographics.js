@@ -95,25 +95,27 @@ function CarouselInfographics() {
             >
                 {uploadImages(cookies.get('UserType')).map((step, index) => (
                     <div key={step.label}>
-                        {Math.abs(activeStep - index) <= 2
+                        {
+                            Math.abs(activeStep - index) <= 2
                             ?
-                            (
-                                <a href={step.link}>
-                                    <Box
-                                        component="img"
-                                        sx={{
-                                            height: 440,
-                                            display: 'block',
-                                            overflow: 'hidden',
-                                            width: '100%',
-                                        }}
-                                        src={step.imgPath}
-                                        alt={step.label}
-                                    />
-                                </a>
-                            )
+                                (
+                                    <a href={step.link}>
+                                        <Box
+                                            component="img"
+                                            sx={{
+                                                height: 440,
+                                                display: 'block',
+                                                overflow: 'hidden',
+                                                width: '100%',
+                                            }}
+                                            src={step.imgPath}
+                                            alt={step.label}
+                                        />
+                                    </a>
+                                )
                             :
-                            null}
+                                null
+                        }
                     </div>
                 ))}
             </AutoPlaySwipeableViews>
@@ -135,4 +137,5 @@ function CarouselInfographics() {
         </Card>
     );
 }
+
 export default CarouselInfographics;

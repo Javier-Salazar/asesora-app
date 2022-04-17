@@ -26,11 +26,9 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-
-
 function UserDistribution() {
-
   const [data, setData] = useState([]);
+  
   const baseUrl = "https://localhost:44397/api/users";
 
   const peticionesGet = async () => {

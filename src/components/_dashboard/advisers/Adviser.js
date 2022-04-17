@@ -24,12 +24,12 @@ function Adviser(props) {
             <IconButton color="error" size="small" onClick={handleLike} style={{ alignSelf: 'flex-end' }}>
                 {
                     like
-                        ?
+                    ?
                         <Tooltip title="Quitar de favoritos" placement="top" arrow>
                             <Icon icon={heartFill} width="32px" />
                         </Tooltip>
 
-                        :
+                    :
                         <Tooltip title="Añadir a favoritos" placement="top" arrow>
                             <Icon icon={heartOutline} width="32px" />
                         </Tooltip>

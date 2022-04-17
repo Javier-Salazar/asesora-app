@@ -5,10 +5,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import { useNavigate } from 'react-router-dom';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import {
-    Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
-    DialogTitle, DialogContent, TextField, CircularProgress
-} from '@mui/material';
+import { Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
+    DialogTitle, DialogContent, TextField, CircularProgress } from '@mui/material';
 import Page from '../components/Page';
 import esLocale from '@fullcalendar/core/locales/es';
 import { useEffect, useState } from 'react';
@@ -25,7 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function dateFormat(date) {
     var dateTimeArray = date.split('T');
     var dateArray = dateTimeArray[0].split('-');
-    return (dateArray[2] + "/" + dateArray[1] + "/" + dateArray[0])
+    return `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
 }
 
 function timeFormat(dateStart, dateEnd) {
@@ -33,15 +31,15 @@ function timeFormat(dateStart, dateEnd) {
     var dateTimeEndArray = dateEnd.split('T');
     var timeStartArray = dateTimeStartArray[1].split(':');
     var timeEndArray = dateTimeEndArray[1].split(':');
-    return (timeStartArray[0] + ":" + timeStartArray[1] + " - " + timeEndArray[0] + ":" + timeEndArray[1])
+    return `${timeStartArray[0]}:${timeStartArray[1]} - ${timeEndArray[0]}:${timeEndArray[1]}`;
 }
 
 function changeLabelModality(text) {
     if (text === 'P') {
-        return 'Presencial';
+        return sentenceCase('presencial');
     }
     else {
-        return 'Virtual';
+        return sentenceCase('virtual');
     }
 }
 
@@ -86,7 +84,7 @@ function Calendar() {
         return filterResults;
     };
 
-    const adviceList = filterData().map((element => ({
+    const adviseList = filterData().map((element => ({
         id: element.advise_code,
         title: element.subjectx_name,
         start: element.advise_date_start,
@@ -96,9 +94,8 @@ function Calendar() {
         textColor: element.advise_modality === 'P' ? '#637381' : '#4B29BA'
     })));
 
-
     const handleEventClick = (info) => {
-        axios.get("https://localhost:44397/api/advises/" + info.event.id)
+        axios.get(`https://localhost:44397/api/advises/${info.event.id}`)
             .then(response => {
                 setSelectedAdvise(response.data);
             }).catch(error => {
@@ -121,8 +118,8 @@ function Calendar() {
                         Calendario
                     </Typography>
                 </Stack>
-                <Card>
 
+                <Card>
                     <CardContent sx={{ flex: '1 0 auto' }}>
                         <FullCalendar
                             height={'auto'}
@@ -130,17 +127,18 @@ function Calendar() {
                             plugins={[dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin]}
                             initialView="dayGridMonth"
                             weekends={true}
-                            events={adviceList}
+                            events={adviseList}
                             eventDisplay={'block'}
                             headerToolbar={{
-                                right: 'prev,next today',
+                                right: 'today prev,next',
                                 center: 'title',
-                                left: 'dayGridMonth,timeGridWeek,timeGridDay'//listWeek
+                                left: 'dayGridMonth,timeGridWeek,timeGridDay'
                             }}
                             nowIndicator={true}
                             locale={esLocale}
                             dayMaxEventRows={4}
                             eventClick={(e) => handleEventClick(e)}
+                            
                         />
                     </CardContent>
                 </Card>
@@ -157,16 +155,16 @@ function Calendar() {
                             color={(selectedAdvise.advise_modality === 'V' && 'virtual') || 'default'}
                             style={{ alignSelf: 'flex-end', minWidth: 'auto' }}
                         >
-                            {sentenceCase(changeLabelModality(selectedAdvise.advise_modality))}
+                            {changeLabelModality(selectedAdvise.advise_modality)}
                         </Label>
                     </div>
                 </DialogTitle>
                 <DialogContent>
                     {
                         selectedAdvise.advise_code === ''
-                            ?
+                        ?
                             <CircularProgress color="success" />
-                            :
+                        :
                             <Stack spacing={2} sx={{ padding: '12px' }}>
 
                                 <TextField
@@ -183,14 +181,14 @@ function Calendar() {
                                 />
                                 {
                                     cookies.get('UserType') === 'N'
-                                        ?
+                                    ?
                                         <TextField
                                             fullWidth
                                             label="Asesor"
                                             value={`${selectedAdvise.advisorName} ${selectedAdvise.advisorLastName} ${selectedAdvise.advisorLastMotherName}`}
                                             disabled
                                         />
-                                        :
+                                    :
                                         <TextField
                                             fullWidth
                                             label="Alumno"
@@ -217,10 +215,10 @@ function Calendar() {
                                     label="Lugar"
                                     value={
                                         selectedAdvise.advise_modality === 'V'
-                                            ?
+                                        ?
                                             selectedAdvise.advise_url
-                                            :
-                                            `${'Edificio:'} ${selectedAdvise.building_name} ${'-'} ${selectedAdvise.classroom_name}`
+                                        :
+                                            `Edificio: ${selectedAdvise.building_name} - ${selectedAdvise.classroom_name}`
                                     }
                                     disabled
                                 />
@@ -234,7 +232,6 @@ function Calendar() {
                 </DialogActions>
             </Dialog>
         </Page >
-
     );
 }
 export default Calendar;

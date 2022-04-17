@@ -1,6 +1,6 @@
 import { Card, Typography, CardHeader, CardContent, CardMedia, Box } from '@mui/material';
-import { Timeline, TimelineItem, TimelineContent, TimelineConnector, TimelineSeparator, TimelineDot } from '@mui/lab';
 import { useEffect, useState } from 'react';
+import { Timeline, TimelineItem, TimelineContent, TimelineConnector, TimelineSeparator, TimelineDot } from '@mui/lab';
 import axios from 'axios';
 import Cookies from 'universal-cookie'
 
@@ -21,7 +21,6 @@ function AdviseOfTheDay() {
   useEffect(() => {
     peticionesGet();
   });
-
 
   const timeFormat = (text) => {
     var hora = text.split('T');
@@ -53,7 +52,7 @@ function AdviseOfTheDay() {
       <CardContent>
         {
           filterAndSort().length === 0
-            ?
+          ?
             <>
               <CardMedia
                 component="img"
@@ -65,17 +64,16 @@ function AdviseOfTheDay() {
                 Ninguna asesoría agendada por el día de hoy
               </Typography>
             </>
-            :
+          :
             <Box>
               <Timeline>
                 {filterAndSort().map(element => (
                   <TimelineItem key={element.advise_code}>
                     <TimelineSeparator>
                       <TimelineConnector />
-                      <TimelineDot sx={{
-                        bgcolor:
-                          (element.advise_modality === 'P' && '#637381') || '#4B29BA'
-                      }} />
+                      <TimelineDot
+                        sx={{ bgcolor: (element.advise_modality === 'P' && '#637381') || '#4B29BA' }}
+                      />
                       <TimelineConnector />
                     </TimelineSeparator>
                     <TimelineContent sx={{ py: '12px', px: 2 }}>

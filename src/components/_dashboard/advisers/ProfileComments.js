@@ -1,5 +1,5 @@
-import { Typography, Card, CardContent, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Typography, Card, CardContent, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 import { Wrong } from '../errors';
 import MockImgAvatar from '../../../utils/mockImages';
 import axios from 'axios';
@@ -55,9 +55,9 @@ function ProfileComments(props) {
                             <div>
                                 {
                                     noRequest
-                                        ?
+                                    ?
                                         <Wrong />
-                                        :
+                                    :
                                         loadData().map(element => (
                                             <ListItem button key={element.advise_code}>
                                                 <ListItemAvatar>
