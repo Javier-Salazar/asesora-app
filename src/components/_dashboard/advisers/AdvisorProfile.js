@@ -12,6 +12,7 @@ import startFill from '@iconify/icons-eva/star-fill';
 import startOutline from '@iconify/icons-eva/star-outline';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import MockImgAvatar from '../../../utils/mockImages';
 
 function AdvisorProfile() {
     const cookies = new Cookies();
@@ -101,7 +102,7 @@ function AdvisorProfile() {
                                     <div style={{ position: 'absolute', left: 28, top: 80, display: 'flex', alignItems: 'center' }}>
                                         <Box
                                             component="img"
-                                            src={`data:image/png;base64, ${adviser.userx_image}`}
+                                            src={`data:image/png;base64,${adviser.userx_image !== '' ? adviser.userx_image : MockImgAvatar()}`}
                                             sx={{ width: 120, borderRadius: 12, height: 120 }}
                                         />
                                         <Box sx={{ pl: 4, pt: 2 }}>

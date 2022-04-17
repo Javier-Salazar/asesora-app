@@ -20,6 +20,7 @@ function Advisers() {
     const baseUrl = "https://localhost:44397/api/advisors";
     const [advisers, setAdvisers] = useState([]);
     const [noRequest, setNoRequest] = useState(false);
+    const [advise, setAdvise] = useState([]);
 
     const peticionesGet = async () => {
         await axios.get(baseUrl)
@@ -36,9 +37,37 @@ function Advisers() {
             })
     }
 
+    const peticionesGetAdvise = async () => {
+        await axios.get("https://localhost:44397/api/advises")
+            .then(Response => {
+                setAdvise(Response.data);
+            }).catch(error => {
+                if (error.request) {
+                    console.log(error.request);
+                    setNoRequest(true);
+                }
+                else {
+                    console.log(error);
+                }
+            })
+    }
+
+    const loadComments = (advisor) => {
+        var filterResults = advise.filter((element) => {
+            if (element.advise_advisor === advisor) {
+                return element;
+            }
+            return filterResults;
+        });
+        return filterResults;
+    };
+
     useEffect(() => {
         peticionesGet();
+        peticionesGetAdvise();
     }, []);
+
+
 
     return (
         <Page title="AsesoraApp | Asesores">
@@ -61,7 +90,7 @@ function Advisers() {
                                             name={`${elemento.userx_name} ${elemento.userx_lastname}`}
                                             email={elemento.userx_email}
                                             rating={elemento.advisor_rating}
-                                            comments="6"
+                                            comments={loadComments(elemento.advisor_code).length}
                                             id={elemento.advisor_code}
                                         />
                                     </Card>
