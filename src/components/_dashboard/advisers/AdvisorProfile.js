@@ -153,7 +153,7 @@ function AdvisorProfile() {
                             {
                                 comments
                                     ?
-                                    <ProfileComments name={adviser.userx_name} />
+                                    <ProfileComments name={adviser.userx_name} adviser={idUser} />
                                     :
                                     null
                             }
