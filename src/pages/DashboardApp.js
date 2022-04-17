@@ -3,9 +3,10 @@ import Page from '../components/Page';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
-import { AppTasks, AcceptedAdvice, CanceledAdvise, RequestedAdvice, AppNewsUpdate, TotalAdvice, 
-  AdviseOfTheDay, UserDistribution, AppWebsiteVisits, AppTrafficBySite, AppCurrentSubject, 
-  AppConversionRates } from '../components/_dashboard/app';
+import {
+  AcceptedAdvice, CanceledAdvise, RequestedAdvice, TotalAdvice,
+  AdviseOfTheDay, UserDistribution, CarouselInfographics, WebAppAdvise
+} from '../components/_dashboard/app';
 
 function DashboardApp() {
   const cookies = new Cookies();
@@ -24,50 +25,66 @@ function DashboardApp() {
           <Typography variant="h4">Hola, Bienvenido de nuevo</Typography>
         </Box>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <TotalAdvice />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <AcceptedAdvice />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <RequestedAdvice />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <CanceledAdvise />
-          </Grid>
+          {
+            cookies.get('UserType') === 'N'
+              ?
+              <>
+                <Grid item xs={12} md={4} lg={8}>
+                  <CarouselInfographics />
+                </Grid>
 
-          <Grid item xs={12} md={4} lg={8}>
-            <AppWebsiteVisits />
-          </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <AdviseOfTheDay />
+                </Grid>
+              </>
+              :
+              null
+          }
 
-          <Grid item xs={12} md={6} lg={4}>
-            <UserDistribution />
-          </Grid>
+          {
+            cookies.get('UserType') === 'A'
+              ?
+              <>
 
-          <Grid item xs={12} md={6} lg={8}>
-            <AppConversionRates />
-          </Grid>
+                <Grid item xs={12} md={4} lg={8}>
+                  <CarouselInfographics />
+                </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <AppCurrentSubject />
-          </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <AdviseOfTheDay />
+                </Grid>
+              </>
+              :
+              null
+          }
 
-          <Grid item xs={12} md={6} lg={8}>
-            <AppNewsUpdate />
-          </Grid>
+          {
+            cookies.get('UserType') === 'S'
+              ?
+              <>
+                <Grid item xs={12} sm={6} md={3}>
+                  <TotalAdvice />
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <AcceptedAdvice />
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <RequestedAdvice />
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <CanceledAdvise />
+                </Grid>
+                <Grid item xs={12} md={4} lg={8}>
+                  <WebAppAdvise />
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
+                  <UserDistribution />
+                </Grid>
+              </>
+              :
+              null
+          }
 
-          <Grid item xs={12} md={6} lg={4}>
-            <AdviseOfTheDay />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppTrafficBySite />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
-            <AppTasks />
-          </Grid>
         </Grid>
       </Container>
     </Page>

@@ -1,10 +1,11 @@
-import { Card, Typography, CardHeader, CardContent } from '@mui/material';
+import { Card, Typography, CardHeader, CardContent, CardMedia, Box } from '@mui/material';
 import { Timeline, TimelineItem, TimelineContent, TimelineConnector, TimelineSeparator, TimelineDot } from '@mui/lab';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import Cookies from 'universal-cookie'
 
 function AdviseOfTheDay() {
+  const cookies = new Cookies();
   const [data, setData] = useState([]);
   const baseUrl = "https://localhost:44397/api/advises";
 
@@ -29,9 +30,10 @@ function AdviseOfTheDay() {
   };
 
   const date = new Date();
+
   const filterAndSort = () => {
     var filterResults = data.filter((element) => {
-      if (element.advise_advisor === "mbailon") {
+      if ((cookies.get('UserType') === 'N' ? element.advise_student : element.advise_advisor) === cookies.get('UserCode')) {
         var dateArray = element.advise_date_start.split('T', 1);
         var dateSys = date.toISOString().split('T', 1);
         if (dateArray[0] === dateSys[0]) {
@@ -46,37 +48,47 @@ function AdviseOfTheDay() {
   }
 
   return (
-    <Card
-      sx={{
-        '& .MuiTimelineItem-missingOppositeContent:before': {
-          display: 'none'
-        }
-      }}
-    >
+    <Card sx={{ height: '480px' }} >
       <CardHeader title="Tus asesorías del día" />
       <CardContent>
-        <Timeline>
-          {filterAndSort().map(element => (
-            <TimelineItem key={element.advise_code}>
-              <TimelineSeparator>
-                <TimelineConnector />
-                <TimelineDot sx={{
-                  bgcolor:
-                    (element.advise_modality === 'P' && 'primary.main') ||
-                    (element.advise_modality === 'V' && 'warning.main') ||
-                    'error.main'
-                }} />
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: '12px', px: 2 }}>
-                <Typography variant="h6" component="span">
-                  {timeFormat(element.advise_date_start)}
-                </Typography>
-                <Typography>{element.subjectx_name}</Typography>
-              </TimelineContent>
-            </TimelineItem>
-          ))}
-        </Timeline>
+        {
+          filterAndSort().length === 0
+            ?
+            <>
+              <CardMedia
+                component="img"
+                height="340"
+                image="/static/illustrations/illustration_dayOff_dashboard_advisor.png"
+                alt="Día libre"
+              />
+              <Typography variant="subtitle2" component="span">
+                Ninguna asesoría agendada por el día de hoy
+              </Typography>
+            </>
+            :
+            <Box>
+              <Timeline>
+                {filterAndSort().map(element => (
+                  <TimelineItem key={element.advise_code}>
+                    <TimelineSeparator>
+                      <TimelineConnector />
+                      <TimelineDot sx={{
+                        bgcolor:
+                          (element.advise_modality === 'P' && '#637381') || '#4B29BA'
+                      }} />
+                      <TimelineConnector />
+                    </TimelineSeparator>
+                    <TimelineContent sx={{ py: '12px', px: 2 }}>
+                      <Typography variant="h6" component="span">
+                        {timeFormat(element.advise_date_start)}
+                      </Typography>
+                      <Typography>{element.subjectx_name}</Typography>
+                    </TimelineContent>
+                  </TimelineItem>
+                ))}
+              </Timeline>
+            </Box>
+        }
       </CardContent>
     </Card>
   );
