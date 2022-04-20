@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { DataGrid, GridToolbar, esES } from '@mui/x-data-grid';
-import { Stack, Container, Typography, Card, Avatar } from '@mui/material';
+import { Stack, Container, Typography, Card } from '@mui/material';
 import Page from '../components/Page';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Label from '../components/Label';
 import { sentenceCase } from 'change-case';
-import MockImgAvatar from '../utils/mockImages';
 import Cookies from 'universal-cookie';
 
 function changeLabelModality(text) {

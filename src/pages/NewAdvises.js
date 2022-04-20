@@ -26,20 +26,20 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 
 function changeLabelStatus(bool) {
   if (bool) {
-    return sentenceCase('Activo');
+    return sentenceCase('virtual');
   } else {
-    return sentenceCase('Inactivo');
+    return sentenceCase('presencial');
   }
 }
 
-function MyAdvises() {
-//   const cookies = new Cookies();
+function NewAdvises() {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const date = new Date();
 
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
-  const [accountStatus, setStatus] = useState(false);
+  const [modality, setModality] = useState(false);
   const [email, setEmail] = useState('');
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
@@ -73,41 +73,9 @@ function MyAdvises() {
       .min(2, 'El nombre es muy corto')
       .max(30, 'El nombre es muy largo')
       .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/, "Ingrese solamente letras")
-      .required('El nombre es obligatorio'),
-    lastName: Yup.string()
-      .min(2, 'El apellido es muy corto')
-      .max(30, 'El apellido es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios")
-      .required('El apellido es obligatorio'),
-    motherLastName: Yup.string()
-      .min(2, 'El apellido es muy corto')
-      .max(30, 'El apellido es muy largo')
-      .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "Ingrese solamente letras, sin dejar espacios"),
-    password: Yup.string()
-      .required('La contraseña es obligatoria')
-      .min(8, "La contraseña debe contener mínimo 8 caracteres"),
-    phone: Yup.string()
-      .min(2, 'El teléfono es muy corto')
-      .max(7, 'El teléfono es muy largo')
-      .matches(/[0-9]/, "Ingrese solamente números")
+      .required('El nombre es obligatorio')
   });
-
-  const validate = () => {
-    const errors = {};
-    setEmail(email.toLowerCase());
-
-    var AuxEmail = email.split('@');
-    var code = AuxEmail[0].slice(1);
-
-    if (email === "") {
-      errors.email = 'El correo electrónico es obligatorio';
-    } else if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj\.edu\.mx/.test(email)) {
-      errors.email = 'Ingrese un correo institucional, por ejemplo: user@itcj.edu.mx';
-    } else if ((email.charAt(0) !== "l" && /^[0-9]*$/.test(code)) || (code.length !== 8 && /^[0-9]*$/.test(code))) {
-      errors.email = 'El correo tiene estructura de alumno pero esta mal escrito';
-    }
-    return errors;
-  };
+  
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -120,7 +88,6 @@ function MyAdvises() {
       phone: ''
     },
     validationSchema: RegisterSchema,
-    validate,
     onSubmit: () => {
       searchUser();
       validateUserType();
@@ -180,7 +147,7 @@ function MyAdvises() {
     setShowAlertPost(false);
     setAdmin(false);
     setAdvisor(false);
-    setStatus(false);
+    setModality(false);
   }
 
 //   const peticionPostUser = async (type) => {
@@ -299,9 +266,9 @@ function MyAdvises() {
             <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse', marginBottom: '24px' }}>
               <Label
                 variant="ghost"
-                color={(accountStatus === false && 'error') || 'success'}
+                color={(modality === false && 'default') || 'virtual'}
               >
-                {changeLabelStatus(accountStatus)}
+                {changeLabelStatus(modality)}
               </Label>
             </div>
 
@@ -320,43 +287,13 @@ function MyAdvises() {
             }}>
               <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
                 <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Estatus
+                  Modalidad
                 </Typography>
                 <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Definir el estado de la cuenta
+                  Definir la modalidad de la asesoría
                 </Typography>
               </div>
-              <Switch sx={{ pl: 2 }} onChange={() => setStatus(!accountStatus)} checked={accountStatus} />
-            </div>
-
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
-              alignItems: 'center', marginTop: '24px'
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Asesor
-                </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Esta cuenta es asesor
-                </Typography>
-              </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
-            </div>
-
-            <div style={{
-              width: '100%', display: 'flex', justifyContent: 'space-between',
-              alignItems: 'center', marginTop: '24px'
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '80%' }}>
-                <Typography variant='subtitle2' sx={{ wordWrap: 'break-word' }}>
-                  Administrador
-                </Typography>
-                <Typography variant='body2' sx={{ wordWrap: 'break-word' }}>
-                  Esta cuenta es administrador
-                </Typography>
-              </div>
-              <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
+              <Switch sx={{ pl: 2 }} onChange={() => setModality(!modality)} checked={modality} />
             </div>
 
           </Card>
@@ -493,4 +430,4 @@ function MyAdvises() {
   );
 }
 
-export default MyAdvises;
+export default NewAdvises;

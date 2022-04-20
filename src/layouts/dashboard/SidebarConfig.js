@@ -32,8 +32,8 @@ const sidebarConfig = [
     icon: getIcon(fileTextFill)
   },
   {
-    title: 'mis asesorías',
-    path: '/dashboard/my-advises',
+    title: 'añadir asesoría',
+    path: '/dashboard/new-advises',
     icon: getIcon(fileTextFill)
   },
   {

@@ -31,7 +31,7 @@ const handleClick = () => {
             scope: SCOPES,
         })
 
-        gapi.client.load('calendar', 'v3', () => console.log('bam!'))
+        gapi.client.load('calendar', 'v3', () => console.log('bam!'));
 
         gapi.auth2.getAuthInstance().signIn()
             .then(() => {
@@ -83,15 +83,6 @@ function Advise(props) {
     const [open, setOpen] = useState(false);
     var modality;
 
-    const handleClickOpen = () => {
-        setShowAlert({
-            message: 'Hemos agregado este evento con éxito a tu calendario',
-            show: true,
-            duration: 5000,
-        });
-        setOpen(true);
-    }
-
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -106,7 +97,6 @@ function Advise(props) {
     else {
         modality = 'presencial';
     }
-
 
     return (
         <Stack

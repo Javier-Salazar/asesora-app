@@ -6,7 +6,6 @@ import { LoadingButton } from '@mui/lab';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import CryptoJS from 'crypto-js';
-import emailjs from '@emailjs/browser';
 
 function ResetPasswordForm({ func }) {
     const navigate = useNavigate();
