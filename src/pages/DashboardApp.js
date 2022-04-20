@@ -20,7 +20,7 @@ function DashboardApp() {
     <Page title="AsesoraApp | Inicio">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">Hola, Bienvenido de nuevo</Typography>
+          <Typography variant="h4">Hola, bienvenido de nuevo</Typography>
         </Box>
         <Grid container spacing={3}>
           {

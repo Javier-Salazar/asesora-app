@@ -1,5 +1,5 @@
-import { Card, Typography, CardHeader, CardContent, CardMedia, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Card, Typography, CardHeader, CardContent, CardMedia, Box } from '@mui/material';
 import { Timeline, TimelineItem, TimelineContent, TimelineConnector, TimelineSeparator, TimelineDot } from '@mui/lab';
 import axios from 'axios';
 import Cookies from 'universal-cookie'
@@ -47,18 +47,19 @@ function AdviseOfTheDay() {
   }
 
   return (
-    <Card sx={{ height: '480px' }} >
+    <Card sx={{ height: '420px' }} >
       <CardHeader title="Tus asesorías del día" />
-      <CardContent>
+      <CardContent sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '87%'}}>
         {
           filterAndSort().length === 0
           ?
             <>
               <CardMedia
                 component="img"
-                height="340"
-                image="/static/illustrations/illustration_dayOff_dashboard_advisor.png"
-                alt="Día libre"
+                height="82%"
+                image="/static/illustrations/illustration_day_off.png"
+                alt="day off"
+                sx={{objectFit: 'contain'}}
               />
               <Typography variant="subtitle2" component="span">
                 Ninguna asesoría agendada por el día de hoy
@@ -67,23 +68,25 @@ function AdviseOfTheDay() {
           :
             <Box>
               <Timeline>
-                {filterAndSort().map(element => (
-                  <TimelineItem key={element.advise_code}>
-                    <TimelineSeparator>
-                      <TimelineConnector />
-                      <TimelineDot
-                        sx={{ bgcolor: (element.advise_modality === 'P' && '#637381') || '#4B29BA' }}
-                      />
-                      <TimelineConnector />
-                    </TimelineSeparator>
-                    <TimelineContent sx={{ py: '12px', px: 2 }}>
-                      <Typography variant="h6" component="span">
-                        {timeFormat(element.advise_date_start)}
-                      </Typography>
-                      <Typography>{element.subjectx_name}</Typography>
-                    </TimelineContent>
-                  </TimelineItem>
-                ))}
+                {
+                  filterAndSort().map(element => (
+                    <TimelineItem key={element.advise_code}>
+                      <TimelineSeparator>
+                        <TimelineConnector />
+                        <TimelineDot
+                          sx={{ bgcolor: (element.advise_modality === 'P' && '#637381') || '#4B29BA' }}
+                        />
+                        <TimelineConnector />
+                      </TimelineSeparator>
+                      <TimelineContent sx={{ py: '12px', px: 2 }}>
+                        <Typography variant="h6" component="span">
+                          {timeFormat(element.advise_date_start)}
+                        </Typography>
+                        <Typography>{element.subjectx_name}</Typography>
+                      </TimelineContent>
+                    </TimelineItem>
+                  ))
+                }
               </Timeline>
             </Box>
         }

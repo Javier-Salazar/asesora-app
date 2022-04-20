@@ -5,9 +5,10 @@ import arrowLeft from '@iconify/icons-eva/arrow-ios-back-fill';
 import arrowRight from '@iconify/icons-eva/arrow-ios-forward-fill';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
-import Cookies from 'universal-cookie'
+import Cookies from 'universal-cookie';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
 function uploadImages(type) {
     if (type === 'N') {
         return (
@@ -86,7 +87,7 @@ function CarouselInfographics() {
     };
 
     return (
-        <Card sx={{ height: '480px' }}>
+        <Card sx={{ height: '420px' }}>
             <AutoPlaySwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={activeStep}
@@ -103,10 +104,10 @@ function CarouselInfographics() {
                                         <Box
                                             component="img"
                                             sx={{
-                                                height: 440,
+                                                height: 370,
                                                 display: 'block',
                                                 overflow: 'hidden',
-                                                width: '100%',
+                                                width: '100%'
                                             }}
                                             src={step.imgPath}
                                             alt={step.label}
@@ -133,6 +134,7 @@ function CarouselInfographics() {
                         <Icon icon={arrowLeft} width="26px" />
                     </IconButton>
                 }
+                sx={{borderRadius: '0'}}
             />
         </Card>
     );

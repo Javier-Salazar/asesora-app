@@ -72,8 +72,7 @@ function Reports() {
                             {showDateTime(params.value)}
                         </Typography>
                     </>
-                )
-
+                );
             }
         },
         {
@@ -85,8 +84,7 @@ function Reports() {
                             {showDateTime(params.value)}
                         </Typography>
                     </>
-                )
-
+                );
             }
         },
         {
@@ -98,8 +96,7 @@ function Reports() {
                             {showDateTime(params.value)}
                         </Typography>
                     </>
-                )
-
+                );
             }
         },
         {
@@ -114,7 +111,7 @@ function Reports() {
                             {sentenceCase(params.value)}
                         </Label>
                     </>
-                )
+                );
             }
         },
         {
@@ -130,7 +127,7 @@ function Reports() {
                             {sentenceCase(params.value)}
                         </Label>
                     </>
-                )
+                );
             }
         },
         { field: 'adviseComments', headerName: 'Comentarios', width: 450 }
