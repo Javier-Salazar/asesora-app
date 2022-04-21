@@ -6,7 +6,7 @@ import Register from './pages/Register';
 import Advisers from './pages/Advisers';
 import Advises from './pages/Advises';
 import NewAdvises from './pages/NewAdvises';
-import Subjects from './pages/Subjects';
+import SubjectsX from './pages/SubjectsX';
 import ResetPassword from './pages/ResetPassword';
 import EndUserAgreement from './pages/EndUserAgreement'
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -59,7 +59,7 @@ function Router() {
         { path: 'adviser-profile/:adviserID', element: <AdvisorProfile /> },
         { path: 'advises', element: <Advises /> },
         { path: 'new-advises', element: <NewAdvises /> },
-        { path: 'subject', element: <Subjects /> },
+        { path: 'subject', element: <SubjectsX /> },
         { path: 'my-profile', element: <MyProfile /> },
         { path: 'reports', element: <Reports /> },
         { path: 'calendar', element: <Calendar /> },
