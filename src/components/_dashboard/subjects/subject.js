@@ -57,8 +57,9 @@ function Subject(props) {
                     </Typography>
                 </div>
             </Box>
-            <Box sx={{ flex: 'flex', textAlign: 'left', mt: 2 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+
+            <Box sx={{ mt: 2 }}>
+                <div>
                     <AvatarGroup max={5}>
                         {
                             props.advisors.map(subject => (
@@ -82,9 +83,10 @@ function Subject(props) {
                     </AvatarGroup>
                 </div>
             </Box>
+
             <Grid container columnSpacing={0} sx={{ mt: 3 }}>
                 <Grid item xs={12} sm={12}>
-                    <Button fullWidth to="/dashboard/advises" component={RouterLink}>
+                    <Button fullWidth to="/dashboard/advises" component={RouterLink} adviser={props.adviser} subject={props.name}>
                         ver asesorías disponibles
                     </Button>
                 </Grid>
@@ -92,4 +94,5 @@ function Subject(props) {
         </Stack>
     );
 }
+
 export default Subject;

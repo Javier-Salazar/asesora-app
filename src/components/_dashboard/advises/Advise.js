@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Icon } from '@iconify/react';
 import startFill from '@iconify/icons-eva/star-fill';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { sentenceCase } from 'change-case';
-import { Typography, Box, Stack, Button, Grid, Chip, Avatar, Snackbar, Alert } from '@mui/material';
+import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, IconButton } from '@mui/material';
 import Label from '../../../components/Label';
 import MockImgAvatar from '../../../utils/mockImages';
-
-const ChipStyled = styled(Chip)(({ theme }) => ({
-    color: theme.palette.primary.main,
-    backgroundColor: '#EBF8F6'
-}));
 
 var gapi = window.gapi;
 
@@ -117,64 +113,43 @@ function Advise(props) {
                 </Label>
             </div>
 
-            <Box sx={{ flex: 'flex', textAlign: 'left', mt: 3 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
-                    {
-                        props.tag1 !== ''
-                        ?
-                            <ChipStyled label={props.tag1} sx={{ mb: 1, mr: 1 }} />
-                        :
-                            null
-                    }
-                    {
-                        props.tag2 !== ''
-                        ?
-                            <ChipStyled label={props.tag2} sx={{ mb: 1 }} />
-                        :
-                            null
-                    }
-                    {
-                        props.tag3 !== ''
-                        ?
-                            <ChipStyled label={props.tag3} />
-                        :
-                            null
-                    }
-                    {
-                        props.tag4 !== ''
-                        ?
-                            <ChipStyled label={props.tag4} />
-                        :
-                            null
-                    }
+            <Box sx={{ textAlign: 'center', mt: 1 }}>
+                <div style={{ display: 'inline-flex' }}>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
+                        {'5'}&nbsp;
+                        <Icon icon={messageCircleFill} />
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
+                        {'5'}&nbsp;
+                        <Icon icon={startFill} />
+                    </Typography>
                 </div>
+            </Box>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                    <div style={{ display: 'inline-flex' }}>
-                        <Avatar src={`data:image/png;base64,${props.image !== '' ? props.image : MockImgAvatar()}`} alt="avatar_1"
-                            sx={{ width: 35, height: 35 }}
+            <Box sx={{ mt: 2 }}>
+                <div style={{ display: 'flex', alignItems: 'center'}}>
+                    <IconButton
+                        to={`/dashboard/adviser-profile/${props.idAdvisor}`}
+                        component={RouterLink}
+                        sx={{
+                            padding: 0,
+                            width: 35,
+                            height: 35
+                        }}>
+                        <Avatar
+                            src={`data:image/png;base64,${props.image !== '' ? props.image : MockImgAvatar()}`}
+                            alt={'subject.idAdvisor'}
                         />
-                        <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
-                            {props.adviser}
-                        </Typography>
-                    </div>
-
-                    <div style={{ display: 'inline-flex' }}>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
-                            {props.comments}&nbsp;
-                            <Icon icon={messageCircleFill} />
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
-                            {props.rating}&nbsp;
-                            <Icon icon={startFill} />
-                        </Typography>
-                    </div>
-                </Box>
+                    </IconButton>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', pl: 2 }}>
+                        {props.adviser}
+                    </Typography>
+                </div>
             </Box>
 
             <Grid container columnSpacing={0} sx={{ mt: 2 }}>
                 <Button fullWidth onClick={handleClick}>
-                    agendar
+                    agendar asesoría
                 </Button>
             </Grid>
 

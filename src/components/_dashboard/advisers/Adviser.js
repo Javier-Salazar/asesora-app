@@ -68,7 +68,7 @@ function Adviser(props) {
                     </Button>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                    <Button fullWidth to="/dashboard/subject" component={RouterLink} adviser={props.id}>
+                    <Button fullWidth to="/dashboard/subject" component={RouterLink} c={props.id}>
                         agendar
                     </Button>
                 </Grid>

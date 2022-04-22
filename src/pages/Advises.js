@@ -8,7 +8,10 @@ import MockImgAvatar from '../utils/mockImages';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
-function Advises() {
+function Advises(props) {
+    const [advises, setAdvises] = useState([]);
+    const [noRequest, setNoRequest] = useState(false);
+
     const cookies = new Cookies();
     const navigate = useNavigate();
 
@@ -17,13 +20,9 @@ function Advises() {
             navigate('/');
         }
     });
-
-    const baseUrl = "https://localhost:44397/api/advises";
-    const [advises, setAdvises] = useState([]);
-    const [noRequest, setNoRequest] = useState(false);
-
+    
     const peticionesGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get('https://localhost:44397/api/advises')
             .then(Response => {
                 setAdvises(Response.data);
             }).catch(error => {
@@ -69,6 +68,8 @@ function Advises() {
                                             comments={element.advise_comments}
                                             modality={element.advise_modality}
                                             id={element.advise_code}
+                                            adviserr={props.adviser}
+                                            subjectt={props.name}
                                         />
                                     </Card>
                                 </Grid>

@@ -7,13 +7,13 @@ import Cookies from 'universal-cookie';
 import Page from '../components/Page';
 import { Subject } from '../components/_dashboard/subjects';
 
-function Subjects() {
+function Subjects(props) {
     const cookies = new Cookies();
-    const navigate = useNavigate();
     const [noRequest, setNoRequest] = useState(false);
     const [data, setData] = useState([]);
     const [advisor, setAdvisor] = useState([]);
-
+    
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!cookies.get('UserCode')) {
@@ -151,6 +151,7 @@ function Subjects() {
                                             faceToFaceAdvise={subject.faceToFaceAdvise}
                                             virtualAdvise={subject.virtalAdvise}
                                             advisors={subject.advisors}
+                                            adviser={props.adviser}
                                         />
                                     </Card>
                                 </Grid>
