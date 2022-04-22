@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import styled from '@emotion/styled';
+import MockImgAvatar from '../../../utils/mockImages';
 import { Icon } from '@iconify/react';
 import heartOutline from '@iconify/icons-eva/heart-outline';
 import heartFill from '@iconify/icons-eva/heart-fill';
-import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip, Chip } from '@mui/material';
-
-const ChipStyled = styled(Chip)(({theme}) => ({
-    color: theme.palette.primary.main,
-    backgroundColor: '#EBF8F6'
-}));
+import bookFill from '@iconify/icons-eva/book-fill';
+import pinFill from '@iconify/icons-eva/pin-fill';
+import videoFill from '@iconify/icons-eva/video-fill';
+import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip, Avatar, AvatarGroup } from '@mui/material';
 
 function Subject(props) {
     const [like, setLike] = useState(false);
-
     const handleLike = () => {
         setLike(!like);
     }
@@ -22,21 +19,21 @@ function Subject(props) {
         <Stack
             alignItems="center"
             spacing={0}
-            sx={{p: 2}}
+            sx={{ p: 2 }}
         >
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                <Typography gutterBottom variant="h6" sx={{m: 0}}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <Typography gutterBottom variant="h6" sx={{ m: 0 }}>
                     {props.name}
                 </Typography>
-                <IconButton color="error" size="small" onClick={handleLike} style={{alignSelf: 'flex-start'}}>
+                <IconButton color="error" size="small" onClick={handleLike} style={{ alignSelf: 'flex-start' }}>
                     {
-                        like 
+                        like
                         ?
                             <Tooltip title="Quitar de favoritos" placement="top" arrow>
                                 <Icon icon={heartFill} width="32px" />
                             </Tooltip>
-                            
-                        : 
+
+                        :
                             <Tooltip title="Añadir a favoritos" placement="top" arrow>
                                 <Icon icon={heartOutline} width="32px" />
                             </Tooltip>
@@ -44,48 +41,51 @@ function Subject(props) {
                 </IconButton>
             </div>
 
-            <Box sx={{ flex: 'flex' , textAlign: 'left', mt: 2 }}>
-                <div style={{display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap'}}>
-                    {
-                        props.tag1 !== ''
-                        ?
-                            <ChipStyled label={props.tag1} sx={{mb: 1, mr: 1}} />
-                        :
-                            null
-                    }
-                    {
-                        props.tag2 !== ''
-                        ?
-                            <ChipStyled label={props.tag2} sx={{mb: 1}} />
-                        :
-                            null
-                    }
-                    {
-                        props.tag3 !== ''
-                        ?
-                            <ChipStyled label={props.tag3} />
-                        :
-                            null
-                    }
-                    {
-                        props.tag4 !== ''
-                        ?
-                            <ChipStyled label={props.tag4} />
-                        :
-                            null
-                    }
+            <Box sx={{ textAlign: 'center' }}>
+                <div style={{ display: 'inline-flex' }}>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
+                        {(props.faceToFaceAdvise + props.virtualAdvise)}&nbsp;
+                        <Icon icon={bookFill} />
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 2 }}>
+                        {props.faceToFaceAdvise}&nbsp;
+                        <Icon icon={pinFill} />
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 2 }}>
+                        {props.virtualAdvise}&nbsp;
+                        <Icon icon={videoFill} />
+                    </Typography>
                 </div>
             </Box>
-
-            <Grid container columnSpacing={0} sx={{mt: 3}}>
-                <Grid item xs={6} sm={6}>
+            <Box sx={{ flex: 'flex', textAlign: 'left', mt: 2 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+                    <AvatarGroup max={5}>
+                        {
+                            props.advisors.map(subject => (
+                                <Tooltip title={subject.name} placement="top" arrow>
+                                    <IconButton
+                                        to={`/dashboard/adviser-profile/${subject.idAdvisor}`}
+                                        component={RouterLink}
+                                        sx={{
+                                            padding: 0,
+                                            width: 35,
+                                            height: 35
+                                        }}>
+                                        <Avatar
+                                            alt={subject.idAdvisor}
+                                            src={`data:image/png;base64,${subject.image !== '' ? subject.image : MockImgAvatar()}`}
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                            ))
+                        }
+                    </AvatarGroup>
+                </div>
+            </Box>
+            <Grid container columnSpacing={0} sx={{ mt: 3 }}>
+                <Grid item xs={12} sm={12}>
                     <Button fullWidth to="/dashboard/advises" component={RouterLink}>
-                        ver asesores
-                    </Button>
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                    <Button fullWidth to="#" component={RouterLink}>
-                        agendar
+                        ver asesorías disponibles
                     </Button>
                 </Grid>
             </Grid>

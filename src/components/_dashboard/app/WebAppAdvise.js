@@ -11,10 +11,9 @@ import axios from 'axios';
 function WebAppAdvise() {
     const [value, setValue] = useState(new Date());
     const [data, setData] = useState([]);
-    const baseUrl = "https://localhost:44397/api/advises";
 
     const requestGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get('https://localhost:44397/api/advises')
             .then(response => {
                 setData(response.data);
             }).catch(error => {
@@ -36,7 +35,7 @@ function WebAppAdvise() {
 
     const filterAdviseTotal = () => {
         var total = [];
-        for (var i = 0; i <= 11; i++) {
+        for (let i = 0; i <= 11; i++) {
             var filterResults = data.filter((element) => {
                 if ((i === dateFormat(element.advise_date_start)[0]) && ('' + value.getFullYear() === dateFormat(element.advise_date_start)[1])) {
                     if (element.advise_status === 'A') {
@@ -52,7 +51,7 @@ function WebAppAdvise() {
 
     const filterAdviseVirtual = () => {
         var total = [];
-        for (var i = 0; i <= 11; i++) {
+        for (let i = 0; i <= 11; i++) {
             var filterResults = data.filter((element) => {
                 if ((i === dateFormat(element.advise_date_start)[0]) && ('' + value.getFullYear() === dateFormat(element.advise_date_start)[1])) {
                     if ((element.advise_modality === 'V') && (element.advise_status === 'A')) {
@@ -68,7 +67,7 @@ function WebAppAdvise() {
 
     const filterAdviseFaceToFace = () => {
         var total = [];
-        for (var i = 0; i <= 11; i++) {
+        for (let i = 0; i <= 11; i++) {
             var filterResults = data.filter((element) => {
                 if ((i === dateFormat(element.advise_date_start)[0]) && ('' + value.getFullYear() === dateFormat(element.advise_date_start)[1])) {
                     if ((element.advise_modality) === 'P' && (element.advise_status === 'A')) {

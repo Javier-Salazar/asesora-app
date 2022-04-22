@@ -33,10 +33,9 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 function AcceptedAdvice() {
 
   const [data, setData] = useState([]);
-  const baseUrl = "https://localhost:44397/api/advises";
 
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get('https://localhost:44397/api/advises')
       .then(Response => {
         setData(Response.data);
       }).catch(error => {
