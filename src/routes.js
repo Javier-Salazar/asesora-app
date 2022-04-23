@@ -4,7 +4,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Advisers from './pages/Advisers';
-import Advises from './pages/Advises';
+import Advises from './pages/AdvisesX';
 import NewAdvises from './pages/NewAdvises';
 import Subjects from './pages/Subjects';
 import ResetPassword from './pages/ResetPassword';
