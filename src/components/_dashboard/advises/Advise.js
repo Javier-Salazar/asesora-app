@@ -5,93 +5,175 @@ import { Icon } from '@iconify/react';
 import startFill from '@iconify/icons-eva/star-fill';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { sentenceCase } from 'change-case';
-import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, IconButton } from '@mui/material';
+import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton,
+    Dialog, DialogContent, DialogActions, DialogTitle } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import Label from '../../../components/Label';
-import MockImgAvatar from '../../../utils/mockImages';
+import Slide from '@mui/material/Slide';
 
-var gapi = window.gapi;
+const ChipStyled = styled(Chip)(({ theme }) => ({
+    color: theme.palette.primary.main,
+    backgroundColor: '#EBF8F6'
+}));
 
-var CLIENT_ID = "403325894307-riktnlopiv84g0mjisqa6b9rgclkeigo.apps.googleusercontent.com";
-var API_KEY = "AIzaSyAN18U9TJjC3nVndaQM6ovngAAnJvOvgZU";
-var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
-var SCOPES = "https://www.googleapis.com/auth/calendar";
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
-const handleClick = () => {
-    gapi.load('client:auth2', () => {
-        console.log('loaded client')
+function dateFormat(date) {
+    var dateTimeArray = date.split('T');
+    var dateArray = dateTimeArray[0].split('-');
+    return `${dateArray[2]}/${dateArray[1]}/${dateArray[0]}`;
+}
 
-        gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES,
-        })
+function timeFormat(dateStart, dateEnd) {
+    var dateTimeStartArray = dateStart.split('T');
+    var dateTimeEndArray = dateEnd.split('T');
+    var timeStartArray = dateTimeStartArray[1].split(':');
+    var timeEndArray = dateTimeEndArray[1].split(':');
+    return `${timeStartArray[0]}:${timeStartArray[1]} - ${timeEndArray[0]}:${timeEndArray[1]}`;
+}
 
-        gapi.client.load('calendar', 'v3', () => console.log('bam!'));
-
-        gapi.auth2.getAuthInstance().signIn()
-            .then(() => {
-                var event = {
-                    'summary': 'PruebaParaAsesora',
-                    'location': 'Instituto Tecnologico de Ciudad Juarez',
-                    'description': 'Esto es una prueba para el funicionamiento de la api',
-                    'start': {
-                        'dateTime': '2022-04-03T20:00:00',
-                        'timeZone': 'America/Los_Angeles'
-                    },
-                    'end': {
-                        'dateTime': '2022-04-03T20:30:00',
-                        'timeZone': 'America/Los_Angeles'
-                    },
-                    'reminders': {
-                        'useDefault': false,
-                        'overrides': [
-                            { 'method': 'email', 'minutes': 24 * 60 },
-                            { 'method': 'popup', 'minutes': 10 },
-                        ],
-                    },
-                    "conferenceData": {
-                        "createRequest": {
-                            "conferenceSolutionKey": {
-                                "type": "hangoutsMeet"
-                            },
-                            "requestId": "AsesoraApp"
-                        }
-                    },
-                }
-
-                var request = gapi.client.calendar.events.insert({
-                    'calendarId': 'primary',
-                    'resource': event,
-                    'conferenceDataVersion': 1
-                })
-
-                request.execute(event => {
-                    window.open(event.htmlLink);
-                })
-
-            })
-    });
+function changeLabelModality(text) {
+    if (text === 'P') {
+        return sentenceCase('presencial');
+    }
+    else {
+        return sentenceCase('virtual');
+    }
 }
 
 function Advise(props) {
     const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
     const [open, setOpen] = useState(false);
-    var modality;
+    const [openDialog, setOpenDialog] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+
+    var gapi = window.gapi;
+    var CLIENT_ID = '403325894307-riktnlopiv84g0mjisqa6b9rgclkeigo.apps.googleusercontent.com';
+    var API_KEY = 'AIzaSyAN18U9TJjC3nVndaQM6ovngAAnJvOvgZU';
+    var DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'];
+    var SCOPES = 'https://www.googleapis.com/auth/calendar';
+    var event = {};
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
         setOpen(false);
-        setShowAlert(false);
+        setShowAlert({ message: '', show: false, duration: 0 });
     }
 
-    if (props.modality === 'V') {
-        modality = 'virtual';
+    const googleCalendar = () => {
+        setOpenDialog(false);
+
+        gapi.load('client:auth2', () => {
+            console.log('loaded client')
+
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: DISCOVERY_DOCS,
+                scope: SCOPES,
+            })
+
+            gapi.client.load('calendar', 'v3', () => console.log('bam!'));
+
+            gapi.auth2.getAuthInstance().signIn()
+                .then(() => {
+                    if (props.modality === 'P') {
+                        event = {
+                            'summary': 'AsesoraApp',
+                            'location': 'ITCJ- Edificio: ISC',
+                            'description': `Cita para tomar asesoría de ${props.subject}`,
+                            'colorId': 2,
+                            'start': {
+                                'dateTime': props.start,
+                                'timeZone': 'America/Chihuahua'
+                            },
+                            'end': {
+                                'dateTime': props.end,
+                                'timeZone': 'America/Chihuahua'
+                            },
+                            'reminders': {
+                                'useDefault': false,
+                                'overrides': [
+                                    { 'method': 'popup', 'minutes': 3 * 60 },
+                                ],
+                            }
+                        }
+                    } else {
+                        event = {
+                            'summary': 'AsesoraApp',
+                            'location': 'Reunión en Meet',
+                            'description': `Cita para tomar asesoría de ${props.subject}`,
+                            'colorId': 2,
+                            'start': {
+                                'dateTime': props.start,
+                                'timeZone': 'America/Chihuahua'
+                            },
+                            'end': {
+                                'dateTime': props.end,
+                                'timeZone': 'America/Chihuahua'
+                            },
+                            'reminders': {
+                                'useDefault': false,
+                                'overrides': [
+                                    { 'method': 'popup', 'minutes': 15 },
+                                ],
+                            },
+                            "conferenceData": {
+                                "entryPoints": [
+                                    {
+                                        "entryPointType": 'video',
+                                        "uri": 'https://meet.google.com/pia-iajq-nht?pli=1&authuser=0',
+                                        "label": `Reunión ${props.subject}`,
+                                        "meetingCode": 'pia-iajq-nht',
+                                    }
+                                ],
+                                "conferenceSolution": {
+                                    "key": {
+                                        "type": 'hangoutsMeet'
+                                    }
+                                },
+                            },
+
+                        }
+                    }
+
+                    var request = gapi.client.calendar.events.insert({
+                        'calendarId': 'primary',
+                        'resource': event,
+                        'conferenceDataVersion': 1
+                    })
+
+                    request.execute(event => {
+                        setShowAlert({
+                            message: '¡Se agendó la asesoría con éxito!, puedes consultarla en tu calendario',
+                            show: true,
+                            duration: 6000
+                        });
+                        setOpen(true);
+                        setLoading(false);
+                        setDisabled(true);
+                    })
+
+                })
+        });
     }
-    else {
-        modality = 'presencial';
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+        setShowAlert({message: '', show: false, duration: 0});
+        setOpen(false);
+        setLoading(false);
+        setDisabled(false);
+    }
+
+    const handleClick = () => {
+        setLoading(true);
+        setOpenDialog(true);
     }
 
     return (
@@ -106,30 +188,24 @@ function Advise(props) {
                 </Typography>
                 <Label
                     variant="ghost"
-                    color={(modality === 'virtual' && 'virtual') || 'default'}
+                    color={(props.modality === 'V' && 'virtual') || 'default'}
                     style={{ alignSelf: 'flex-start', minWidth: 'auto' }}
                 >
-                    {sentenceCase(modality)}
+                    {changeLabelModality(props.modality)}
                 </Label>
             </div>
 
-            <Box sx={{ textAlign: 'center', mt: 1 }}>
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
                 <div style={{ display: 'inline-flex' }}>
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
-                        {'5'}&nbsp;
-                        <Icon icon={messageCircleFill} />
-                    </Typography>
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
-                        {'5'}&nbsp;
-                        <Icon icon={startFill} />
-                    </Typography>
+                    <ChipStyled label={`Fecha ${dateFormat(props.start)}`}/>
+                    <ChipStyled label={`Horario ${timeFormat(props.start, props.end)}`}/>
                 </div>
             </Box>
 
             <Box sx={{ mt: 2 }}>
                 <div style={{ display: 'flex', alignItems: 'center'}}>
                     <IconButton
-                        to={`/dashboard/adviser-profile/${props.idAdvisor}`}
+                        to={`/dashboard/adviser-profile/${props.id}`}
                         component={RouterLink}
                         sx={{
                             padding: 0,
@@ -137,8 +213,8 @@ function Advise(props) {
                             height: 35
                         }}>
                         <Avatar
-                            src={`data:image/png;base64,${props.image !== '' ? props.image : MockImgAvatar()}`}
-                            alt={'subject.idAdvisor'}
+                            src={`data:image/png;base64,${props.image}`}
+                            alt={props.id}
                         />
                     </IconButton>
                     <Typography variant="body2" sx={{ color: 'text.secondary', pl: 2 }}>
@@ -147,22 +223,52 @@ function Advise(props) {
                 </div>
             </Box>
 
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+                <div style={{ display: 'inline-flex' }}>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
+                        {props.comments}&nbsp;
+                        <Icon icon={messageCircleFill} />
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
+                        {props.rating}&nbsp;
+                        <Icon icon={startFill} />
+                    </Typography>
+                </div>
+            </Box>
+
             <Grid container columnSpacing={0} sx={{ mt: 2 }}>
-                <Button fullWidth onClick={handleClick}>
+                <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
                     agendar asesoría
-                </Button>
+                </LoadingButton>
             </Grid>
 
-            <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                open={open}
-                autoHideDuration={showAlert.duration}
-                onClose={handleClose}
-                sx={{ mt: 10 }}
-            >
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
-                    {showAlert.message}
-                </Alert>
-            </Snackbar>
+            <Dialog open={openDialog} TransitionComponent={Transition} onClose={handleCloseDialog}>
+                <DialogTitle>Registrar asesoría</DialogTitle>
+                <DialogContent>
+                    Estas a punto de agregar esta asesoría a tu calendario ¿Deseas continuar?
+                </DialogContent>
+                <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
+                    <Button fullWidth variant="contained" onClick={googleCalendar}>aceptar</Button>
+                    <Button fullWidth onClick={handleCloseDialog}>cancelar</Button>
+                </DialogActions>
+            </Dialog>
+
+            {
+                showAlert.show
+                ?
+                    <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                        open={open}
+                        autoHideDuration={showAlert.duration}
+                        onClose={handleClose}
+                        sx={{ mt: 10 }}
+                    >
+                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
+                            {showAlert.message}
+                        </Alert>
+                    </Snackbar>
+                :
+                    null
+            }
         </Stack>
     );
 }

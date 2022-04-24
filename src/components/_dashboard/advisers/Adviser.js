@@ -6,7 +6,6 @@ import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import heartOutline from '@iconify/icons-eva/heart-outline';
 import heartFill from '@iconify/icons-eva/heart-fill';
 import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip } from '@mui/material';
-import MockImgAvatar from '../../../utils/mockImages';
 
 function Adviser(props) {
     const [like, setLike] = useState(false);
@@ -37,7 +36,7 @@ function Adviser(props) {
             </IconButton>
             <Box
                 component="img"
-                src={`data:image/png;base64,${props.image !== '' ? props.image : MockImgAvatar()}`}
+                src={`data:image/png;base64,${props.image}`}
                 alt="avatar_1"
                 sx={{ width: 80, borderRadius: 8, mb: 3, height: 80 }}
             />
@@ -63,12 +62,12 @@ function Adviser(props) {
 
             <Grid container columnSpacing={0} sx={{ mt: 3 }}>
                 <Grid item xs={6} sm={6}>
-                    <Button fullWidth to={`${"/dashboard/adviser-profile/"}${props.id}`} component={RouterLink}>
+                    <Button fullWidth to={`/dashboard/adviser-profile/${props.id}`} component={RouterLink}>
                         ver perfil
                     </Button>
                 </Grid>
                 <Grid item xs={6} sm={6}>
-                    <Button fullWidth to="/dashboard/subject" component={RouterLink} c={props.id}>
+                    <Button fullWidth to={`/dashboard/subject/${props.id}`} component={RouterLink}>
                         agendar
                     </Button>
                 </Grid>

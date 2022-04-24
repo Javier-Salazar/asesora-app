@@ -83,10 +83,10 @@ function Subject(props) {
                     </AvatarGroup>
                 </div>
             </Box>
-
+            {/* ${props.advisors} */}
             <Grid container columnSpacing={0} sx={{ mt: 3 }}>
                 <Grid item xs={12} sm={12}>
-                    <Button fullWidth to="/dashboard/advises" component={RouterLink} adviser={props.adviser} subject={props.name}>
+                    <Button fullWidth to={`/dashboard/advises/${props.idSubject}`} component={RouterLink}>
                         ver asesorías disponibles
                     </Button>
                 </Grid>

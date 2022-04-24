@@ -1,18 +1,21 @@
-import { Container, Typography, Grid, Card } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { Wrong } from '../components/_dashboard/errors';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
+import { Container, Typography, Grid, Card } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Wrong } from '../components/_dashboard/errors';
 import Page from '../components/Page';
 import { Subject } from '../components/_dashboard/subjects';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
-function Subjects(props) {
-    const cookies = new Cookies();
+function Subjects() {
     const [noRequest, setNoRequest] = useState(false);
     const [data, setData] = useState([]);
     const [advisor, setAdvisor] = useState([]);
-    
+
+    var params = useParams();
+    var idUser = params.adviserID;
+
+    const cookies = new Cookies();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -58,10 +61,14 @@ function Subjects(props) {
 
     const uniqueSubjects = () => {
         var subject = [];
-        var i = 0;
         data.filter((element) => {
-            subject[i] = element.advise_subject;
-            i = i + 1;
+            if(idUser !== undefined){
+                if(element.advise_advisor === idUser){
+                    subject.push(element.advise_subject); 
+                }
+            } else {
+                subject.push(element.advise_subject);
+            }
             return 0;
         });
         var uniqueArray = [...new Set(subject)];
@@ -91,22 +98,32 @@ function Subjects(props) {
         var idSubject = dataResult[0].advise_subject;
         var nameSubject = dataResult[0].subjectx_name;
         var advisor = [];
-        var i = 0;
         var faceToFace = 0;
         var virtual = 0;
 
         dataResult.filter((element) => {
-            advisor[i] = element.advise_advisor;
-            i = i + 1;
-            if (element.advise_modality === 'P') {
-                faceToFace = faceToFace + 1;
+            if(idUser !== undefined){
+                if(idUser === element.advise_advisor){
+                    advisor.push(element.advise_advisor);
+                    if (element.advise_modality === 'P') {
+                        faceToFace = faceToFace + 1;
+                    } else {
+                        virtual = virtual + 1;
+                    }
+                }
             } else {
-                virtual = virtual + 1;
+                advisor.push(element.advise_advisor);
+                if (element.advise_modality === 'P') {
+                    faceToFace = faceToFace + 1;
+                } else {
+                    virtual = virtual + 1;
+                }
             }
             return 0;
         });
 
         var uniqueAdvisor = [...new Set(advisor)];
+
         return ({ 
             id: idSubject,
             name: nameSubject,
@@ -151,7 +168,6 @@ function Subjects(props) {
                                             faceToFaceAdvise={subject.faceToFaceAdvise}
                                             virtualAdvise={subject.virtalAdvise}
                                             advisors={subject.advisors}
-                                            adviser={props.adviser}
                                         />
                                     </Card>
                                 </Grid>

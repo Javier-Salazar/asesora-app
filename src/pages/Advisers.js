@@ -1,13 +1,18 @@
+import { useEffect, useState } from 'react';
 import { Container, Typography, Grid, Card } from '@mui/material';
 import Page from '../components/Page';
 import { Adviser } from '../components/_dashboard/advisers';
 import { Wrong } from '../components/_dashboard/errors';
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import MockImgAvatar from '../utils/mockImages';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
 function Advisers() {
+    const [advisers, setAdvisers] = useState([]);
+    const [noRequest, setNoRequest] = useState(false);
+    const [advise, setAdvise] = useState([]);
+
     const cookies = new Cookies();
     const navigate = useNavigate();
 
@@ -17,13 +22,8 @@ function Advisers() {
         }
     });
 
-    const baseUrl = "https://localhost:44397/api/advisors";
-    const [advisers, setAdvisers] = useState([]);
-    const [noRequest, setNoRequest] = useState(false);
-    const [advise, setAdvise] = useState([]);
-
     const peticionesGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get('https://localhost:44397/api/advisors')
             .then(Response => {
                 setAdvisers(Response.data);
             }).catch(error => {
@@ -38,7 +38,7 @@ function Advisers() {
     }
 
     const peticionesGetAdvise = async () => {
-        await axios.get("https://localhost:44397/api/advises")
+        await axios.get('https://localhost:44397/api/advises')
             .then(Response => {
                 setAdvise(Response.data);
             }).catch(error => {
@@ -84,12 +84,12 @@ function Advisers() {
                                 <Grid item xs={12} sm={6} md={3}>
                                     <Card>
                                         <Adviser
-                                            image={elemento.userx_image}
+                                            id={elemento.advisor_code}
+                                            image={elemento.userx_image !== '' ? elemento.userx_image : MockImgAvatar()}
                                             name={`${elemento.userx_name} ${elemento.userx_lastname}`}
                                             email={elemento.userx_email}
                                             rating={elemento.advisor_rating}
                                             comments={loadComments(elemento.advisor_code).length}
-                                            id={elemento.advisor_code}
                                         />
                                     </Card>
                                 </Grid>

@@ -1,6 +1,6 @@
 import { useEffect, useState, } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, CardMedia, Card, CardContent, Box, BottomNavigation, BottomNavigationAction, Alert,
+import { useParams, useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Typography, CardMedia, Card, CardContent, Box, BottomNavigation, BottomNavigationAction,
     Container, Grid } from '@mui/material';
 import ProfileInformation from './ProfileInformation';
 import ProfileComments from './ProfileComments';
@@ -13,43 +13,38 @@ import Cookies from 'universal-cookie';
 import MockImgAvatar from '../../../utils/mockImages';
 
 function AdvisorProfile() {
+    const [value, setValue] = useState(0);
+    const [profile, setProfile] = useState(true);
+    const [comments, setComments] = useState(false);
+    const [adviser, setAdviser] = useState([]);
+    const [noRequest, setNoRequest] = useState(false);
+
     const cookies = new Cookies();
     const navigate = useNavigate();
 
     var params = useParams();
     var idUser = params.adviserID;
-    const [value, setValue] = useState(0);
-    const [profile, setProfile] = useState(true);
-    const [comments, setComments] = useState(false);
-    const [schedule, setSchedule] = useState(false);
-    const [adviser, setAdviser] = useState([]);
-    const [noRequest, setNoRequest] = useState(false);
 
     const setStyle = [];
     var setRating = adviser.advisor_rating;
-
-    const baseUrl = `https://localhost:44397/api/advisors/${idUser}`;
 
     const mostrar = (valueNew) => {
         if (valueNew === 0) {
             setProfile(true);
             setComments(false);
-            setSchedule(false);
         }
         else if (valueNew === 1) {
             setProfile(false);
             setComments(true);
-            setSchedule(false);
         }
         else {
             setProfile(false);
             setComments(false);
-            setSchedule(true);
         }
     }
 
     const peticionesGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get(`https://localhost:44397/api/advisors/${idUser}`)
             .then(Response => {
                 setAdviser(Response.data);
             }).catch(error => {
@@ -132,7 +127,7 @@ function AdvisorProfile() {
                                         >
                                             <BottomNavigationAction label="Perfil" />
                                             <BottomNavigationAction label="Comentarios" />
-                                            <BottomNavigationAction label="Agendar" />
+                                            <BottomNavigationAction label="Agendar" to={`/dashboard/subject/${idUser}`} component={RouterLink}/>
                                         </BottomNavigation>
                                     </Box>
                                 </CardContent>
@@ -153,15 +148,6 @@ function AdvisorProfile() {
                                 comments
                                 ?
                                     <ProfileComments name={adviser.userx_name} adviser={idUser} />
-                                :
-                                    null
-                            }
-                            {
-                                schedule
-                                ?
-                                    <Alert border-radius="12px" severity="warning">
-                                        Se selecciona la opción agendar
-                                    </Alert>
                                 :
                                     null
                             }
