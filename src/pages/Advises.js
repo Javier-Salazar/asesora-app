@@ -1,8 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Container, Typography, Grid, Card } from '@mui/material';
 import Page from '../components/Page';
 import { Advise } from '../components/_dashboard/advises';
 import { Wrong } from '../components/_dashboard/errors';
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MockImgAvatar from '../utils/mockImages';
 import Cookies from 'universal-cookie';
@@ -49,19 +49,19 @@ function Advises() {
         advise.filter((element) => {
             if(idSubject !== undefined){
                 if(idUser !== undefined){
-                    if(element.advise_subject === idSubject && element.advise_advisor === idUser){
+                    if(idSubject.match(element.advise_subject) && idUser.match(element.advise_advisor)){
                         data.push(element);
                     }
-                } else if(element.advise_subject === idSubject){
+                } else if(idSubject.match(element.advise_subject)){
                     data.push(element);
                 }
+
             } else {
                 data.push(element);
             }
             return 0;
-            
         });
-        console.log(data);
+
         var uniqueArray = [...new Set(data)];
         return uniqueArray;
     };
@@ -92,9 +92,6 @@ function Advises() {
                                             modality={element.advise_modality}
                                             start={element.advise_date_start}
                                             end={element.advise_date_ends}
-
-                                            // adviserr={props.adviser}
-                                            // filterSubject={props.name}
                                         />
                                     </Card>
                                 </Grid>

@@ -63,7 +63,7 @@ function Subjects() {
         var subject = [];
         data.filter((element) => {
             if(idUser !== undefined){
-                if(element.advise_advisor === idUser){
+                if(idUser.match(element.advise_advisor)){
                     subject.push(element.advise_subject); 
                 }
             } else {
@@ -103,7 +103,7 @@ function Subjects() {
 
         dataResult.filter((element) => {
             if(idUser !== undefined){
-                if(idUser === element.advise_advisor){
+                if(idUser.match(element.advise_advisor)){
                     advisor.push(element.advise_advisor);
                     if (element.advise_modality === 'P') {
                         faceToFace = faceToFace + 1;

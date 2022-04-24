@@ -11,9 +11,21 @@ import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip, Avatar, Avat
 
 function Subject(props) {
     const [like, setLike] = useState(false);
+    
     const handleLike = () => {
         setLike(!like);
     }
+
+    const filterSubject = () => {
+        var data = [];
+        props.advisors.filter((element) => {
+            data.push(element.idAdvisor);
+            return 0;
+        });
+        
+        var uniqueArray = [...new Set(data)];
+        return uniqueArray;
+    };
 
     return (
         <Stack
@@ -83,10 +95,9 @@ function Subject(props) {
                     </AvatarGroup>
                 </div>
             </Box>
-            {/* ${props.advisors} */}
             <Grid container columnSpacing={0} sx={{ mt: 3 }}>
                 <Grid item xs={12} sm={12}>
-                    <Button fullWidth to={`/dashboard/advises/${props.idSubject}`} component={RouterLink}>
+                    <Button fullWidth to={`/dashboard/advises/${props.idSubject}${filterSubject().length === 1 ? '/' + filterSubject()[0] : undefined}`} component={RouterLink}>
                         ver asesorías disponibles
                     </Button>
                 </Grid>
