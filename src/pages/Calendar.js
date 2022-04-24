@@ -44,19 +44,20 @@ function changeLabelModality(text) {
 }
 
 function Calendar() {
+    const [data, setData] = useState([]);
+    const [selectedAdvise, setSelectedAdvise] = useState({ advise_code: '' });
+
     const cookies = new Cookies();
     const navigate = useNavigate();
+
     useEffect(() => {
         if (!cookies.get('UserCode')) {
             navigate('/');
         }
     });
 
-    const [data, setData] = useState([]);
-    const [selectedAdvise, setSelectedAdvise] = useState({ advise_code: '' });
-    const baseUrl = "https://localhost:44397/api/advises";
     const requestGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get('https://localhost:44397/api/advises')
             .then(response => {
                 setData(response.data);
             }).catch(error => {
