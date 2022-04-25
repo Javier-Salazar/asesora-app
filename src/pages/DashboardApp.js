@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Container, Typography } from '@mui/material';
 import Page from '../components/Page';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import Cookies from 'universal-cookie';
 import { AcceptedAdvice, CanceledAdvise, RequestedAdvice, TotalAdvice,
   AdviseOfTheDay, UserDistribution, CarouselInfographics, WebAppAdvise } from '../components/_dashboard/app';
+  import { NAME_APP } from '../Configurations';
+  import Cookies from 'universal-cookie';
 
 function DashboardApp() {
   const cookies = new Cookies();
@@ -17,7 +18,7 @@ function DashboardApp() {
   });
 
   return (
-    <Page title="AsesoraApp | Inicio">
+    <Page title={`Asesora${NAME_APP} | Inicio`}>
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
           <Typography variant="h4">Hola, bienvenido de nuevo</Typography>

@@ -1,7 +1,7 @@
-import faker from 'faker';
-import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import faker from 'faker';
+import PropTypes from 'prop-types';
 import { set, sub, formatDistanceToNow } from 'date-fns';
 import { Icon } from '@iconify/react';
 import bellFill from '@iconify/icons-eva/bell-fill';

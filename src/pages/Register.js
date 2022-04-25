@@ -5,6 +5,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import Page from '../components/Page';
 import { MHidden } from '../components/@material-extend';
 import { RegisterForm } from '../components/authentication/register';
+import { NAME_APP } from '../Configurations';
 
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
@@ -34,7 +35,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 function Register() {
   return (
-    <RootStyle title="AsesoraApp | Registrarse">
+    <RootStyle title={`Asesora${NAME_APP} | Registrarse`}>
       <AuthLayout>
         ¿Ya tienes una cuenta? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/login">

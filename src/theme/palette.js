@@ -1,4 +1,5 @@
 import { alpha } from '@mui/material/styles';
+import { COLOR_APP } from '../Configurations';
 
 function CreateGradient(color1, color2) {
   return `linear-gradient(to bottom, ${color1}, ${color2})`;
@@ -28,7 +29,7 @@ const GREY = {
 const PRIMARY = {
   lighter: '#C8FACD',
   light: '#5BE584',
-  main: '#00A389',
+  main: COLOR_APP,
   dark: '#007A67',
   darker: '#005249',
   contrastText: '#FFF'

@@ -33,7 +33,7 @@ const sidebarConfig = [
   },
   {
     title: 'añadir asesoría',
-    path: '/dashboard/new-advises',
+    path: '/dashboard/new-advise',
     icon: getIcon(fileTextFill)
   },
   {

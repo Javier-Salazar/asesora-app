@@ -1,13 +1,14 @@
-import { Icon } from '@iconify/react';
 import { useRef, useState, useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settingsFill from '@iconify/icons-eva/settings-fill';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
 import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '@mui/material';
 import MenuPopover from '../../components/MenuPopover';
 import MockImgAvatar from '../../utils/mockImages';
+import { WS_PATH } from '../../Configurations';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -52,7 +53,7 @@ function AccountPopover() {
   }
 
   const peticionesGet = async () => {
-    await axios.get("https://localhost:44397/api/users/" + cookies.get('UserCode'))
+    await axios.get(`${WS_PATH}users/${cookies.get('UserCode')}`)
       .then(Response => {
         setInfoUser(Response.data);
       }).catch(error => {

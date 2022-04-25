@@ -1,11 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import closeCircleFill from '@iconify/icons-eva/close-circle-fill';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 import { FShortenNumber } from '../../../utils/formatNumber';
-import { useEffect, useState } from 'react';
+import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
-
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -31,14 +31,11 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
   )} 100%)`
 }));
 
-
 function CanceledAdvise() {
-
   const [data, setData] = useState([]);
-  const baseUrl = "https://localhost:44397/api/advises";
 
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}advises`)
       .then(Response => {
         setData(Response.data);
       }).catch(error => {
@@ -59,7 +56,6 @@ function CanceledAdvise() {
     });
     return filterResults;
   };
-
 
   return (
     <RootStyle>

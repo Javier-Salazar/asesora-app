@@ -1,25 +1,28 @@
-import { Icon } from '@iconify/react';
 import React, { useRef, useState, useEffect } from 'react';
-import editFill from '@iconify/icons-eva/edit-fill';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import editFill from '@iconify/icons-eva/edit-fill';
 import slashOutline from '@iconify/icons-eva/slash-outline';
-import axios from 'axios';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
   DialogActions, Button, DialogTitle, Snackbar, Alert } from '@mui/material';
+import { WS_PATH } from '../../../Configurations';
 import Slide from '@mui/material/Slide';
+import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function UserMoreMenu(props) {
-  const ref = useRef(null);
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
   const [openAlert, setOpenAlert] = useState(false);
+  const [user, setUser] = useState([]);
+
+  const ref = useRef(null);
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,11 +33,8 @@ function UserMoreMenu(props) {
     setOpen(false);
   }
 
-  const [user, setUser] = useState([]);
-  const baseUrl = `https://localhost:44397/api/users/${props.idUser}`;
-
   const requestGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}users/${props.idUser}`)
       .then(response => {
         setUser(response.data);
       }).catch(error => {
@@ -67,7 +67,7 @@ function UserMoreMenu(props) {
   }
 
   const peticionPutUser = async (modification) => {
-    await axios.put(baseUrl, {
+    await axios.put(`${WS_PATH}users/${props.idUser}`, {
       userx_code: user.userx_code,
       userx_name: user.userx_name,
       userx_lastname: user.userx_lastname,
@@ -102,7 +102,7 @@ function UserMoreMenu(props) {
   }
 
   const peticionPutStudent = () => {
-    var UrlStudent = `https://localhost:44397/api/students/${props.idUser}`;
+    var UrlStudent = `${WS_PATH}students/${props.idUser}`;
     axios.get(UrlStudent)
       .then(Response => {
         axios.put(UrlStudent, {
@@ -113,7 +113,7 @@ function UserMoreMenu(props) {
           student_semester: Response.data.student_semester,
           student_status: 'I',
         }).then(response => {
-          navigate('/dashboard/user-edit/' + props.idUser);
+          navigate(`/dashboard/user-edit/${props.idUser}`);
           navigate('/dashboard/user');
         }).catch(error => {
           console.log(error);
@@ -124,7 +124,7 @@ function UserMoreMenu(props) {
   }
 
   const peticionPutAdvisor = () => {
-    var UrlAdvisor = `https://localhost:44397/api/advisors/${props.idUser}`;
+    var UrlAdvisor = `${WS_PATH}advisors/${props.idUser}`;
     axios.get(UrlAdvisor)
       .then(Response => {
         axios.put(UrlAdvisor, {
@@ -133,7 +133,7 @@ function UserMoreMenu(props) {
           advisor_comments: Response.data.advisor_comments,
           advisor_status: 'I',
         }).then(response => {
-          navigate('/dashboard/user-edit/' + props.idUser);
+          navigate(`/dashboard/user-edit/${props.idUser}`);
           navigate('/dashboard/user');
         }).catch(error => {
           console.log(error);

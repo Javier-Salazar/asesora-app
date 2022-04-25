@@ -1,4 +1,5 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Card, Stack, Link, Container, Typography } from '@mui/material';
 import AuthLayout from '../layouts/AuthLayout';
@@ -6,8 +7,7 @@ import Page from '../components/Page';
 import { MHidden } from '../components/@material-extend';
 import { LoginForm } from '../components/authentication/login';
 import AuthSocial from '../components/authentication/AuthSocial';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
 
 const RootStyle = styled(Page)(({ theme }) => ({
@@ -47,7 +47,7 @@ function Login() {
   });
 
   return (
-    <RootStyle title="AsesoraApp | Iniciar sesión">
+    <RootStyle title={`Asesora${NAME_APP} | Iniciar sesión`}>
       <AuthLayout>
         ¿No tienes una cuenta? &nbsp;
         <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">

@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Page from '../components/Page';
-import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Button } from '@mui/material';
 import ResetPasswordForm from '../components/authentication/login/ResetPasswordForm';
+import { NAME_APP } from '../Configurations';
 
 const RootStyle = styled(Page)(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
@@ -31,7 +32,7 @@ function ResetPassword() {
     }
 
     return (
-        <RootStyle title="AsesoraApp | Restablecer contraseña">
+        <RootStyle title={`Asesora${NAME_APP} | Restablecer contraseña`}>
             <SectionStyle>
                 <Container maxWidth="sm">
                     {

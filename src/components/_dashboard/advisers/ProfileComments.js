@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react';
 import { Typography, Card, CardContent, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 import { Wrong } from '../errors';
 import MockImgAvatar from '../../../utils/mockImages';
+import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
 function ProfileComments(props) {
-
-    const baseUrl = "https://localhost:44397/api/advises";
     const [data, setData] = useState([]);
     const [noRequest, setNoRequest] = useState(false);
 
     const peticionesGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get(`${WS_PATH}advises`)
             .then(Response => {
                 setData(Response.data);
             }).catch(error => {
@@ -24,7 +23,6 @@ function ProfileComments(props) {
                 }
             })
     }
-
 
     useEffect(() => {
         peticionesGet();
@@ -40,7 +38,6 @@ function ProfileComments(props) {
         });
         return filterResults;
     };
-
 
     return (
         <Grid container spacing={3}>

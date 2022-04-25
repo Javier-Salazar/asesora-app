@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Typography, Grid, Card } from '@mui/material';
 import Page from '../components/Page';
 import { Advise } from '../components/_dashboard/advises';
 import { Wrong } from '../components/_dashboard/errors';
-import { useNavigate, useParams } from 'react-router-dom';
 import MockImgAvatar from '../utils/mockImages';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -12,12 +13,12 @@ function Advises() {
     const [advise, setAdvise] = useState([]);
     const [noRequest, setNoRequest] = useState(false);
 
+    const cookies = new Cookies();
+    const navigate = useNavigate();
+
     var params = useParams();
     var idSubject = params.subjectID;
     var idUser = params.adviserID;
-
-    const cookies = new Cookies();
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (!cookies.get('UserCode')) {
@@ -26,7 +27,7 @@ function Advises() {
     });
     
     const requestGet = async () => {
-        await axios.get('https://localhost:44397/api/advises')
+        await axios.get(`${WS_PATH}advises`)
             .then(response => {
                 setAdvise(response.data);
             }).catch(error => {
@@ -67,7 +68,7 @@ function Advises() {
     };
 
     return (
-        <Page title="AsesoraApp | Asesorías">
+        <Page title={`Asesora${NAME_APP} | Asesorías`}>
             <Container>
                 <Typography variant="h4" sx={{ mb: 5 }}>
                     Asesorías

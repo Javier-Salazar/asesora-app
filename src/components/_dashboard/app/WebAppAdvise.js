@@ -1,11 +1,12 @@
+import { useEffect, useState } from 'react';
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 import { Card, CardHeader, Box, TextField, useTheme, Stack } from '@mui/material';
 import { BaseOptionChart } from '../../charts';
-import { useEffect, useState } from 'react';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
 function WebAppAdvise() {
@@ -13,7 +14,7 @@ function WebAppAdvise() {
     const [data, setData] = useState([]);
 
     const requestGet = async () => {
-        await axios.get('https://localhost:44397/api/advises')
+        await axios.get(`${WS_PATH}advises`)
             .then(response => {
                 setData(response.data);
             }).catch(error => {

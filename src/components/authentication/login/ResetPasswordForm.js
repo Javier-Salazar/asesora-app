@@ -1,13 +1,16 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import { Stack, TextField, Button } from '@mui/material';
+import { WS_PATH } from '../../../Configurations';
 import { LoadingButton } from '@mui/lab';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
 function ResetPasswordForm({ func }) {
+    const [data, setData] = useState([]);
+    
     const navigate = useNavigate();
     const RegisterSchema = Yup.object().shape({
         email: Yup.string()
@@ -32,11 +35,8 @@ function ResetPasswordForm({ func }) {
         }
     });
 
-    const baseUrl = "https://localhost:44397/api/";
-    const [data, setData] = useState([]);
-
     const peticionesGet = async () => {
-        await axios.get(`${baseUrl}users`)
+        await axios.get(`${WS_PATH}users`)
             .then((Response) => {
                 setData(Response.data);
             })

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 import Logo from '../../components/Logo';
@@ -10,6 +10,7 @@ import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 import account from '../../_mocks_/account';
 import MockImgAvatar from '../../utils/mockImages';
+import { WS_PATH } from '../../Configurations';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -36,6 +37,9 @@ DashboardSidebar.propTypes = {
 };
 
 function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
+  const [infoUser, setInfoUser] = useState([]);
+  
+  const cookies = new Cookies();
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -45,11 +49,8 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const cookies = new Cookies();
-  const [infoUser, setInfoUser] = useState([]);
-
   const peticionesGet = async () => {
-    await axios.get("https://localhost:44397/api/users/" + cookies.get('UserCode'))
+    await axios.get(`${WS_PATH}users/${cookies.get('UserCode')}`)
       .then(Response => {
         setInfoUser(Response.data);
       }).catch(error => {
@@ -60,7 +61,6 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   useEffect(() => {
     peticionesGet();
   })
-
 
   const renderContent = (
     <Scrollbar

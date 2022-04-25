@@ -8,9 +8,10 @@ import { Wrong } from '../errors';
 import { Icon } from '@iconify/react';
 import startFill from '@iconify/icons-eva/star-fill';
 import startOutline from '@iconify/icons-eva/star-outline';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
 import MockImgAvatar from '../../../utils/mockImages';
+import { WS_PATH } from '../../../Configurations';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 function AdvisorProfile() {
     const [value, setValue] = useState(0);
@@ -44,7 +45,7 @@ function AdvisorProfile() {
     }
 
     const peticionesGet = async () => {
-        await axios.get(`https://localhost:44397/api/advisors/${idUser}`)
+        await axios.get(`${WS_PATH}advisors/${idUser}`)
             .then(Response => {
                 setAdviser(Response.data);
             }).catch(error => {

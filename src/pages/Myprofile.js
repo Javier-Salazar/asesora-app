@@ -1,26 +1,23 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { Icon } from '@iconify/react';
 import editFill from '@iconify/icons-eva/edit-fill';
 import cameraFill from '@iconify/icons-eva/camera-fill';
-import {
-  Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert, Button, IconButton,
-  Tooltip, DialogActions, Dialog, DialogTitle, DialogContent
-} from '@mui/material';
+import startFill from '@iconify/icons-eva/star-fill';
+import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert, Button, 
+  IconButton, Tooltip, DialogActions, Dialog, DialogTitle, DialogContent } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
-import Cookies from 'universal-cookie';
-import axios from 'axios';
-import CryptoJS from 'crypto-js';
-import startFill from '@iconify/icons-eva/star-fill';
-import { useNavigate } from 'react-router-dom';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import Slide from '@mui/material/Slide';
-
+import Cookies from 'universal-cookie';
+import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -44,16 +41,11 @@ function changeLabelStatus(text) {
   }
 }
 
-
 const Input = styled('input')({
   display: 'none',
 });
 
-
-function MyProfile({ status }) {
-  const cookies = new Cookies();
-  const navigate = useNavigate();
-
+function MyProfile() {
   const [photo, setPhoto] = useState("");
   const [changePhoto, setChangePhoto] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
@@ -61,8 +53,7 @@ function MyProfile({ status }) {
   const [biography, setBiography] = useState('Escriba su biografía...');
   const [advisor, setAdvisor] = useState([]);
   const [errorBiography, setErrorBiography] = useState(false);
-  const baseUrl = `https://localhost:44397/api/users/${cookies.get('UserCode')}`;
-
+  const [openDialog, setOpenDialog] = useState(false);
   const [user, setUser] = useState({
     userx_code: "",
     userx_name: "",
@@ -76,8 +67,11 @@ function MyProfile({ status }) {
     userx_date: ""
   });
 
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}users/${cookies.get('UserCode')}`)
       .then(Response => {
         setUser(Response.data);
       }).catch(error => {
@@ -93,7 +87,7 @@ function MyProfile({ status }) {
   });
 
   const peticionPut = async () => {
-    await axios.put(baseUrl, {
+    await axios.put(`${WS_PATH}users/${cookies.get('UserCode')}`, {
       userx_code: getFieldProps("code").value,
       userx_name: getFieldProps("firstName").value,
       userx_lastname: getFieldProps("lastName").value,
@@ -204,7 +198,7 @@ function MyProfile({ status }) {
   }
 
   const peticionesGetAdvisor = async () => {
-    await axios.get(`https://localhost:44397/api/advisors/${cookies.get('UserCode')}`)
+    await axios.get(`${WS_PATH}advisors/${cookies.get('UserCode')}`)
       .then(Response => {
         setAdvisor(Response.data);
         if (Response.data.advisor_comments !== '') {
@@ -215,7 +209,6 @@ function MyProfile({ status }) {
       })
   }
 
-  const [openDialog, setOpenDialog] = useState(false);
   const handleEventClick = () => {
     peticionesGetAdvisor();
     setOpenDialog(true);
@@ -231,7 +224,7 @@ function MyProfile({ status }) {
   };
 
   const peticionPutAdvisor = async () => {
-    await axios.put(`https://localhost:44397/api/advisors/${cookies.get('UserCode')}`, {
+    await axios.put(`${WS_PATH}advisors/${cookies.get('UserCode')}`, {
       advisor_code: advisor.advisor_code,
       advisor_rating: advisor.advisor_rating,
       advisor_comments: biography === 'Escriba su biografía...' ? advisor.advisor_comments : biography,
@@ -257,10 +250,9 @@ function MyProfile({ status }) {
     }
   }
 
-
   const { errors, touched, handleSubmit, getFieldProps } = formik;
   return (
-    <Page title="AsesoraApp | Mi perfil">
+    <Page title={`Asesora${NAME_APP} | Mi perfil`}>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -290,9 +282,9 @@ function MyProfile({ status }) {
 
             {
               changePhoto
-                ?
+              ?
                 <Avatar src={`data:image/png;base64,${photo}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
-                :
+              :
                 <Avatar src={`data:image/png;base64,${user.userx_image}`} sx={{ width: '106px', height: '106px', margin: 'auto' }} />
             }
             <div style={{ position: 'absolute', right: '31%', top: '30%', display: 'flex', alignItems: 'center' }}>
@@ -318,7 +310,7 @@ function MyProfile({ status }) {
             </div>
             {
               cookies.get('UserType') === 'A'
-                ?
+              ?
                 <div style={{
                   width: '100%', display: 'flex', justifyContent: 'center',
                   alignItems: 'center', marginTop: '4px', marginBottom: '8px'
@@ -330,7 +322,7 @@ function MyProfile({ status }) {
                     Editar Biografía
                   </Button>
                 </div>
-                :
+              :
                 <div style={{
                   width: '100%', display: 'flex', justifyContent: 'space-between',
                   alignItems: 'center', marginTop: '24px'
@@ -478,13 +470,13 @@ function MyProfile({ status }) {
               </FormikProvider>
               {
                 showAlert.show
-                  ?
+                ?
                   <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                       {showAlert.message}
                     </Alert>
                   </Snackbar>
-                  :
+                :
                   null
               }
             </Scrollbar>
@@ -517,7 +509,7 @@ function MyProfile({ status }) {
               />
               {
                 errorBiography
-                  ?
+                ?
                   <TextField
                     multiline
                     label="Biografía"
@@ -526,7 +518,7 @@ function MyProfile({ status }) {
                     error
                     helperText="Máximo 250 caracteres"
                   />
-                  :
+                :
                   <TextField
                     multiline
                     label="Biografía"

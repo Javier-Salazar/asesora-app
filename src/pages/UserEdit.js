@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { sentenceCase } from 'change-case';
 import * as Yup from 'yup';
 import styled from '@emotion/styled';
@@ -9,8 +9,9 @@ import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
-import axios from 'axios';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -23,9 +24,6 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 }));
 
 function UserEdit() {
-  const cookies = new Cookies();
-  const navigate = useNavigate();
-
   const [accountStatus, setStatus] = useState("");
   const [admin, setAdmin] = useState("");
   const [advisor, setAdvisor] = useState("");
@@ -33,12 +31,6 @@ function UserEdit() {
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
   const [open, setOpen] = useState(false);
-
-  var params = useParams();
-  var idUser = params.userID;
-
-  const baseUrl = `https://localhost:44397/api/users/${idUser}`;
-
   const [user, setUser] = useState({
     userx_code: "",
     userx_name: "",
@@ -50,6 +42,14 @@ function UserEdit() {
     userx_status: "",
     userx_image: ""
   });
+
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+
+  var params = useParams();
+  var idUser = params.userID;
+
+  const baseUrl = `${WS_PATH}users/${idUser}`;
 
   const peticionesGet = async () => {
     await axios.get(baseUrl)
@@ -244,7 +244,7 @@ function UserEdit() {
   }
 
   const peticionPutStudent = (status) => {
-    var UrlStudent = `https://localhost:44397/api/students/${idUser}`;
+    var UrlStudent = `${WS_PATH}students/${idUser}`;
     axios.get(UrlStudent)
       .then(Response => {
         axios.put(UrlStudent, {
@@ -271,7 +271,7 @@ function UserEdit() {
   }
 
   const peticionPutAdvisor = (status) => {
-    var UrlAdvisor = `https://localhost:44397/api/advisors/${idUser}`;
+    var UrlAdvisor = `${WS_PATH}advisors/${idUser}`;
     axios.get(UrlAdvisor)
       .then(Response => {
         axios.put(UrlAdvisor, {
@@ -305,7 +305,7 @@ function UserEdit() {
   const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
-    <Page title="AsesoraApp | Editar Usuario">
+    <Page title={`Asesora${NAME_APP} | Editar Usuario`}>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -328,10 +328,10 @@ function UserEdit() {
               <Label
                 variant="ghost"
                 color={
-                  accountStatus === ""
-                    ?
+                  accountStatus === ''
+                  ?
                     (user.userx_status === 'I' && 'error') || 'success'
-                    :
+                  :
                     (accountStatus === 'I' && 'error') || 'success'
                 }
               >
@@ -361,10 +361,10 @@ function UserEdit() {
                 </Typography>
               </div>
               {
-                accountStatus === ""
-                  ?
+                accountStatus === ''
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(user.userx_status === 'I' ? 'A' : 'I')} checked={user.userx_status === 'I' ? false : true} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(accountStatus === 'I' ? 'A' : 'I')} checked={accountStatus === 'I' ? false : true} />
               }
             </div>
@@ -382,10 +382,10 @@ function UserEdit() {
                 </Typography>
               </div>
               {
-                advisor === ""
-                  ?
+                advisor === ''
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('A')} checked={user.userx_type === 'A' ? true : false} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
               }
 
@@ -404,10 +404,10 @@ function UserEdit() {
                 </Typography>
               </div>
               {
-                admin === ""
-                  ?
+                admin === ''
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('S')} checked={user.userx_type === 'S' ? true : false} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
               }
 
@@ -501,13 +501,13 @@ function UserEdit() {
 
                       {
                         showAlert.show
-                          ?
+                        ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
 

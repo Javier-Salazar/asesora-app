@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Card, Typography, CardHeader, CardContent, CardMedia, Box } from '@mui/material';
+import { WS_PATH } from '../../../Configurations';
 import { Timeline, TimelineItem, TimelineContent, TimelineConnector, TimelineSeparator, TimelineDot } from '@mui/lab';
-import axios from 'axios';
 import Cookies from 'universal-cookie'
+import axios from 'axios';
 
 function AdviseOfTheDay() {
-  const cookies = new Cookies();
   const [data, setData] = useState([]);
-  const baseUrl = "https://localhost:44397/api/advises";
+
+  const cookies = new Cookies();
 
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}advises`)
       .then(Response => {
         setData(Response.data);
       }).catch(error => {

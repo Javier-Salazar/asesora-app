@@ -5,7 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Advisers from './pages/Advisers';
 import Advises from './pages/Advises';
-import NewAdvises from './pages/NewAdvises';
+import NewAdvise from './pages/NewAdvise';
 import Subjects from './pages/Subjects';
 import ResetPassword from './pages/ResetPassword';
 import EndUserAgreement from './pages/EndUserAgreement'
@@ -60,7 +60,7 @@ function Router() {
         { path: 'advises', element: <Advises /> },
         { path: 'advises/:subjectID', element: <Advises /> },
         { path: 'advises/:subjectID/:adviserID', element: <Advises /> },
-        { path: 'new-advises', element: <NewAdvises /> },
+        { path: 'new-advise', element: <NewAdvise /> },
         { path: 'subject', element: <Subjects /> },
         { path: 'subject/:adviserID', element: <Subjects /> },
         { path: 'my-profile', element: <MyProfile /> },

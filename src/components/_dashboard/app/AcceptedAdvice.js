@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-circle-2-fill';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 import { FShortenNumber } from '../../../utils/formatNumber';
-import { useEffect, useState } from 'react';
+import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -31,11 +32,10 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 function AcceptedAdvice() {
-
   const [data, setData] = useState([]);
 
   const peticionesGet = async () => {
-    await axios.get('https://localhost:44397/api/advises')
+    await axios.get(`${WS_PATH}advises`)
       .then(Response => {
         setData(Response.data);
       }).catch(error => {

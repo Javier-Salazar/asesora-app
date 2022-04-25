@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Link } from '@mui/material';
 import HeaderLegal from '../components/HeaderLegal';
 import Page from '../components/Page';
+import { NAME_APP } from '../Configurations';
 
 const RootStyle = styled(Page)(({ theme }) => ({
   
@@ -33,7 +34,7 @@ const ContentStyle = styled('div')({
 
 function PrivacyPolicy() {
   return (
-    <RootStyle title="AsesoraApp | Políticas de privacidad">
+    <RootStyle title={`Asesora${NAME_APP} | Políticas de privacidad`}>
         <HeaderLegal />
         <SectionStyle>
           <LinkStyle underline="none" variant="subtitle2" component={RouterLink} to="/legal/end-user-agreement" sx={{

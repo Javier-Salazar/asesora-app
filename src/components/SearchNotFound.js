@@ -1,7 +1,7 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Paper, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
 
 SearchNotFound.propTypes = {

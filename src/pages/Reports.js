@@ -1,13 +1,14 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DataGrid, GridToolbar, esES } from '@mui/x-data-grid';
 import { Stack, Container, Typography, Card } from '@mui/material';
 import Page from '../components/Page';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Label from '../components/Label';
 import { sentenceCase } from 'change-case';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 function changeLabelModality(text) {
     if (text === 'P') {
@@ -42,8 +43,11 @@ function showDateTime(text) {
 }
 
 function Reports() {
+    const [data, setData] = useState([]);
+
     const cookies = new Cookies();
     const navigate = useNavigate();
+
     useEffect(() => {
         if (!cookies.get('UserCode')) {
             navigate('/');
@@ -132,11 +136,8 @@ function Reports() {
         { field: 'adviseComments', headerName: 'Comentarios', width: 450 }
     ];
 
-    const [data, setData] = useState([]);
-    const baseUrl = "https://localhost:44397/api/advises";
-
     const requestGet = async () => {
-        await axios.get(baseUrl)
+        await axios.get(`${WS_PATH}advises`)
             .then(response => {
                 setData(response.data);
             }).catch(error => {
@@ -177,7 +178,7 @@ function Reports() {
     })));
 
     return (
-        <Page title="AsesoraApp | Asesorías">
+        <Page title={`Asesora${NAME_APP} | Asesorías`}>
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>

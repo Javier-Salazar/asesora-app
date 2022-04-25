@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import { merge } from 'lodash';
 import ReactApexChart from 'react-apexcharts';
 import { useTheme, styled } from '@mui/material/styles';
 import { Card, CardHeader } from '@mui/material';
 import { FNumber } from '../../../utils/formatNumber';
 import { BaseOptionChart } from '../../charts';
-import { useEffect, useState } from 'react';
+import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
 const CHART_HEIGHT = 360;
@@ -28,11 +29,9 @@ const ChartWrapperStyle = styled('div')(({ theme }) => ({
 
 function UserDistribution() {
   const [data, setData] = useState([]);
-  
-  const baseUrl = "https://localhost:44397/api/users";
 
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}users`)
       .then(Response => {
         setData(Response.data);
       }).catch(error => {
@@ -73,7 +72,6 @@ function UserDistribution() {
     });
     return filterResults;
   };
-
 
   const theme = useTheme();
 

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Container, Typography, Grid, Card } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Container, Typography, Grid, Card } from '@mui/material';
 import { Wrong } from '../components/_dashboard/errors';
 import Page from '../components/Page';
 import { Subject } from '../components/_dashboard/subjects';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -25,7 +26,7 @@ function Subjects() {
     });
 
     const requestGet = async () => {
-        await axios.get('https://localhost:44397/api/advises')
+        await axios.get(`${WS_PATH}advises`)
             .then(response => {
                 setData(response.data);
             }).catch(error => {
@@ -40,7 +41,7 @@ function Subjects() {
     }
 
     const requestGetAdvisor = async () => {
-        await axios.get('https://localhost:44397/api/users')
+        await axios.get(`${WS_PATH}users`)
             .then(response => {
                 setAdvisor(response.data);
             }).catch(error => {
@@ -148,7 +149,7 @@ function Subjects() {
     };
 
     return (
-        <Page title="AsesoraApp | Materias">
+        <Page title={`Asesora${NAME_APP} | Materias`}>
             <Container>
                 <Typography variant="h4" sx={{ mb: 5 }}>
                     Materias

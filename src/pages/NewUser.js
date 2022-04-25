@@ -11,8 +11,9 @@ import Label from '../components/Label';
 import { useFormik, Form, FormikProvider } from 'formik';
 import Scrollbar from '../components/Scrollbar';
 import MockImgAvatar from '../utils/mockImages';
-import axios from "axios";
+import { WS_PATH, NAME_APP } from '../Configurations';
 import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -26,17 +27,13 @@ const ContainerStyle = styled('div')(({ theme }) => ({
 
 function changeLabelStatus(bool) {
   if (bool) {
-    return sentenceCase('Activo');
+    return sentenceCase('activo');
   } else {
-    return sentenceCase('Inactivo');
+    return sentenceCase('inactivo');
   }
 }
 
 function NewUser() {
-  const cookies = new Cookies();
-  const navigate = useNavigate();
-  const date = new Date();
-
   const [admin, setAdmin] = useState(false);
   const [advisor, setAdvisor] = useState(false);
   const [accountStatus, setStatus] = useState(true);
@@ -46,10 +43,12 @@ function NewUser() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
 
-  const baseUrl = "https://localhost:44397/api/";
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const date = new Date();
 
   const peticionesGet = async () => {
-    await axios.get(`${baseUrl}users`)
+    await axios.get(`${WS_PATH}users`)
       .then((Response) => {
         setData(Response.data);
       })
@@ -180,6 +179,7 @@ function NewUser() {
 
   var isStudent = false;
   var isTypeAorS = false;
+
   function validateUserType() {
     var Aux = email.split('@');
     var code = Aux[0].slice(1);
@@ -209,7 +209,7 @@ function NewUser() {
   const peticionPostUser = async (type) => {
     var arrayCode = email.split('@');
     var arrayDate = date.toISOString().split('T');
-    await axios.post(`${baseUrl}users`, {
+    await axios.post(`${WS_PATH}users`, {
       userx_code: arrayCode[0],
       userx_name: getFieldProps("firstName").value,
       userx_lastname: getFieldProps("lastName").value,
@@ -247,7 +247,7 @@ function NewUser() {
   const peticionPostStudent = async () => {
     var arrayCode = email.split('@');
 
-    await axios.post(baseUrl + "students", {
+    await axios.post(`${WS_PATH}students`, {
       student_code: arrayCode[0],
       student_school: "ITCJC1",
       student_career: "SINCS",
@@ -268,7 +268,7 @@ function NewUser() {
   const peticionPostAdvisor = async (status) => {
     var arrayCode = email.split('@');
 
-    await axios.post(`${baseUrl}advisors`, {
+    await axios.post(`${WS_PATH}advisors`, {
       advisor_code: arrayCode[0],
       advisor_rating: 5,
       advisor_comments: "",
@@ -309,7 +309,7 @@ function NewUser() {
   const { errors, touched, handleSubmit, getFieldProps, setFieldValue } = formik;
 
   return (
-    <Page title="AsesoraApp | Agregar usuario">
+    <Page title={`Asesora${NAME_APP} | Agregar usuario`}>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { useEffect, useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
   Typography, TableContainer, TablePagination } from '@mui/material';
 import Page from '../components/Page';
@@ -13,6 +13,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { Wrong } from '../components/_dashboard/errors';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
 import MockImgAvatar from '../utils/mockImages';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
@@ -76,9 +77,6 @@ function changeLabelType(text) {
 }
 
 function User() {
-  const cookies = new Cookies();
-  const navigate = useNavigate();
-
   const [data, setData] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const [page, setPage] = useState(0);
@@ -89,10 +87,11 @@ function User() {
   const [filter, setFilter] = useState('');
   const [noRequest, setNoRequest] = useState(false);
 
-  const baseUrl = "https://localhost:44397/api/users";
+  const cookies = new Cookies();
+  const navigate = useNavigate();
 
   const requestGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}users`)
       .then(response => {
         setData(response.data);
         setDataTable(response.data);
@@ -218,7 +217,7 @@ function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="AsesoraApp | Usuarios">
+    <Page title={`Asesora${NAME_APP} | Usuarios`}>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>

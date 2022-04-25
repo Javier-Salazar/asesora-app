@@ -1,20 +1,23 @@
-import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { Stack, TextField, IconButton, InputAdornment, Snackbar, Alert } from '@mui/material';
+import { WS_PATH } from '../../../Configurations';
 import { LoadingButton } from '@mui/lab';
-import axios from 'axios';
 import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
 function RegisterForm() {
-  const date = new Date();
   const [showPassword, setShowPassword] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState([]);
 
+  const date = new Date();
+  
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, 'El nombre es muy corto')
@@ -82,6 +85,7 @@ function RegisterForm() {
 
   var isStudent = false;
   var isTypeAorS = false;
+
   function validateUserType() {
     var Aux = getFieldProps("email").value.split('@');
     var code = Aux[0].slice(1);
@@ -94,11 +98,8 @@ function RegisterForm() {
     }
   }
 
-  const baseUrl = "https://localhost:44397/api/";
-  const [data, setData] = useState([]);
-
   const peticionesGet = async () => {
-    await axios.get(`${baseUrl}users`)
+    await axios.get(`${WS_PATH}users`)
       .then((Response) => {
         setData(Response.data);
       })
@@ -114,7 +115,7 @@ function RegisterForm() {
   const peticionPostUser = async (type) => {
     var arrayCode = getFieldProps("email").value.split('@');
     var arrayDate = date.toISOString().split('T');
-    await axios.post(`${baseUrl}users`, {
+    await axios.post(`${WS_PATH}users`, {
       userx_code: arrayCode[0],
       userx_name: getFieldProps("name").value,
       userx_lastname: getFieldProps("lastName").value,
@@ -148,7 +149,7 @@ function RegisterForm() {
   };
 
   const peticionPostStudent = async (code) => {
-    await axios.post(`${baseUrl}students`, {
+    await axios.post(`${WS_PATH}students`, {
       student_code: code,
       student_school: "ITCJC1",
       student_career: "SINCS",
@@ -175,7 +176,7 @@ function RegisterForm() {
   };
 
   const peticionPostAdvisor = async (code) => {
-    await axios.post(`${baseUrl}advisors`, {
+    await axios.post(`${WS_PATH}advisors`, {
       advisor_code: code,
       advisor_rating: 5,
       advisor_comments: "",

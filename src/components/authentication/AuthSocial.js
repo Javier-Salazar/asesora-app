@@ -6,22 +6,24 @@ import { Stack, Button, Divider, Typography, Tooltip, Dialog, DialogContent, Sna
 import Slide from '@mui/material/Slide';
 import Scanner from './scannerLogin/Scanner';
 import googleFill from '@iconify/icons-eva/google-fill';
-import Quagga from 'quagga';
+import { WS_PATH } from '../../Configurations';
 import GoogleLogin from 'react-google-login';
-import axios from "axios";
+import Quagga from 'quagga';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function AuthSocial() {
-  const cookies = new Cookies();
-  const navigate = useNavigate();
-
   const [open, setOpen] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
   const [openAlert, setOpenAlert] = useState(false);
+  const [user, setUser] = useState([]);
+
+  const cookies = new Cookies();
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,11 +34,8 @@ function AuthSocial() {
     setOpen(false);
   }
 
-  const baseUrl = "https://localhost:44397/api/users";
-  const [user, setUser] = useState([]);
-
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}users`)
       .then(Response => {
         setUser(Response.data);
       }).catch(error => {

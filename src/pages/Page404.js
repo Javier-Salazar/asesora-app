@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { styled } from '@mui/material/styles';
 import { Box, Button, Typography, Container } from '@mui/material';
 import { MotionContainer, varBounceIn } from '../components/animate';
 import Page from '../components/Page';
+import { NAME_APP } from '../Configurations';
 
 const RootStyle = styled(Page)(({ theme }) => ({
   display: 'flex',
@@ -14,7 +15,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 
 function Page404() {
   return (
-    <RootStyle title="Página no encontrada | Asesora App">
+    <RootStyle title={`Página no encontrada | Asesora${NAME_APP}`}>
       <Container>
         <MotionContainer initial="initial" open>
           <Box sx={{ maxWidth: 552, margin: 'auto', textAlign: 'center' }}>

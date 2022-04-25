@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
-import { useNavigate } from 'react-router-dom';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
     DialogTitle, DialogContent, TextField, CircularProgress } from '@mui/material';
 import Page from '../components/Page';
 import esLocale from '@fullcalendar/core/locales/es';
-import { useEffect, useState } from 'react';
 import { sentenceCase } from 'change-case';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import Slide from '@mui/material/Slide';
 import Label from '../components/Label';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -46,6 +46,7 @@ function changeLabelModality(text) {
 function Calendar() {
     const [data, setData] = useState([]);
     const [selectedAdvise, setSelectedAdvise] = useState({ advise_code: '' });
+    const [open, setOpen] = useState(false);
 
     const cookies = new Cookies();
     const navigate = useNavigate();
@@ -57,7 +58,7 @@ function Calendar() {
     });
 
     const requestGet = async () => {
-        await axios.get('https://localhost:44397/api/advises')
+        await axios.get(`${WS_PATH}advises`)
             .then(response => {
                 setData(response.data);
             }).catch(error => {
@@ -96,7 +97,7 @@ function Calendar() {
     })));
 
     const handleEventClick = (info) => {
-        axios.get(`https://localhost:44397/api/advises/${info.event.id}`)
+        axios.get(`${WS_PATH}advises/${info.event.id}`)
             .then(response => {
                 setSelectedAdvise(response.data);
             }).catch(error => {
@@ -105,14 +106,13 @@ function Calendar() {
         setOpen(true);
     }
 
-    const [open, setOpen] = useState(false);
     const handleClose = () => {
         setSelectedAdvise({ advise_code: '' });
         setOpen(false);
     }
 
     return (
-        <Page title="AsesoraApp | Calendario">
+        <Page title={`Asesora${NAME_APP} | Calendario`}>
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>

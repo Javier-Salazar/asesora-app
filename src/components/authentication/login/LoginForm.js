@@ -1,20 +1,25 @@
-import * as Yup from 'yup';
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel, Snackbar, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import axios from "axios";
+import { WS_PATH } from '../../../Configurations';
 import CryptoJS from 'crypto-js';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 function LoginForm() {
+  const [user, setUser] = useState([]);
+  const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
+  const [open, setOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const cookies = new Cookies();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -26,11 +31,8 @@ function LoginForm() {
       .required('La contraseña es obligatoria')
   });
 
-  const baseUrl = "https://localhost:44397/api/users";
-  const [user, setUser] = useState([]);
-
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}users`)
       .then(Response => {
         setUser(Response.data);
       }).catch(error => {
@@ -41,9 +43,6 @@ function LoginForm() {
   useEffect(() => {
     peticionesGet();
   });
-
-  const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
-  const [open, setOpen] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -103,6 +102,7 @@ function LoginForm() {
   var type = "";
   var correctPassword = false;
   var status = "";
+  
   const searchUser = (finded) => {
     user.filter((element) => {
       if (element.userx_email.toLowerCase() === finded.toLowerCase()) {

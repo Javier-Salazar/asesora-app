@@ -1,23 +1,22 @@
-import ScannerQuagga from './ScannerQuagga';
-import { useNavigate } from 'react-router-dom';
-import Quagga from 'quagga';
-import axios from 'axios';
-import Cookies from 'universal-cookie';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ScannerQuagga from './ScannerQuagga';
 import { Alert, Typography } from '@mui/material';
+import { WS_PATH } from '../../../Configurations';
 import './styles.css';
+import Quagga from 'quagga';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
-export default function Scanner() {
-  const navigate = useNavigate();
-  const cookies = new Cookies();
-
-  const baseUrl = "https://localhost:44397/api/users";
-
+function Scanner() {
   const [userTable, setUserTable] = useState([]);
   const [activeAlert, setActiveAlert] = useState({ message: '', show: false });
 
+  const navigate = useNavigate();
+  const cookies = new Cookies();
+
   const peticionesGet = async () => {
-    await axios.get(baseUrl)
+    await axios.get(`${WS_PATH}users`)
       .then(Response => {
         setUserTable(Response.data);
       }).catch(error => {
@@ -37,7 +36,7 @@ export default function Scanner() {
         isFind = true;
         if (element.userx_status === "A") {
           if (element.userx_type === "N") {
-            const Url = `https://localhost:44397/api/students/${element.userx_code}`;
+            const Url = `${WS_PATH}students/${element.userx_code}`;
             axios.get(Url)
               .then(Response => { //Se llenan las Cookies con la información obtenida
                 cookies.set('UserCode', Response.data.student_code, { path: '/' });
@@ -91,3 +90,5 @@ export default function Scanner() {
     </div>
   );
 }
+
+export default Scanner;

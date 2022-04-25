@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Typography, Grid, Card } from '@mui/material';
 import Page from '../components/Page';
 import { Adviser } from '../components/_dashboard/advisers';
 import { Wrong } from '../components/_dashboard/errors';
-import { useNavigate } from 'react-router-dom';
 import MockImgAvatar from '../utils/mockImages';
+import { WS_PATH, NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -23,7 +24,7 @@ function Advisers() {
     });
 
     const peticionesGet = async () => {
-        await axios.get('https://localhost:44397/api/advisors')
+        await axios.get(`${WS_PATH}advisors`)
             .then(Response => {
                 setAdvisers(Response.data);
             }).catch(error => {
@@ -38,7 +39,7 @@ function Advisers() {
     }
 
     const peticionesGetAdvise = async () => {
-        await axios.get('https://localhost:44397/api/advises')
+        await axios.get(`${WS_PATH}advises`)
             .then(Response => {
                 setAdvise(Response.data);
             }).catch(error => {
@@ -68,7 +69,7 @@ function Advisers() {
     }, []);
 
     return (
-        <Page title="AsesoraApp | Asesores">
+        <Page title={`Asesora${NAME_APP} | Asesores`}>
             <Container>
                 <Typography variant="h4" sx={{ mb: 5 }}>
                     Asesores
