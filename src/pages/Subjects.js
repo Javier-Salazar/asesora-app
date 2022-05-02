@@ -22,6 +22,8 @@ function Subjects() {
     useEffect(() => {
         if (!cookies.get('UserCode')) {
             navigate('/');
+        } else if (cookies.get('UserType') !== 'N') {
+            navigate('/dashboard');
         }
     });
 
@@ -63,9 +65,9 @@ function Subjects() {
     const uniqueSubjects = () => {
         var subject = [];
         data.filter((element) => {
-            if(idUser !== undefined){
-                if(idUser.match(element.advise_advisor)){
-                    subject.push(element.advise_subject); 
+            if (idUser !== undefined) {
+                if (idUser.match(element.advise_advisor)) {
+                    subject.push(element.advise_subject);
                 }
             } else {
                 subject.push(element.advise_subject);
@@ -103,8 +105,8 @@ function Subjects() {
         var virtual = 0;
 
         dataResult.filter((element) => {
-            if(idUser !== undefined){
-                if(idUser.match(element.advise_advisor)){
+            if (idUser !== undefined) {
+                if (idUser.match(element.advise_advisor)) {
                     advisor.push(element.advise_advisor);
                     if (element.advise_modality === 'P') {
                         faceToFace = faceToFace + 1;
@@ -125,12 +127,12 @@ function Subjects() {
 
         var uniqueAdvisor = [...new Set(advisor)];
 
-        return ({ 
+        return ({
             id: idSubject,
             name: nameSubject,
             faceToFaceAdvise: faceToFace,
             virtalAdvise: virtual,
-            advisors: filterAdvisorData(uniqueAdvisor) 
+            advisors: filterAdvisorData(uniqueAdvisor)
         });
     };
 
@@ -157,9 +159,9 @@ function Subjects() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                        ?
+                            ?
                             <Wrong />
-                        :
+                            :
                             filterSubjectData().map(subject => (
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Card>

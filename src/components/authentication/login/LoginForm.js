@@ -64,6 +64,7 @@ function LoginForm() {
             cookies.set('UserCode', code, { path: '/' });
             cookies.set('UserType', type, { path: '/' });
             navigate('/dashboard', { replace: true });
+            window.location.reload();
           } else {
             setShowAlert({
               message: 'No puedes ingresar a tu cuenta, contacta a tu administrador de sistema para mayor información',
@@ -102,7 +103,7 @@ function LoginForm() {
   var type = "";
   var correctPassword = false;
   var status = "";
-  
+
   const searchUser = (finded) => {
     user.filter((element) => {
       if (element.userx_email.toLowerCase() === finded.toLowerCase()) {
@@ -188,13 +189,13 @@ function LoginForm() {
         </LoadingButton>
         {
           showAlert.show
-          ?
+            ?
             <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose}>
               <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
                 {showAlert.message}
               </Alert>
             </Snackbar>
-          :
+            :
             null
         }
       </Form>

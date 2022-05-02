@@ -20,6 +20,8 @@ function Advisers() {
     useEffect(() => {
         if (!cookies.get('UserCode')) {
             navigate('/');
+        } else if (cookies.get('UserType') !== 'N') {
+            navigate('/dashboard');
         }
     });
 
@@ -78,9 +80,9 @@ function Advisers() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                        ?
+                            ?
                             <Wrong />
-                        :
+                            :
                             advisers.map(elemento => (
                                 <Grid item xs={12} sm={6} md={3}>
                                     <Card>

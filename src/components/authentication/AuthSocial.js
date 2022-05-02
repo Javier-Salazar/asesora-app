@@ -53,6 +53,7 @@ function AuthSocial() {
       cookies.set('UserCode', code, { path: '/' });
       cookies.set('UserType', type, { path: '/' });
       navigate('/dashboard', { replace: true });
+      window.location.reload();
     } if (isFind && status === "I") {
       setShowAlert({
         message: 'No puedes ingresar a tu cuenta, contacta a tu administrador de sistema para mayor información',
@@ -134,13 +135,13 @@ function AuthSocial() {
 
       {
         showAlert.show
-        ?
+          ?
           <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={showAlert.duration} onClose={handleCloseAlert}>
             <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
               {showAlert.message}
             </Alert>
           </Snackbar>
-        :
+          :
           null
       }
     </>

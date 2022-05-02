@@ -51,6 +51,8 @@ function Reports() {
     useEffect(() => {
         if (!cookies.get('UserCode')) {
             navigate('/');
+        } else if (cookies.get('UserType') === 'N') {
+            navigate('/dashboard');
         }
     });
 
@@ -163,9 +165,9 @@ function Reports() {
         advisorPhone: element.advisorPhone,
         counselingLocationInfo:
             element.advise_modality === 'V'
-            ?
+                ?
                 element.advise_url
-            :
+                :
                 `Edificio: ${element.building_name} - ${element.classroom_name}`,
         adviseDateRequest: dateTimeFormat(element.advise_date_request),
         adviseDateStart: dateTimeFormat(element.advise_date_start),
@@ -186,11 +188,11 @@ function Reports() {
                     </Typography>
                 </Stack>
                 <Card style={{ height: 472, padding: '24px' }}>
-                    <div style={{ height: '100%'}}>
+                    <div style={{ height: '100%' }}>
                         <DataGrid
                             rows={adviseList}
                             columns={columns}
-                            components={{Toolbar: GridToolbar}}
+                            components={{ Toolbar: GridToolbar }}
                             componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                             initialState={{

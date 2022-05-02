@@ -27,7 +27,7 @@ function Scanner() {
   useEffect(() => {
     peticionesGet();
   }, []);
-  
+
   var isFind = false;
 
   const searchUser = (finded) => {
@@ -43,6 +43,7 @@ function Scanner() {
                 cookies.set('UserType', Response.data.userx_type, { path: '/' });
                 Quagga.stop();
                 navigate('/dashboard', { replace: true });
+                window.location.reload();
               }).catch(error => {
                 console.log(error);
               })
@@ -79,11 +80,11 @@ function Scanner() {
       {
         activeAlert.show
           ?
-            <Alert border-radius="12px" severity="error" sx={{boxShadow: 4}}>
-              {activeAlert.message}
-            </Alert>
+          <Alert border-radius="12px" severity="error" sx={{ boxShadow: 4 }}>
+            {activeAlert.message}
+          </Alert>
           :
-            <Alert border-radius="12px" severity="info" sx={{boxShadow: 4}}>Escaneando credencial...</Alert>
+          <Alert border-radius="12px" severity="info" sx={{ boxShadow: 4 }}>Escaneando credencial...</Alert>
       }
       <br></br>
       <ScannerQuagga onDetected={_onDetected} />

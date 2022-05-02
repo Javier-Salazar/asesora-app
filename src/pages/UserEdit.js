@@ -64,6 +64,8 @@ function UserEdit() {
     peticionesGet();
     if (!cookies.get('UserCode')) {
       navigate('/');
+    } else if (cookies.get('UserType') !== 'S') {
+      navigate('/dashboard');
     }
   });
 
@@ -329,9 +331,9 @@ function UserEdit() {
                 variant="ghost"
                 color={
                   accountStatus === ''
-                  ?
+                    ?
                     (user.userx_status === 'I' && 'error') || 'success'
-                  :
+                    :
                     (accountStatus === 'I' && 'error') || 'success'
                 }
               >
@@ -362,9 +364,9 @@ function UserEdit() {
               </div>
               {
                 accountStatus === ''
-                ?
+                  ?
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(user.userx_status === 'I' ? 'A' : 'I')} checked={user.userx_status === 'I' ? false : true} />
-                :
+                  :
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(accountStatus === 'I' ? 'A' : 'I')} checked={accountStatus === 'I' ? false : true} />
               }
             </div>
@@ -383,9 +385,9 @@ function UserEdit() {
               </div>
               {
                 advisor === ''
-                ?
+                  ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('A')} checked={user.userx_type === 'A' ? true : false} />
-                :
+                  :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
               }
 
@@ -405,9 +407,9 @@ function UserEdit() {
               </div>
               {
                 admin === ''
-                ?
+                  ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('S')} checked={user.userx_type === 'S' ? true : false} />
-                :
+                  :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
               }
 
@@ -501,13 +503,13 @@ function UserEdit() {
 
                       {
                         showAlert.show
-                        ?
+                          ?
                           <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                        :
+                          :
                           null
                       }
 

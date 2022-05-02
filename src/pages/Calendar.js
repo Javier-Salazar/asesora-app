@@ -57,6 +57,8 @@ function Calendar() {
     useEffect(() => {
         if (!cookies.get('UserCode')) {
             navigate('/');
+        } else if (cookies.get('UserType') === 'S') {
+            navigate('/dashboard');
         }
     });
 
