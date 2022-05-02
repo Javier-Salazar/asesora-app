@@ -42,68 +42,84 @@ function NewAdvises() {
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = React.useState(null);
+  const [dateAdvise, setDateAdvise] = useState(null);
+  const [dateStart, setDateStart] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
+  const [infoUser, setInfoUser] = useState({userx_code: '', userx_name: '', userx_lastname: ''});
+  const [subject, setSubject] = useState([]);
 
   const cookies = new Cookies();
   const navigate = useNavigate();
   const date = new Date();
+  const timeStart = new Date();
+  const timeEnd = new Date();
+
+  const getUserRequest = async () => {
+    await axios.get(`${WS_PATH}users/${cookies.get('UserCode')}`)
+      .then(response => {
+        setInfoUser(response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  const getSubjectRequest = async () => {
+    await axios.get(`${WS_PATH}subjects`)
+      .then(response => {
+        setSubject(response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
 
   useEffect(() => {
+    getUserRequest();
+    getSubjectRequest();
     if (!cookies.get('UserCode')) {
       navigate('/');
     }
   });
 
-  const RegisterSchema = Yup.object().shape({});
+  const RegisterSchema = Yup.object().shape({
+    subject: Yup.string()
+      .required('La materia es obligatoria')
+  });
   
   const formik = useFormik({
     initialValues: {
-      code: '',
       school: 'Instituto Tecnológico de Ciudad Juárez',
-      name: '',
-      lastName: '',
       subject: '',
       dateAdvise: date.toLocaleString().split(' ', 1),
-      dateStart: date.toLocaleString().split(' ', 1),
-      dateEnd: date.toLocaleString().split(' ', 1)
+      dateStart: timeStart.toLocaleString().split(' ', 1),
+      dateEnd: timeEnd.toLocaleString().split(' ', 1)
     },
     validationSchema: RegisterSchema,
     onSubmit: () => {
-      peticionPostUser();
+      postAdvise();
     },
   });
 
-  function clearData() {
-    setFieldValue('lastName', '', false);
-    setFieldValue('motherLastName', '', false);
-    setFieldValue('phone', '', false);
-    setFieldValue('password', '', false);
-    setShowAlert({ message: '', show: false });
-    setShowAlertPost(false);
-    setModality(false);
-  }
-
-  const peticionPostUser = async (type) => {
+  const postAdvise = async (type) => {
     var arrayDate = date.toISOString().split('T');
-    await axios.post(`${WS_PATH}users`, {
-      userx_name: getFieldProps("firstName").value,
-      userx_lastname: getFieldProps("lastName").value,
-      userx_mother_lastname: getFieldProps("motherLastName").value,
-      userx_remember: "N",
-      userx_phone: getFieldProps("phone").value,
+    await axios.post(`${WS_PATH}advises`, {
+      userx_name: getFieldProps('firstName').value,
+      userx_lastname: getFieldProps('lastName').value,
+      userx_mother_lastname: getFieldProps('motherLastName').value,
+      userx_remember: 'N',
+      userx_phone: getFieldProps('phone').value,
       userx_type: type,
-      userx_istmp_password: "N",
+      userx_istmp_password: 'N',
       userx_date: arrayDate[0],
-      userx_islockedout: "N",
+      userx_islockedout: 'N',
       userx_islockedout_date: arrayDate[0],
       userx_islockedout_enable_date: arrayDate[0],
       userx_last_login_date: arrayDate[0],
       userx_lastfailed_login_date: arrayDate[0],
-      userx_image: ""
+      userx_image: ''
     })
       .then((response) => {
-        clearData();
         setShowAlertPost(true);
+        setShowAlert(true);
         setOpen(true);
       })
       .catch((error) => {
@@ -120,7 +136,7 @@ function NewAdvises() {
 
   const options = ['test', 'test'];
 
-  const { handleSubmit, getFieldProps, setFieldValue } = formik;
+  const { handleSubmit, getFieldProps } = formik;
 
   return (
     <Page title={`Asesora${NAME_APP} | Mis Asesorías`}>
@@ -184,7 +200,7 @@ function NewAdvises() {
                       <TextField
                         fullWidth
                         label="Clave"
-                        value="test"
+                        value={infoUser.userx_code}
                         disabled
                       />
                       
@@ -199,17 +215,16 @@ function NewAdvises() {
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <TextField
                         fullWidth
-                        disabled
-                        type="name"
                         label="Nombre"
-                        {...getFieldProps('name')}
+                        value={infoUser.userx_name}
+                        disabled
                       />
 
                       <TextField
                         fullWidth
-                        disabled
                         label="Apellido"
-                        {...getFieldProps('lastName')}
+                        value={infoUser.userx_lastname}
+                        disabled
                       />
                     </Stack>
 
@@ -225,9 +240,9 @@ function NewAdvises() {
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
                         label="Fecha de asesoría"
-                        value={value}
+                        value={dateAdvise}
                         onChange={(newValue) => {
-                          setValue(newValue);
+                          setDateAdvise(newValue);
                         }}
                         renderInput={(params) => <TextField fullWidth {...params} />}
                       />
@@ -238,9 +253,9 @@ function NewAdvises() {
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <TimePicker
                           label="Hora inicio"
-                          value={value}
+                          value={dateStart}
                           onChange={(newValue) => {
-                            setValue(newValue);
+                            setDateStart(newValue);
                           }}
                           renderInput={(params) => <TextField fullWidth {...params} />}
                         />
@@ -249,9 +264,9 @@ function NewAdvises() {
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <TimePicker
                           label="Hora fin"
-                          value={value}
+                          value={dateEnd}
                           onChange={(newValue) => {
-                            setValue(newValue);
+                            setDateEnd(newValue);
                           }}
                           renderInput={(params) => <TextField fullWidth {...params} />}
                         />

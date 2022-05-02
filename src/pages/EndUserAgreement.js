@@ -5,10 +5,6 @@ import HeaderLegal from '../components/HeaderLegal';
 import Page from '../components/Page';
 import { NAME_APP } from '../Configurations';
 
-const RootStyle = styled(Page)(({ theme }) => ({
-
-}));
-
 const SectionStyle = styled('div')(({ theme }) => ({
     margin: '30px auto',
     width: '85%',
@@ -32,12 +28,11 @@ const ContentStyle = styled('div')({
     width: '85%',
     margin: '0 auto',
     paddingTop: '30px',
-    //border: '1px red solid'
 });
 
 function EndUserAgreement() {
     return (
-        <RootStyle title={`Asesora${NAME_APP} | Términos y condiciones del servicio`}>
+        <Page title={`Asesora${NAME_APP} | Términos y condiciones del servicio`}>
             <HeaderLegal />
             <SectionStyle>
                 <LinkStyle underline="none" variant="subtitle2" component={RouterLink} to="/legal/end-user-agreement" sx={{
@@ -58,10 +53,10 @@ function EndUserAgreement() {
                 <Typography variant="h4">
                     TÉRMINOS Y CONDICIONES
                 </Typography>
-                <Typography variant="body1" align='justify' mt={1}>
+                <Typography variant="body1" align="justify" mt={1}>
                     Este contrato describe los términos y condiciones generales (en adelante, únicamente "términos y condiciones")
                     aplicables al uso de los contenidos y servicios ofrecidos a través de la aplicación web AsesoraApp (en adelante,
-                    "aplicación web"), del cual es titular Asesora (en adelante, "titular"). Cualquier persona que desee acceder o
+                    "aplicación web"), del cual es titular AsesoraApp (en adelante, "titular"). Cualquier persona que desee acceder o
                     hacer uso de la aplicación web o los servicios que en ella se ofrecen, podrá hacerlo sujetándose a los presentes
                     términos y condiciones, así como a políticas y principios incorporados al presente documento. En todo caso,
                     cualquier persona que no acepte los presentes términos y condiciones, deberá abstenerse de utilizar la aplicación
@@ -70,7 +65,7 @@ function EndUserAgreement() {
                 <Typography variant="h6" mt={3}>
                     I. Del objeto
                 </Typography>
-                <Typography variant="body1" align='justify' mt={1}>
+                <Typography variant="body1" align="justify" mt={1}>
                     El objeto de los presentes términos y condiciones es regular el acceso y la utilización de la aplicación web,
                     entendiendo por este cualquier tipo de contenido o servicio que se encuentre a disposición del público en general
                     dentro del dominio de la aplicación web.
@@ -78,7 +73,7 @@ function EndUserAgreement() {
                     <br></br>
                     El titular se reserva la facultad de modificar, en cualquier momento y sin previo aviso, la presentación, los
                     contenidos, la funcionalidad, los servicios, y la configuración que pudiera estar contenida en la aplicación web;
-                    en este sentido, el usuario reconoce y acepta que Asesora en cualquier momento podrá interrumpir, desactivar o
+                    en este sentido, el usuario reconoce y acepta que AsesoraApp en cualquier momento podrá interrumpir, desactivar o
                     cancelar quiera de los elementos que conforman la aplicación web o el acceso a la misma.
                     <br></br>
                     <br></br>
@@ -94,11 +89,11 @@ function EndUserAgreement() {
                     el semestre que cursen.
                     <br></br>
                     <br></br>
-                    La aplicación web está dirigida principalmente a usuarios residentes en la República Mexicana, por lo cual, Asesora
+                    La aplicación web está dirigida principalmente a usuarios residentes en la República Mexicana, por lo cual, AsesoraApp
                     no asegura que la aplicación web cumpla total o parcialmente con la legislación de otros países, de forma que, si el
                     usuario reside o tiene domicilio establecido en otro país y decide acceder o utilizar la aplicación web lo hará bajo
                     su propia responsabilidad y deberá asegurarse de que tal acceso y navegación cumple con la legislación local que le
-                    es aplicables, no asumiendo Asesora ninguna responsabilidad que se puede derivar de dicho acto.
+                    es aplicables, no asumiendo AsesoraApp ninguna responsabilidad que se puede derivar de dicho acto.
                     <br></br>
                     <br></br>
                     Se hace del conocimiento del usuario que el titular podrá administrar o gestionar la aplicación web de manera directa
@@ -108,7 +103,7 @@ function EndUserAgreement() {
                 <Typography variant="h6" mt={3}>
                     II. Del usuario
                 </Typography>
-                <Typography variant="body1" align='justify' mt={1}>
+                <Typography variant="body1" align="justify" mt={1}>
                     El acceso o utilización de la aplicación web, así como de los recursos habilitados para interactuar entre los
                     usuarios, o entre el usuario y el titular, tales como medios para realizar publicaciones o comentarios, confiere
                     la condición de usuario de la aplicación web, por lo que quedará sujeto a los presentes términos y condiciones,
@@ -125,12 +120,12 @@ function EndUserAgreement() {
                     a su inmediata cancelación.
                     <br></br>
                     <br></br>
-                    Asesora se reserva el derecho de retirar todos aquellos comentarios y aportaciones que vulneren la ley, el respeto
+                    AsesoraApp se reserva el derecho de retirar todos aquellos comentarios y aportaciones que vulneren la ley, el respeto
                     a la dignidad de la persona, que sean discriminatorios, atenten contra los derechos de tercero o el orden público,
                     o bien, que a su juicio no resulten adecuados para su publicación.
                     <br></br>
                     <br></br>
-                    En cualquier caso, Asesora no será responsable de las opiniones vertidas por los usuarios a través de comentarios
+                    En cualquier caso, AsesoraApp no será responsable de las opiniones vertidas por los usuarios a través de comentarios
                     o publicaciones que estos realicen.
                     <br></br>
                     <br></br>
@@ -141,33 +136,33 @@ function EndUserAgreement() {
                 <Typography variant="h6" mt={3}>
                     III. Del acceso y navegación en la aplicación web
                 </Typography>
-                <Typography variant="body1" align='justify' mt={1}>
+                <Typography variant="body1" align="justify" mt={1}>
                     El titular no garantiza de ningún modo la continuidad y disponibilidad de los contenidos o servicios ofrecidos
                     a través de la aplicación web, no obstante, el titular llevará a cabo las acciones que de acuerdo a sus
                     posibilidades le permitan mantener el buen funcionamiento de la aplicación web, sin que esto suponga alguna
-                    responsabilidad de parte de Asesora.
+                    responsabilidad de parte de AsesoraApp.
                     <br></br>
                     <br></br>
-                    De igual forma, Asesora no será responsable ni garantiza que el contenido o software al que pueda accederse a
+                    De igual forma, AsesoraApp no será responsable ni garantiza que el contenido o software al que pueda accederse a
                     través de la aplicación web, se encuentre libre de errores, software malicioso, o que pueda causar algún daño en
                     el ámbito de software o hardware en el equipo a través del cual el usuario accede.
                     <br></br>
                     <br></br>
                     El titular tampoco se hace responsable de los daños que pudiesen ocasionarse por un uso inadecuado de la aplicación
-                    web. En ningún caso Asesora será responsable por las pérdidas, daños o perjuicios de cualquier tipo que surjan por
+                    web. En ningún caso AsesoraApp será responsable por las pérdidas, daños o perjuicios de cualquier tipo que surjan por
                     el solo acceso o utilización de la aplicación web.
                 </Typography>
                 <Typography variant="h6" mt={3}>
                     IV. Política de enlaces
                 </Typography>
-                <Typography variant="body1" align='justify' mt={1}>
+                <Typography variant="body1" align="justify" mt={1}>
                     La aplicación web puede contener enlaces, contenidos, servicios o funciones, de otros sitios de internet
                     pertenecientes y/o gestionados por terceros, como por ejemplo imágenes, videos, comentarios, motores de búsqueda, etc.
                     <br></br>
                     <br></br>
                     La utilización de estos enlaces, contenidos, servicios o funciones, tiene por objeto mejorar la experiencia del
                     usuario al hacer uso de la aplicación web, sin que pueda considerarse una sugerencia, recomendación o invitación
-                    para hacer uso de sitios externos. Asesora en ningún caso revisará o controlará el contenido de los sitios externos,
+                    para hacer uso de sitios externos. AsesoraApp en ningún caso revisará o controlará el contenido de los sitios externos,
                     de igual forma, no hace propios los productos, servicios, contenidos, y cualquier otro material existente en los
                     referidos sitios enlazados; por lo cual, tampoco se garantizará la disponibilidad, exactitud, veracidad, validez o
                     legalidad de los sitios externos a los que se pueda tener acceso a través de la aplicación web. Así mismo, el
@@ -177,14 +172,14 @@ function EndUserAgreement() {
                 <Typography variant="h6" mt={3}>
                     V. Política en materia de propiedad intelectual
                 </Typography>
-                <Typography variant="body1" align='justify' mt={1}>
-                    Asesora por sí o como parte cesionaria, es titular de todos los derechos de propiedad intelectual e industrial de
+                <Typography variant="body1" align="justify" mt={1}>
+                    AsesoraApp por sí o como parte cesionaria, es titular de todos los derechos de propiedad intelectual e industrial de
                     la aplicación web, entendiendo por este el código fuente que hace posible su funcionamiento, así como las imágenes,
                     archivos de audio o video, logotipos, marcas, combinaciones de colores, estructuras, diseños y demás elementos que
                     lo distinguen. Serán, por consiguiente, protegidas por la legislación mexicana en materia de propiedad intelectual
                     e industrial, así como por los tratados internacionales aplicables. Por consiguiente, queda expresamente prohibida
                     la reproducción, distribución, o difusión de los contenidos de la aplicación web, con fines comerciales, en cualquier
-                    soporte y por cualquier medio, sin la autorización de Asesora.
+                    soporte y por cualquier medio, sin la autorización de AsesoraApp.
                     <br></br>
                     <br></br>
                     El usuario se compromete a respetar los derechos de propiedad intelectual e industrial del titular. No obstante,
@@ -200,14 +195,14 @@ function EndUserAgreement() {
                     <br></br>
                     En caso de que el usuario o algún tercero consideren que cualquiera de los contenidos de la aplicación web suponga
                     una violación de los derechos de protección de la propiedad industrial o intelectual, deberá comunicarlo
-                    inmediatamente a Asesora a través del siguiente correo electrónico: asesoraapp.soporte@gmail.com
+                    inmediatamente a AsesoraApp a través del siguiente correo electrónico: asesoraapp.soporte@gmail.com
                 </Typography>
 
                 <Typography variant="h6" mt={3}>
                     VI. Legislación y jurisdicción aplicable
                 </Typography>
-                <Typography variant="body1" align='justify' mt={1}>
-                    Asesora se reserva la facultad de presentar las acciones civiles o penales que considere necesarias por la
+                <Typography variant="body1" align="justify" mt={1}>
+                    AsesoraApp se reserva la facultad de presentar las acciones civiles o penales que considere necesarias por la
                     utilización indebida de la aplicación web, sus contenidos, servicios, o por el incumplimiento de los presentes
                     términos y condiciones.
                     <br></br>
@@ -218,12 +213,12 @@ function EndUserAgreement() {
                     conforme a derecho en el estado al que se hace referencia.
                 </Typography>
 
-                <Typography variant="caption" align='center' display="block" mt={3}>
+                <Typography variant="body2" align="center" display="block" mt={8} mb={3}>
                     © 2022 AsesoraApp
                 </Typography>
                 <br></br>
             </ContentStyle>
-        </RootStyle>
+        </Page>
     );
 }
 
