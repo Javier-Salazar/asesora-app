@@ -5,8 +5,10 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
-    DialogTitle, DialogContent, TextField, CircularProgress } from '@mui/material';
+import {
+    Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
+    DialogTitle, DialogContent, TextField, CircularProgress,
+} from '@mui/material';
 import Page from '../components/Page';
 import esLocale from '@fullcalendar/core/locales/es';
 import { sentenceCase } from 'change-case';
@@ -47,6 +49,7 @@ function Calendar() {
     const [data, setData] = useState([]);
     const [selectedAdvise, setSelectedAdvise] = useState({ advise_code: '' });
     const [open, setOpen] = useState(false);
+    const [openCancel, setOpenCancel] = useState(false);
 
     const cookies = new Cookies();
     const navigate = useNavigate();
@@ -70,10 +73,23 @@ function Calendar() {
         requestGet();
     }, []);
 
+    const date = new Date();
+    const validate = (adviseDateTime, status) => {
+        var adviseDateArray = adviseDateTime.split('T');
+        var adviseDate = adviseDateArray[0].split('-');
+        var todayD = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
+        var adviseD = new Date(adviseDate[0], adviseDate[1], adviseDate[2]);
+        if ((todayD >= adviseD) || (status === 'C')) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     const filterData = () => {
         var filterResults = data.filter((element) => {
             if (cookies.get('UserType') === 'N') {
-                if (element.advise_student === cookies.get('UserCode')) {
+                if (element.advise_student === cookies.get('UserCode') && (element.advise_status !== 'S')) {
                     return element;
                 }
             } else if (cookies.get('UserType') === 'A') {
@@ -88,12 +104,12 @@ function Calendar() {
 
     const adviseList = filterData().map((element => ({
         id: element.advise_code,
-        title: element.subjectx_name,
+        title: element.advise_status === 'C' ? `cancelado: ${element.subjectx_name}` : element.subjectx_name,
         start: element.advise_date_start,
         end: element.advise_date_ends,
         backgroundColor: element.advise_modality === 'P' ? '#EDEFF1' : '#E8E1FF',
         borderColor: element.advise_modality === 'P' ? '#C7C8C8' : '#B9B2CE',
-        textColor: element.advise_modality === 'P' ? '#637381' : '#4B29BA'
+        textColor: element.advise_status === 'C' ? '#E74C3C' : (element.advise_modality === 'P' ? '#637381' : '#4B29BA'),
     })));
 
     const handleEventClick = (info) => {
@@ -110,6 +126,39 @@ function Calendar() {
         setSelectedAdvise({ advise_code: '' });
         setOpen(false);
     }
+
+    const handleCloseCancel = () => {
+        setOpenCancel(false);
+    }
+
+    const cancelAdvise = () => {
+        axios.put(`${WS_PATH}advises/${selectedAdvise.advise_code}`, {
+            advise_code: selectedAdvise.advise_code,
+            advise_student: selectedAdvise.advise_student,
+            advise_topic: selectedAdvise.advise_topic,
+            advise_subject: selectedAdvise.advise_subject,
+            advise_advisor: selectedAdvise.advise_advisor,
+            advise_school: selectedAdvise.advise_school,
+            advise_building: selectedAdvise.advise_building,
+            advise_classroom: selectedAdvise.advise_classroom,
+            advise_date_request: selectedAdvise.advise_date_request,
+            advise_date_start: selectedAdvise.advise_date_start,
+            advise_date_ends: selectedAdvise.advise_date_ends,
+            advise_modality: selectedAdvise.advise_modality,
+            advise_url: selectedAdvise.advise_url,
+            advise_comments: selectedAdvise.advise_comments,
+            advise_status: cookies.get('UserType') === 'N' ? 'S' : 'C'
+        })
+            .then((response) => {
+                setOpen(false);
+                setOpenCancel(false);
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
 
     return (
         <Page title={`Asesora${NAME_APP} | Calendario`}>
@@ -139,7 +188,6 @@ function Calendar() {
                             locale={esLocale}
                             dayMaxEventRows={4}
                             eventClick={(e) => handleEventClick(e)}
-                            
                         />
                     </CardContent>
                 </Card>
@@ -153,19 +201,25 @@ function Calendar() {
                         </Typography>
                         <Label
                             variant="ghost"
-                            color={(selectedAdvise.advise_modality === 'V' && 'virtual') || 'default'}
+                            color={selectedAdvise.advise_status === 'C' ? 'error' : (selectedAdvise.advise_modality === 'P' ? 'default' : 'virtual')}
                             style={{ alignSelf: 'flex-end', minWidth: 'auto' }}
                         >
-                            {changeLabelModality(selectedAdvise.advise_modality)}
+                            {
+                                selectedAdvise.advise_status === 'C'
+                                    ?
+                                    <del> {changeLabelModality(selectedAdvise.advise_modality)} </del>
+                                    :
+                                    changeLabelModality(selectedAdvise.advise_modality)
+                            }
                         </Label>
                     </div>
                 </DialogTitle>
                 <DialogContent>
                     {
                         selectedAdvise.advise_code === ''
-                        ?
+                            ?
                             <CircularProgress color="success" />
-                        :
+                            :
                             <Stack spacing={2} sx={{ padding: '12px' }}>
 
                                 <TextField
@@ -182,14 +236,14 @@ function Calendar() {
                                 />
                                 {
                                     cookies.get('UserType') === 'N'
-                                    ?
+                                        ?
                                         <TextField
                                             fullWidth
                                             label="Asesor"
                                             value={`${selectedAdvise.advisorName} ${selectedAdvise.advisorLastName} ${selectedAdvise.advisorLastMotherName}`}
                                             disabled
                                         />
-                                    :
+                                        :
                                         <TextField
                                             fullWidth
                                             label="Alumno"
@@ -216,9 +270,9 @@ function Calendar() {
                                     label="Lugar"
                                     value={
                                         selectedAdvise.advise_modality === 'V'
-                                        ?
+                                            ?
                                             selectedAdvise.advise_url
-                                        :
+                                            :
                                             `Edificio: ${selectedAdvise.building_name} - ${selectedAdvise.classroom_name}`
                                     }
                                     disabled
@@ -228,8 +282,28 @@ function Calendar() {
                     }
                 </DialogContent>
 
-                <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '75%', ml: '75%' }}>
-                    <Button fullWidth variant="contained" onClick={handleClose}>Cerrar</Button>
+                <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
+                    {
+                        selectedAdvise.advise_code === ''
+                            ?
+                            null
+                            :
+                            <>
+                                <Button fullWidth disabled={validate(selectedAdvise.advise_date_start, selectedAdvise.advise_status)} onClick={() => setOpenCancel(true)}>Cancelar</Button>
+                                <Button fullWidth variant="contained" onClick={handleClose}>Cerrar</Button>
+                            </>
+                    }
+                </DialogActions>
+            </Dialog>
+
+            <Dialog open={openCancel} TransitionComponent={Transition} onClose={handleCloseCancel}>
+                <DialogTitle>Cancelar asesoría</DialogTitle>
+                <DialogContent>
+                    ¿Estas seguro de querer cancelar la asesoría?
+                </DialogContent>
+                <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
+                    <Button fullWidth onClick={cancelAdvise}>Sí</Button>
+                    <Button fullWidth variant="contained" onClick={handleCloseCancel}>No</Button>
                 </DialogActions>
             </Dialog>
         </Page >
