@@ -5,16 +5,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import {
-    Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
-    DialogTitle, DialogContent, TextField, CircularProgress,
-} from '@mui/material';
+import { Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
+    DialogTitle, DialogContent, TextField, CircularProgress } from '@mui/material';
 import Page from '../components/Page';
+import Label from '../components/Label';
 import esLocale from '@fullcalendar/core/locales/es';
 import { sentenceCase } from 'change-case';
 import { WS_PATH, NAME_APP } from '../Configurations';
 import Slide from '@mui/material/Slide';
-import Label from '../components/Label';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
@@ -111,7 +109,7 @@ function Calendar() {
         end: element.advise_date_ends,
         backgroundColor: element.advise_modality === 'P' ? '#EDEFF1' : '#E8E1FF',
         borderColor: element.advise_modality === 'P' ? '#C7C8C8' : '#B9B2CE',
-        textColor: element.advise_status === 'C' ? '#E74C3C' : (element.advise_modality === 'P' ? '#637381' : '#4B29BA'),
+        textColor: element.advise_status === 'C' ? '#E74C3C' : (element.advise_modality === 'P' ? '#637381' : '#4B29BA')
     })));
 
     const handleEventClick = (info) => {
@@ -161,7 +159,6 @@ function Calendar() {
             });
     }
 
-
     return (
         <Page title={`Asesora${NAME_APP} | Calendario`}>
             <Container>
@@ -208,9 +205,9 @@ function Calendar() {
                         >
                             {
                                 selectedAdvise.advise_status === 'C'
-                                    ?
+                                ?
                                     <del> {changeLabelModality(selectedAdvise.advise_modality)} </del>
-                                    :
+                                :
                                     changeLabelModality(selectedAdvise.advise_modality)
                             }
                         </Label>
@@ -219,9 +216,9 @@ function Calendar() {
                 <DialogContent>
                     {
                         selectedAdvise.advise_code === ''
-                            ?
+                        ?
                             <CircularProgress color="success" />
-                            :
+                        :
                             <Stack spacing={2} sx={{ padding: '12px' }}>
 
                                 <TextField
@@ -238,14 +235,14 @@ function Calendar() {
                                 />
                                 {
                                     cookies.get('UserType') === 'N'
-                                        ?
+                                    ?
                                         <TextField
                                             fullWidth
                                             label="Asesor"
                                             value={`${selectedAdvise.advisorName} ${selectedAdvise.advisorLastName} ${selectedAdvise.advisorLastMotherName}`}
                                             disabled
                                         />
-                                        :
+                                    :
                                         <TextField
                                             fullWidth
                                             label="Alumno"
@@ -272,9 +269,9 @@ function Calendar() {
                                     label="Lugar"
                                     value={
                                         selectedAdvise.advise_modality === 'V'
-                                            ?
+                                        ?
                                             selectedAdvise.advise_url
-                                            :
+                                        :
                                             `Edificio: ${selectedAdvise.building_name} - ${selectedAdvise.classroom_name}`
                                     }
                                     disabled
@@ -287,9 +284,9 @@ function Calendar() {
                 <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
                     {
                         selectedAdvise.advise_code === ''
-                            ?
+                        ?
                             null
-                            :
+                        :
                             <>
                                 <Button fullWidth disabled={validate(selectedAdvise.advise_date_start, selectedAdvise.advise_status)} onClick={() => setOpenCancel(true)}>Cancelar</Button>
                                 <Button fullWidth variant="contained" onClick={handleClose}>Cerrar</Button>
