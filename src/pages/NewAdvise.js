@@ -100,22 +100,22 @@ function NewAdvises() {
   });
 
   const postAdvise = async (type) => {
-    var arrayDate = date.toISOString().split('T');
     await axios.post(`${WS_PATH}advises`, {
-      userx_name: getFieldProps('firstName').value,
-      userx_lastname: getFieldProps('lastName').value,
-      userx_mother_lastname: getFieldProps('motherLastName').value,
-      userx_remember: 'N',
-      userx_phone: getFieldProps('phone').value,
-      userx_type: type,
-      userx_istmp_password: 'N',
-      userx_date: arrayDate[0],
-      userx_islockedout: 'N',
-      userx_islockedout_date: arrayDate[0],
-      userx_islockedout_enable_date: arrayDate[0],
-      userx_last_login_date: arrayDate[0],
-      userx_lastfailed_login_date: arrayDate[0],
-      userx_image: ''
+      advise_code: 0,
+      advise_student: '1',
+      advise_topic: 'Asesoría de prueba',
+      advise_subject: 2,
+      advise_advisor: cookies.get('UserCode'),
+      advise_school: 'ITCJ',
+      advise_building: '100',
+      advise_classroom: 'FP',
+      advise_date_request: dateAdvise,
+      advise_date_start: dateStart,
+      advise_date_ends: dateEnd,
+      advise_modality: modality ? 'V' : 'P',
+      advise_url: 'link',
+      advise_comments: 'estas es una asesoría de prueba',
+      advise_status: 'S'
     })
       .then((response) => {
         setShowAlertPost(true);
@@ -134,7 +134,16 @@ function NewAdvises() {
     setOpen(false);
   };
 
-  const options = ['test', 'test'];
+  const options = () => {
+    let data = [];
+    subject.filter((element) => {
+      data.push(element.subjectx_name);
+      return 0;
+    });
+
+    var uniqueArray = [...new Set(data)];
+    return uniqueArray;
+  };
 
   const { handleSubmit, getFieldProps } = formik;
 
@@ -233,7 +242,7 @@ function NewAdvises() {
                         fullWidth
                         disablePortal
                         id="combo-box-subject"
-                        options={options}
+                        options={options()}
                         renderInput={(params) => <TextField {...params} label="Materia" />}
                       />
 
