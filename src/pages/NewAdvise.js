@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
 import { sentenceCase } from 'change-case';
 import styled from '@emotion/styled';
-import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert,
-  Autocomplete } from '@mui/material';
+import {
+  Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert,
+  Autocomplete
+} from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
@@ -16,8 +17,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { es } from 'date-fns/locale';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+
 
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -29,6 +32,7 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
+
 function changeLabelStatus(bool) {
   if (bool) {
     return sentenceCase('virtual');
@@ -37,27 +41,40 @@ function changeLabelStatus(bool) {
   }
 }
 
+function dateTimeFormat(date, time) {
+  const month = `0${date.getMonth() + 1}`.slice(-2).toString();
+  const day = `0${date.getDate()}`.slice(-2).toString();
+  const hours = `0${time.getHours()}`.slice(-2).toString();
+  const minutes = `0${time.getMinutes()}`.slice(-2).toString();
+  return (`${date.getFullYear()}-${month}-${day}T${hours}:${minutes}:00`);
+}
+
 function NewAdvises() {
   const [modality, setModality] = useState(false);
-  const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [dateAdvise, setDateAdvise] = useState(null);
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
-  const [infoUser, setInfoUser] = useState({userx_code: '', userx_name: '', userx_lastname: ''});
+  const [dateEndMin, setDateEndMin] = useState(null);
+  const [infoUser, setInfoUser] = useState({ userx_code: '', userx_name: '', userx_lastname: '', userx_mother_lastname: '' });
   const [subject, setSubject] = useState([]);
+  const [building, setBuilding] = useState([]);
+  const [classroom, setClassroom] = useState([]);
+  const [valueSubject, setValueSubject] = useState('');
+  const [valueBuilding, setValueBuilding] = useState('');
+  const [valueClassroom, setValueClassroom] = useState('');
+  const [listClassroom, setListClassroom] = useState([]);
+  const [valueLinkMeet, setValueLinkMeet] = useState('');
 
   const cookies = new Cookies();
   const navigate = useNavigate();
   const date = new Date();
-  const timeStart = new Date();
-  const timeEnd = new Date();
 
   const getUserRequest = async () => {
     await axios.get(`${WS_PATH}users/${cookies.get('UserCode')}`)
-      .then(response => {
-        setInfoUser(response.data);
+      .then(Response => {
+        setInfoUser(Response.data);
       }).catch(error => {
         console.log(error);
       })
@@ -72,54 +89,120 @@ function NewAdvises() {
       })
   }
 
+  const getBuildingRequest = async () => {
+    await axios.get(`${WS_PATH}buildings`)
+      .then(response => {
+        setBuilding(response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
+  const getClassroomRequest = async () => {
+    await axios.get(`${WS_PATH}classrooms`)
+      .then(response => {
+        setClassroom(response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
   useEffect(() => {
-    getUserRequest();
     getSubjectRequest();
+    getBuildingRequest();
+    getClassroomRequest();
+  }, []);
+
+  useEffect(() => {
     if (!cookies.get('UserCode')) {
       navigate('/');
     }
+    getUserRequest();
   });
 
-  const RegisterSchema = Yup.object().shape({
-    subject: Yup.string()
-      .required('La materia es obligatoria')
-  });
-  
+  const validateDuration = (minutes) => {
+    var ms = 60000 * minutes;
+    var start = new Date(dateStart);
+    var end = new Date(dateEnd);
+    var diffMs = (end - start);
+    if (diffMs > ms) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const validate = () => {
+    const errors = {};
+    if ((valueSubject === '') || (valueSubject === null)) {
+      errors.subject = 'La materia es obligatoria';
+    }
+    if ((dateAdvise === '') || (dateAdvise === null)) {
+      errors.dateAdvise = 'La fecha es obligatoria';
+    }
+    if ((dateStart === '') || (dateStart === null)) {
+      errors.dateStart = 'La hora inicial es obligatoria';
+    }
+    if ((dateEnd === '') || (dateEnd === null)) {
+      errors.dateEnd = 'La hora final es obligatoria';
+    } else if (validateDuration(120)) {
+      errors.dateEnd = 'La asesoría no puede durar más de 2 hrs';
+    }
+
+    if (modality) {
+      if ((valueLinkMeet === '') || (valueLinkMeet === null)) {
+        errors.linkMeet = 'El código de la reunión es obligatorio';
+      } else if (!/^[a-z]{3}-{1}[a-z]{4}-{1}[a-z]{3}$/.test(valueLinkMeet)) {
+        errors.linkMeet = 'Ingrese el código, por ejemplo: aaa-bbbb-ccc';
+      }
+    } else {
+      if ((valueBuilding === '') || (valueBuilding === null)) {
+        errors.building = 'El edificio es obligatorio';
+      } else if ((valueClassroom === '') || (valueClassroom === null)) {
+        errors.classroom = 'El salón es obligatorio';
+      }
+    }
+
+    return errors;
+  };
+
+
   const formik = useFormik({
     initialValues: {
       school: 'Instituto Tecnológico de Ciudad Juárez',
       subject: '',
-      dateAdvise: date.toLocaleString().split(' ', 1),
-      dateStart: timeStart.toLocaleString().split(' ', 1),
-      dateEnd: timeEnd.toLocaleString().split(' ', 1)
+      dateAdvise: '',
+      dateStart: '',
+      dateEnd: '',
+      building: '',
+      classroom: '',
+      linkMeet: ''
     },
-    validationSchema: RegisterSchema,
+    validate,
     onSubmit: () => {
       postAdvise();
     },
   });
 
-  const postAdvise = async (type) => {
+  const postAdvise = async () => {
     await axios.post(`${WS_PATH}advises`, {
-      advise_code: 0,
-      advise_student: '1',
-      advise_topic: 'Asesoría de prueba',
-      advise_subject: 2,
+      advise_student: 'l00000000',
+      advise_topic: 'Pendiente',
+      advise_subject: valueSubject.id,
       advise_advisor: cookies.get('UserCode'),
-      advise_school: 'ITCJ',
-      advise_building: '100',
-      advise_classroom: 'FP',
-      advise_date_request: dateAdvise,
-      advise_date_start: dateStart,
-      advise_date_ends: dateEnd,
+      advise_school: 'ITCJC1',
+      advise_building: modality ? '000' : valueBuilding.id,
+      advise_classroom: modality ? '000' : valueClassroom.id,
+      advise_date_request: dateTimeFormat(dateAdvise, dateAdvise),
+      advise_date_start: dateTimeFormat(dateAdvise, dateStart),
+      advise_date_ends: dateTimeFormat(dateAdvise, dateEnd),
       advise_modality: modality ? 'V' : 'P',
-      advise_url: 'link',
-      advise_comments: 'estas es una asesoría de prueba',
+      advise_url: modality ? valueLinkMeet : 'link',
+      advise_comments: '',
       advise_status: 'S'
     })
       .then((response) => {
         setShowAlertPost(true);
-        setShowAlert(true);
         setOpen(true);
       })
       .catch((error) => {
@@ -134,10 +217,10 @@ function NewAdvises() {
     setOpen(false);
   };
 
-  const options = () => {
+  const optionsSubject = () => {
     let data = [];
     subject.filter((element) => {
-      data.push(element.subjectx_name);
+      data.push({ label: element.subjectx_name, id: element.subjectx_id });
       return 0;
     });
 
@@ -145,7 +228,58 @@ function NewAdvises() {
     return uniqueArray;
   };
 
-  const { handleSubmit, getFieldProps } = formik;
+  const optionsBuilding = () => {
+    let data = [];
+    building.filter((element) => {
+      if (element.building_code !== '000') {
+        data.push({ label: element.building_name, id: element.building_code });
+      }
+      return 0;
+    });
+
+    var uniqueArray = [...new Set(data)];
+    return uniqueArray;
+  };
+
+  const filterClassrooms = (value) => {
+    let data = [];
+    if (value !== null) {
+      classroom.filter((element) => {
+        if ((element.classroom_building === value.id) && (element.classroom_code !== '000')) {
+          data.push({ label: element.classroom_name, id: element.classroom_code });
+        }
+        return 0;
+      });
+    }
+    var uniqueArray = [...new Set(data)];
+    setListClassroom(uniqueArray);
+    setValueBuilding(value);
+    setValueClassroom('');
+  };
+
+  const validateTimeEnds = (value, minutes) => {
+    var time = new Date(value);
+    time.setMinutes(time.getMinutes() + minutes);
+    setDateEndMin(time);
+    setDateStart(value);
+  };
+
+  const handleChange = (event) => {
+    setValueLinkMeet(event.target.value);
+  };
+
+  const deleteData = () => {
+    setDateAdvise(null);
+    setDateStart(null);
+    setDateEnd(null);
+    setValueSubject('');
+    setValueBuilding('');
+    setValueClassroom('');
+    setListClassroom([]);
+    setValueLinkMeet('');
+  };
+
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
     <Page title={`Asesora${NAME_APP} | Mis Asesorías`}>
@@ -212,7 +346,7 @@ function NewAdvises() {
                         value={infoUser.userx_code}
                         disabled
                       />
-                      
+
                       <TextField
                         fullWidth
                         label="Escuela"
@@ -224,15 +358,8 @@ function NewAdvises() {
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <TextField
                         fullWidth
-                        label="Nombre"
-                        value={infoUser.userx_name}
-                        disabled
-                      />
-
-                      <TextField
-                        fullWidth
-                        label="Apellido"
-                        value={infoUser.userx_lastname}
+                        label="Asesor"
+                        value={`${infoUser.userx_name} ${infoUser.userx_lastname} ${infoUser.userx_mother_lastname}`}
                         disabled
                       />
                     </Stack>
@@ -242,47 +369,141 @@ function NewAdvises() {
                         fullWidth
                         disablePortal
                         id="combo-box-subject"
-                        options={options()}
-                        renderInput={(params) => <TextField {...params} label="Materia" />}
+                        value={valueSubject}
+                        onChange={(event, newValue) => {
+                          setValueSubject(newValue);
+                        }}
+                        options={optionsSubject()}
+                        renderInput={
+                          (params) =>
+                            <TextField
+                              {...params}
+                              label="Materia"
+                              error={Boolean(touched.subject && errors.subject)}
+                              helperText={touched.subject && errors.subject} />
+                        }
                       />
 
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DatePicker
-                        label="Fecha de asesoría"
-                        value={dateAdvise}
-                        onChange={(newValue) => {
-                          setDateAdvise(newValue);
-                        }}
-                        renderInput={(params) => <TextField fullWidth {...params} />}
-                      />
-                    </LocalizationProvider>
+                      <LocalizationProvider dateAdapter={AdapterDateFns} locale={es} >
+                        <DatePicker
+                          value={dateAdvise}
+                          minDate={date.setDate(date.getDate() + 1)}
+                          onChange={(newValue) => {
+                            setDateAdvise(newValue);
+                          }}
+                          renderInput={
+                            (params) =>
+                              <TextField
+                                fullWidth
+                                {...params}
+                                label="Fecha de asesoría"
+                                error={Boolean(touched.dateAdvise && errors.dateAdvise)}
+                                helperText={touched.dateAdvise && errors.dateAdvise} />
+                          }
+                        />
+                      </LocalizationProvider>
                     </Stack>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <TimePicker
-                          label="Hora inicio"
                           value={dateStart}
                           onChange={(newValue) => {
-                            setDateStart(newValue);
+                            validateTimeEnds(newValue, 20);
                           }}
-                          renderInput={(params) => <TextField fullWidth {...params} />}
+                          renderInput={
+                            (params) =>
+                              <TextField
+                                fullWidth
+                                {...params}
+                                label="Hora inicio"
+                                error={Boolean(touched.dateStart && errors.dateStart)}
+                                helperText={touched.dateStart && errors.dateStart} />
+                          }
                         />
                       </LocalizationProvider>
 
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <TimePicker
-                          label="Hora fin"
                           value={dateEnd}
+                          minTime={dateEndMin}
                           onChange={(newValue) => {
                             setDateEnd(newValue);
                           }}
-                          renderInput={(params) => <TextField fullWidth {...params} />}
+                          renderInput={
+                            (params) =>
+                              <TextField
+                                fullWidth
+                                {...params}
+                                label="Hora fin"
+                                error={Boolean(touched.dateEnd && errors.dateEnd)}
+                                helperText={touched.dateEnd && errors.dateEnd} />
+                          }
                         />
                       </LocalizationProvider>
                     </Stack>
+                    {
+                      modality
+                        ?
+                        <TextField
+                          fullWidth
+                          label="Código de reunión Meet"
+                          value={valueLinkMeet}
+                          onChange={handleChange}
+                          error={Boolean(touched.linkMeet && errors.linkMeet)}
+                          helperText={touched.linkMeet && errors.linkMeet}
+                        />
+                        :
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                          <Autocomplete
+                            fullWidth
+                            disablePortal
+                            id="combo-box-building"
+                            value={valueBuilding}
+                            onChange={(event, newValue) => {
+                              filterClassrooms(newValue);
+                            }}
+                            options={optionsBuilding()}
+                            renderInput={
+                              (params) =>
+                                <TextField
+                                  {...params}
+                                  label="Edificio"
+                                  error={Boolean(touched.building && errors.building)}
+                                  helperText={touched.building && errors.building} />
+                            }
+                          />
 
-                    <Stack style={{ display: 'flex', alignItems: 'flex-end' }}>
+                          <Autocomplete
+                            fullWidth
+                            disablePortal
+                            disabled={((valueBuilding === '') || (valueBuilding === null)) ? true : false}
+                            id="combo-box-classroom"
+                            value={valueClassroom}
+                            onChange={(event, newValue) => {
+                              setValueClassroom(newValue);
+                            }}
+                            options={listClassroom}
+                            renderInput={
+                              (params) =>
+                                <TextField
+                                  {...params}
+                                  label="Salón"
+                                  error={Boolean(touched.classroom && errors.classroom)}
+                                  helperText={touched.classroom && errors.classroom} />
+                            }
+                          />
+                        </Stack>
+                    }
+
+                    <Stack direction={{ xs: 'column', sm: 'row' }} style={{ display: 'flex', alignItems: 'flex-end' }} spacing={2}>
+                      <LoadingButton
+                        style={{ width: 'fit-content' }}
+                        onClick={deleteData}
+                      >
+                        Borrar información
+                      </LoadingButton>
+
                       <LoadingButton
                         type="submit"
                         variant="contained"
@@ -290,26 +511,16 @@ function NewAdvises() {
                       >
                         Guardar cambios
                       </LoadingButton>
+
                       {
                         showAlertPost
-                        ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                          ?
+                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
-                              Se ha registrado con éxito
+                              Se ha añadido con éxito la asesoría
                             </Alert>
                           </Snackbar>
-                        :
-                          null
-                      }
-                      {
-                        showAlert.show
-                        ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
-                              {showAlert.message}
-                            </Alert>
-                          </Snackbar>
-                        :
+                          :
                           null
                       }
                     </Stack>
