@@ -51,6 +51,7 @@ function dateTimeFormat(date, time) {
 
 function NewAdvises() {
   const [modality, setModality] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [dateAdvise, setDateAdvise] = useState(null);
@@ -180,6 +181,7 @@ function NewAdvises() {
     },
     validate,
     onSubmit: () => {
+      setLoading(true);
       postAdvise();
     },
   });
@@ -202,6 +204,7 @@ function NewAdvises() {
       advise_status: 'S'
     })
       .then((response) => {
+        setLoading(false);
         setShowAlertPost(true);
         setOpen(true);
       })
@@ -507,6 +510,7 @@ function NewAdvises() {
                       <LoadingButton
                         type="submit"
                         variant="contained"
+                        loading={loading}
                         style={{ width: 'fit-content' }}
                       >
                         Guardar cambios
