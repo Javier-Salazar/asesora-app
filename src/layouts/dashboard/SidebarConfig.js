@@ -6,6 +6,7 @@ import fileTextFill from '@iconify/icons-eva/file-text-fill';
 import bookFill from '@iconify/icons-eva/book-fill';
 import clipBoardFill from '@iconify/icons-eva/clipboard-fill';
 import calendarFill from '@iconify/icons-eva/calendar-fill';
+import clockFill from '@iconify/icons-eva/clock-fill';
 import infoFill from '@iconify/icons-eva/info-fill';
 
 const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
@@ -50,6 +51,11 @@ const sidebarConfig = [
     title: 'Calendario',
     path: '/dashboard/calendar',
     icon: getIcon(calendarFill)
+  },
+  {
+    title: 'Historial',
+    path: '/dashboard/history',
+    icon: getIcon(clockFill)
   },
   {
     title: 'acerca de',
