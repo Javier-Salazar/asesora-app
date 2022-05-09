@@ -199,7 +199,7 @@ function NewAdvises() {
       advise_date_start: dateTimeFormat(dateAdvise, dateStart),
       advise_date_ends: dateTimeFormat(dateAdvise, dateEnd),
       advise_modality: modality ? 'V' : 'P',
-      advise_url: modality ? valueLinkMeet : 'link',
+      advise_url: modality ? valueLinkMeet : 'sin-link',
       advise_comments: '',
       advise_status: 'S'
     })

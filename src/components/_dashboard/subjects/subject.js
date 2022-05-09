@@ -11,7 +11,7 @@ import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip, Avatar, Avat
 
 function Subject(props) {
     const [like, setLike] = useState(false);
-    
+
     const handleLike = () => {
         setLike(!like);
     }
@@ -22,7 +22,7 @@ function Subject(props) {
             data.push(element.idAdvisor);
             return 0;
         });
-        
+
         var uniqueArray = [...new Set(data)];
         return uniqueArray;
     };
@@ -40,12 +40,12 @@ function Subject(props) {
                 <IconButton color="error" size="small" onClick={handleLike} style={{ alignSelf: 'flex-start' }}>
                     {
                         like
-                        ?
+                            ?
                             <Tooltip title="Quitar de favoritos" placement="top" arrow>
                                 <Icon icon={heartFill} width="32px" />
                             </Tooltip>
 
-                        :
+                            :
                             <Tooltip title="Añadir a favoritos" placement="top" arrow>
                                 <Icon icon={heartOutline} width="32px" />
                             </Tooltip>

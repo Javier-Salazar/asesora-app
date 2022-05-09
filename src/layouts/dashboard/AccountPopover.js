@@ -63,7 +63,7 @@ function AccountPopover() {
 
   useEffect(() => {
     peticionesGet();
-  }, []);
+  });
 
   return (
     <>
