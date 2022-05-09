@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
-import { WS_PATH } from '../../../Configurations';
 import MockImgAvatar from '../../../utils/mockImages';
 import calendarFill from '@iconify/icons-eva/calendar-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
@@ -10,7 +9,9 @@ import downwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 import pinFill from '@iconify/icons-eva/pin-fill';
 import videoFill from '@iconify/icons-eva/video-fill';
 import { LoadingButton } from '@mui/lab';
-import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, Tooltip, AccordionSummary, AccordionDetails, Rating, Skeleton, Alert, Snackbar } from '@mui/material';
+import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, Tooltip, AccordionSummary, 
+    AccordionDetails, Rating, Skeleton, Alert, Snackbar } from '@mui/material';
+import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
 function dateFormat(date) {
@@ -28,7 +29,6 @@ function timeFormat(dateStart, dateEnd) {
 }
 
 function HistoryAdvisor(props) {
-
     const [advise, setAdvise] = useState({ advise_code: '' });
     const [loading, setLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -58,7 +58,7 @@ function HistoryAdvisor(props) {
         await axios.put(`${WS_PATH}advises/${props.id}`, {
             advise_code: advise.advise_code,
             advise_student: advise.advise_student,
-            advise_topic: getFieldProps("topic").value,
+            advise_topic: getFieldProps('topic').value,
             advise_subject: advise.advise_subject,
             advise_advisor: advise.advise_advisor,
             advise_school: advise.advise_school,
@@ -84,8 +84,8 @@ function HistoryAdvisor(props) {
 
     const RegisterSchema = Yup.object().shape({
         topic: Yup.string()
-            .required("No se ha añadido un tema")
-            .max(30, "Máximo 30 caracteres")
+            .required('No se ha añadido un tema')
+            .max(30, 'Máximo 30 caracteres')
     });
 
     const formik = useFormik({
@@ -103,11 +103,10 @@ function HistoryAdvisor(props) {
     const { errors, touched, handleSubmit, getFieldProps } = formik;
 
     return (
-
         advise.advise_code === ''
-            ?
+        ?
             <Skeleton variant="rectangular" height={90} />
-            :
+        :
             <Accordion>
                 <AccordionSummary
                     expandIcon={<Icon icon={downwardFill} width="26px" />}
@@ -172,9 +171,9 @@ function HistoryAdvisor(props) {
                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                     {
                                         advise.advise_modality === 'V'
-                                            ?
+                                        ?
                                             `Código: ${advise.advise_url}`
-                                            :
+                                        :
                                             `Edificio: ${advise.building_name} - ${advise.classroom_name}`
                                     }
                                 </Typography>
@@ -191,7 +190,7 @@ function HistoryAdvisor(props) {
                                         fullWidth
                                         label="Tema"
                                         variant="standard"
-                                        {...getFieldProps("topic")}
+                                        {...getFieldProps('topic')}
                                         error={Boolean(touched.topic && errors.topic)}
                                         helperText={touched.topic && errors.topic}
                                     />
@@ -225,13 +224,13 @@ function HistoryAdvisor(props) {
                                         </LoadingButton>
                                         {
                                             showAlert
-                                                ?
+                                            ?
                                                 <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
                                                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                                                         ¡Se guardaron los cambios con éxito!
                                                     </Alert>
                                                 </Snackbar>
-                                                :
+                                            :
                                                 null
                                         }
                                     </Stack>

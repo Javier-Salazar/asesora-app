@@ -3,7 +3,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import * as Yup from 'yup';
 import { Icon } from '@iconify/react';
-import { WS_PATH } from '../../../Configurations';
 import MockImgAvatar from '../../../utils/mockImages';
 import calendarFill from '@iconify/icons-eva/calendar-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
@@ -11,7 +10,9 @@ import downwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 import pinFill from '@iconify/icons-eva/pin-fill';
 import videoFill from '@iconify/icons-eva/video-fill';
 import { LoadingButton } from '@mui/lab';
-import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, AccordionSummary, AccordionDetails, Rating, Skeleton, IconButton, Alert, Snackbar } from '@mui/material';
+import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, AccordionSummary, AccordionDetails, 
+  Rating, Skeleton, IconButton, Alert, Snackbar } from '@mui/material';
+import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
 function dateFormat(date) {
@@ -29,7 +30,6 @@ function timeFormat(dateStart, dateEnd) {
 }
 
 function HistoryStudent(props) {
-
   const [advise, setAdvise] = useState({ advise_code: '' });
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -70,7 +70,7 @@ function HistoryStudent(props) {
       advise_date_ends: advise.advise_date_ends,
       advise_modality: advise.advise_modality,
       advise_url: advise.advise_url,
-      advise_comments: getFieldProps("comments").value,
+      advise_comments: getFieldProps('comments').value,
       advise_status: advise.advise_status
     })
       .then((response) => {
@@ -85,8 +85,8 @@ function HistoryStudent(props) {
 
   const RegisterSchema = Yup.object().shape({
     comments: Yup.string()
-      .required("No sea realizado ningún comentario")
-      .max(200, "Máximo 200 caracteres")
+      .required('No sea realizado ningún comentario')
+      .max(200, 'Máximo 200 caracteres')
   });
 
   const formik = useFormik({
@@ -104,11 +104,10 @@ function HistoryStudent(props) {
   const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
-
     advise.advise_code === ''
-      ?
+    ?
       <Skeleton variant="rectangular" height={90} />
-      :
+    :
       <Accordion>
         <AccordionSummary
           expandIcon={<Icon icon={downwardFill} width="26px" />}
@@ -180,9 +179,9 @@ function HistoryStudent(props) {
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {
                     advise.advise_modality === 'V'
-                      ?
+                    ?
                       `Código: ${advise.advise_url}`
-                      :
+                    :
                       `Edificio: ${advise.building_name} - ${advise.classroom_name}`
                   }
                 </Typography>
@@ -233,13 +232,13 @@ function HistoryStudent(props) {
                     </LoadingButton>
                     {
                       showAlert
-                        ?
+                      ?
                         <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
                           <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                             ¡Se guardaron los cambios con éxito!
                           </Alert>
                         </Snackbar>
-                        :
+                      :
                         null
                     }
                   </Stack>

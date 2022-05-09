@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sentenceCase } from 'change-case';
 import styled from '@emotion/styled';
-import {
-  Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert,
-  Autocomplete
-} from '@mui/material';
+import { Card, Stack, Avatar, Container, Typography, TextField, Switch, Snackbar, Alert, Autocomplete } from '@mui/material';
 import Page from '../components/Page';
 import { LoadingButton } from '@mui/lab';
 import Label from '../components/Label';
@@ -21,7 +18,6 @@ import { es } from 'date-fns/locale';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 
-
 const ContainerStyle = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'flex-start',
@@ -32,8 +28,7 @@ const ContainerStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-
-function changeLabelStatus(bool) {
+function changeLabelModality(bool) {
   if (bool) {
     return sentenceCase('virtual');
   } else {
@@ -74,8 +69,8 @@ function NewAdvises() {
 
   const getUserRequest = async () => {
     await axios.get(`${WS_PATH}users/${cookies.get('UserCode')}`)
-      .then(Response => {
-        setInfoUser(Response.data);
+      .then(response => {
+        setInfoUser(response.data);
       }).catch(error => {
         console.log(error);
       })
@@ -147,7 +142,7 @@ function NewAdvises() {
     if ((dateEnd === '') || (dateEnd === null)) {
       errors.dateEnd = 'La hora final es obligatoria';
     } else if (validateDuration(120)) {
-      errors.dateEnd = 'La asesoría no puede durar más de 2 hrs';
+      errors.dateEnd = 'La asesoría no puede durar más de dos horas';
     }
 
     if (modality) {
@@ -166,7 +161,6 @@ function NewAdvises() {
 
     return errors;
   };
-
 
   const formik = useFormik({
     initialValues: {
@@ -271,7 +265,7 @@ function NewAdvises() {
     setValueLinkMeet(event.target.value);
   };
 
-  const deleteData = () => {
+  const clearData = () => {
     setDateAdvise(null);
     setDateStart(null);
     setDateEnd(null);
@@ -309,7 +303,7 @@ function NewAdvises() {
                 variant="ghost"
                 color={(modality === false && 'default') || 'virtual'}
               >
-                {changeLabelStatus(modality)}
+                {changeLabelModality(modality)}
               </Label>
             </div>
 
@@ -445,18 +439,19 @@ function NewAdvises() {
                         />
                       </LocalizationProvider>
                     </Stack>
+
                     {
                       modality
-                        ?
+                      ?
                         <TextField
                           fullWidth
-                          label="Código de reunión Meet"
+                          label="Código de reunión de Google Meet"
                           value={valueLinkMeet}
                           onChange={handleChange}
                           error={Boolean(touched.linkMeet && errors.linkMeet)}
                           helperText={touched.linkMeet && errors.linkMeet}
                         />
-                        :
+                      :
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                           <Autocomplete
                             fullWidth
@@ -499,14 +494,7 @@ function NewAdvises() {
                         </Stack>
                     }
 
-                    <Stack direction={{ xs: 'column', sm: 'row' }} style={{ display: 'flex', alignItems: 'flex-end' }} spacing={2}>
-                      <LoadingButton
-                        style={{ width: 'fit-content' }}
-                        onClick={deleteData}
-                      >
-                        Borrar información
-                      </LoadingButton>
-
+                    <Stack direction={{ xs: 'column', sm: 'row-reverse' }} style={{ display: 'flex', alignItems: 'flex-end' }} spacing={2}>
                       <LoadingButton
                         type="submit"
                         variant="contained"
@@ -516,15 +504,23 @@ function NewAdvises() {
                         Guardar cambios
                       </LoadingButton>
 
+                      <LoadingButton
+                        variant="outlined"
+                        onClick={clearData}
+                        style={{ width: 'fit-content' }}
+                      >
+                        Limpiar datos
+                      </LoadingButton>
+
                       {
                         showAlertPost
-                          ?
-                          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
-                              Se ha añadido con éxito la asesoría
+                        ?
+                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+                              Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
                     </Stack>

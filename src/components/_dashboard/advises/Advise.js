@@ -7,12 +7,12 @@ import startFill from '@iconify/icons-eva/star-fill';
 import MockImgAvatar from '../../../utils/mockImages';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { sentenceCase } from 'change-case';
-import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog, DialogContent, DialogActions, DialogTitle, Skeleton } from '@mui/material';
+import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog, 
+    DialogContent, DialogActions, DialogTitle, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Label from '../../../components/Label';
 import Slide from '@mui/material/Slide';
 import axios from 'axios';
-
 
 const ChipStyled = styled(Chip)(({ theme }) => ({
     color: theme.palette.primary.main,
@@ -219,12 +219,11 @@ function Advise(props) {
         setOpenDialog(true);
     }
 
-
     return (
         advises.advise_code === ''
-            ?
+        ?
             <Skeleton variant="rectangular" height={235} />
-            :
+        :
             <Stack
                 alignItems="center"
                 spacing={0}
@@ -300,7 +299,7 @@ function Advise(props) {
 
                 {
                     showAlert.show
-                        ?
+                    ?
                         <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                             open={open}
                             autoHideDuration={showAlert.duration}
@@ -311,7 +310,7 @@ function Advise(props) {
                                 {showAlert.message}
                             </Alert>
                         </Snackbar>
-                        :
+                    :
                         null
                 }
             </Stack>
