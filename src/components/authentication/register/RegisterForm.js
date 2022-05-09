@@ -17,7 +17,7 @@ function RegisterForm() {
   const [data, setData] = useState([]);
 
   const date = new Date();
-  
+
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, 'El nombre es muy corto')
@@ -124,7 +124,7 @@ function RegisterForm() {
       userx_password: encryptPassword(getFieldProps("password").value),
       userx_salt: key,
       userx_remember: "N",
-      userx_phone: getFieldProps("phone").value,
+      userx_phone: '',
       userx_type: type,
       userx_istmp_password: "N",
       userx_date: arrayDate[0],
@@ -295,13 +295,13 @@ function RegisterForm() {
 
           {
             showAlert.show
-            ?
+              ?
               <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
                   {showAlert.message}
                 </Alert>
               </Snackbar>
-            :
+              :
               null
           }
 

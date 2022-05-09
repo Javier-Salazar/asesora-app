@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import * as React from 'react';
 import { Typography, Card, CardContent, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 import { Wrong } from '../errors';
 import MockImgAvatar from '../../../utils/mockImages';
@@ -29,15 +30,19 @@ function ProfileComments(props) {
     }, []);
 
     const loadData = () => {
+        var todayD = new Date();
         var filterResults = data.filter((element) => {
-            if (element.advise_advisor === props.adviser) {
-
-                return element;
+            var todayA = new Date(element.advise_date_ends);
+            if ((element.advise_comments !== '') && (todayA < todayD) && (element.advise_status === 'A')) {
+                if (element.advise_advisor === props.adviser) {
+                    return element;
+                }
             }
             return filterResults;
         });
         return filterResults;
     };
+
 
     return (
         <Grid container spacing={3}>
@@ -52,15 +57,40 @@ function ProfileComments(props) {
                             <div>
                                 {
                                     noRequest
-                                    ?
+                                        ?
                                         <Wrong />
-                                    :
+                                        :
                                         loadData().map(element => (
                                             <ListItem button key={element.advise_code}>
                                                 <ListItemAvatar>
                                                     <Avatar alt={element.studentName} src={`data:image/png;base64,${element.studentImage !== '' ? element.studentImage : MockImgAvatar()}`} />
                                                 </ListItemAvatar>
-                                                <ListItemText primary={`${element.studentName} ${element.studentLastName} ${element.studentLastMotherName}`} secondary={element.advise_comments} />
+                                                <ListItemText
+                                                    primary={
+                                                        <React.Fragment>
+                                                            <Typography
+                                                                sx={{ display: 'inline' }}
+                                                                component="span"
+                                                                variant="subtitle2"
+                                                            >
+                                                                {`${element.studentName} ${element.studentLastName} ${element.studentLastMotherName}`}
+                                                            </Typography>
+                                                        </React.Fragment>
+                                                    }
+                                                    secondary={
+                                                        <React.Fragment>
+                                                            <Typography
+                                                                sx={{ display: 'inline' }}
+                                                                component="span"
+                                                                variant="body2"
+                                                                color="text.primary"
+                                                            >
+                                                                {element.subjectx_name}
+                                                            </Typography>
+                                                            {` - ${element.advise_comments}`}
+                                                        </React.Fragment>
+                                                    }
+                                                />
                                             </ListItem>
                                         ))
                                 }

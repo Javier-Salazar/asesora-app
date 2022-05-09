@@ -34,12 +34,14 @@ function AdviseOfTheDay() {
   const filterAndSort = () => {
     var filterResults = data.filter((element) => {
       if ((cookies.get('UserType') === 'N' ? element.advise_student : element.advise_advisor) === cookies.get('UserCode')) {
-        var dateArray = element.advise_date_start.split('T', 1);
-        var dateSys = date.toISOString().split('T', 1);
-        if (dateArray[0] === dateSys[0]) {
-          return element;
+        if (element.advise_status === 'A') {
+          var dateArray = element.advise_date_start.split('T', 1);
+          var dateSys = date.toISOString().split('T', 1);
+          if (dateArray[0] === dateSys[0]) {
+            return element;
+          }
+          return 0;
         }
-        return 0;
       }
       return 0;
     });
@@ -50,24 +52,32 @@ function AdviseOfTheDay() {
   return (
     <Card sx={{ height: '420px' }} >
       <CardHeader title="Tus asesorías del día" />
-      <CardContent sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '87%'}}>
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '87%' }}>
         {
           filterAndSort().length === 0
-          ?
+            ?
             <>
               <CardMedia
                 component="img"
                 height="82%"
                 image="/static/illustrations/illustration_day_off.png"
                 alt="day off"
-                sx={{objectFit: 'contain'}}
+                sx={{ objectFit: 'contain' }}
               />
               <Typography variant="subtitle2" component="span">
                 Ninguna asesoría agendada por el día de hoy
               </Typography>
             </>
-          :
-            <Box>
+            :
+            <Box
+              mb={2}
+              display="flex"
+              flexDirection="column"
+              style={{
+                overflow: "hidden",
+                overflowY: "scroll"
+              }}
+            >
               <Timeline>
                 {
                   filterAndSort().map(element => (
@@ -75,7 +85,7 @@ function AdviseOfTheDay() {
                       <TimelineSeparator>
                         <TimelineConnector />
                         <TimelineDot
-                          sx={{ bgcolor: (element.advise_modality === 'P' && '#637381') || '#4B29BA' }}
+                          sx={{ bgcolor: (element.advise_modality === 'P' && '#7f8c98') || '#502fbc' }}
                         />
                         <TimelineConnector />
                       </TimelineSeparator>

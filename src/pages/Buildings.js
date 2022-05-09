@@ -4,8 +4,10 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination } from '@mui/material';
+import {
+  Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination
+} from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -55,11 +57,11 @@ function applySortFilter(array, comparator, query) {
 }
 
 function changeLabelStatus(text) {
-    if (text === 'A'){
-        return 'activo';
-    } else {
-        return 'inactivo';
-    }
+  if (text === 'A') {
+    return 'activo';
+  } else {
+    return 'inactivo';
+  }
 }
 
 function Buildings() {
@@ -102,7 +104,20 @@ function Buildings() {
     }
   });
 
-  const BUILDINGLIST = data.map((element => ({
+
+  const filterData = () => {
+    var dataAux = [];
+    data.filter((element) => {
+      if (element.building_code !== '000') {
+        dataAux.push(element);
+      }
+      return 0;
+    });
+
+    return dataAux;
+  };
+
+  const BUILDINGLIST = filterData().map((element => ({
     id: element.building_code,
     building: element.building_name,
     school: element.school_name,
@@ -181,13 +196,14 @@ function Buildings() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-              Edificios
+            Edificios
           </Typography>
+          {/**
           {
             data <= 0 && isUserNotFound
-            ?
+              ?
               null
-            :
+              :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -197,13 +213,14 @@ function Buildings() {
                 Agregar edificio
               </Button>
           }
+           */}
         </Stack>
 
         {
           noRequest
-          ?
+            ?
             <Wrong />
-          :
+            :
             <Card>
               <BuildingListToolbar
                 numSelected={selected.length}
@@ -263,9 +280,11 @@ function Buildings() {
                                   {sentenceCase(status)}
                                 </Label>
                               </TableCell>
+                              {/**
                               <TableCell align="right">
                                 <BuildingMoreMenu idBuilding={buildingCode} name={building} />
                               </TableCell>
+                               */}
                             </TableRow>
                           );
                         })}

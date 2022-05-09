@@ -79,6 +79,7 @@ function Advises() {
                     if (idUser !== undefined) {
                         if (idSubject.match(element.advise_subject) && idUser.match(element.advise_advisor)) {
                             data.push(element);
+                            console.log(element.advise_code)
                         }
                     } else if (idSubject.match(element.advise_subject)) {
                         data.push(element);
@@ -97,8 +98,10 @@ function Advises() {
     };
 
     const loadComments = (advisor) => {
+        var todayD = new Date();
         var filterResults = advise.filter((element) => {
-            if (element.advise_advisor === advisor) {
+            var todayA = new Date(element.advise_date_ends);
+            if ((element.advise_advisor === advisor) && (element.advise_comments !== '') && (todayA < todayD) && (element.advise_status === 'A')) {
                 return element;
             }
             return filterResults;
@@ -127,9 +130,9 @@ function Advises() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                        ?
+                            ?
                             <Wrong />
-                        :
+                            :
                             filterAdvises().map(element => (
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Card>

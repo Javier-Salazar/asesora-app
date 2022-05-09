@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -7,7 +8,9 @@ import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
-import sidebarConfig from './SidebarConfig';
+import sidebarConfigStudent from './SidebarConfigStudent';
+import sidebarConfigAdvisor from './SidebarConfigAdvisor';
+import sidebarConfigAdm from './SidebarConfigAdm';
 import account from '../../_mocks_/account';
 import MockImgAvatar from '../../utils/mockImages';
 import { WS_PATH } from '../../Configurations';
@@ -38,8 +41,9 @@ DashboardSidebar.propTypes = {
 
 function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const [infoUser, setInfoUser] = useState([]);
-  
+
   const cookies = new Cookies();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -60,7 +64,23 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
   useEffect(() => {
     peticionesGet();
+    if (!cookies.get('UserCode')) {
+      navigate('/');
+    }
   })
+
+
+  const selectSidebarConfig = () => {
+    if (cookies.get('UserType') === 'N') {
+      return (sidebarConfigStudent);
+    } else if (cookies.get('UserType') === 'A') {
+      return (sidebarConfigAdvisor);
+    } else if (cookies.get('UserType') === 'S') {
+      return (sidebarConfigAdm);
+    } else {
+      return (sidebarConfigStudent);
+    }
+  }
 
   const renderContent = (
     <Scrollbar
@@ -94,7 +114,7 @@ function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         </Link>
       </Box>
 
-      <NavSection navConfig={sidebarConfig} />
+      <NavSection navConfig={selectSidebarConfig()} />
 
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>

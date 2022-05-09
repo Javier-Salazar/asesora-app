@@ -5,8 +5,10 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
-    DialogTitle, DialogContent, TextField, CircularProgress } from '@mui/material';
+import {
+    Stack, Container, Typography, Card, CardContent, Button, DialogActions, Dialog,
+    DialogTitle, DialogContent, TextField, CircularProgress
+} from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import esLocale from '@fullcalendar/core/locales/es';
@@ -100,14 +102,44 @@ function Calendar() {
         return filterResults;
     };
 
+    const selectBackgroundColor = (status, modality) => {
+        if (status === 'S') {
+            return ('#FFF5D7');
+        } else if (status === 'C') {
+            return ('#fcd9d9');
+        } else if (modality === 'P') {
+            return ('#EDEFF1');
+        } else if (modality === 'V') {
+            return ('#E8E1FF');
+        }
+    };
+
+    const selectBorderColor = (status, modality, dateEnd) => {
+        var todayD = new Date();
+        var todayA = new Date(dateEnd);
+        if (todayA > todayD) {
+            if (status === 'S') {
+                return ('#FCBA6A');
+            } else if (status === 'C') {
+                return ('#E74C3C');
+            } else if (modality === 'P') {
+                return ('#647482');
+            } else if (modality === 'V') {
+                return ('#502FBC');
+            }
+        } else {
+            return selectBackgroundColor(status, modality);
+        }
+    };
+
     const adviseList = filterData().map((element => ({
         id: element.advise_code,
-        title: element.advise_status === 'C' ? `cancelado: ${element.subjectx_name}` : element.subjectx_name,
+        title: element.subjectx_name,
         start: element.advise_date_start,
         end: element.advise_date_ends,
-        backgroundColor: element.advise_modality === 'P' ? '#EDEFF1' : '#E8E1FF',
-        borderColor: element.advise_modality === 'P' ? '#C7C8C8' : '#B9B2CE',
-        textColor: element.advise_status === 'C' ? '#E74C3C' : (element.advise_modality === 'P' ? '#637381' : '#4B29BA')
+        backgroundColor: selectBackgroundColor(element.advise_status, element.advise_modality),
+        borderColor: selectBorderColor(element.advise_status, element.advise_modality, element.advise_date_ends),
+        textColor: element.advise_modality === 'P' ? '#637381' : '#4B29BA'
     })));
 
     const handleEventClick = (info) => {
@@ -132,7 +164,7 @@ function Calendar() {
     const cancelAdvise = () => {
         axios.put(`${WS_PATH}advises/${selectedAdvise.advise_code}`, {
             advise_code: selectedAdvise.advise_code,
-            advise_student: selectedAdvise.advise_student,
+            advise_student: cookies.get('UserType') === 'N' ? 'l00000000' : selectedAdvise.advise_student,
             advise_topic: selectedAdvise.advise_topic,
             advise_subject: selectedAdvise.advise_subject,
             advise_advisor: selectedAdvise.advise_advisor,
@@ -203,9 +235,9 @@ function Calendar() {
                         >
                             {
                                 selectedAdvise.advise_status === 'C'
-                                ?
+                                    ?
                                     <del> {changeLabelModality(selectedAdvise.advise_modality)} </del>
-                                :
+                                    :
                                     changeLabelModality(selectedAdvise.advise_modality)
                             }
                         </Label>
@@ -214,9 +246,9 @@ function Calendar() {
                 <DialogContent>
                     {
                         selectedAdvise.advise_code === ''
-                        ?
+                            ?
                             <CircularProgress color="success" />
-                        :
+                            :
                             <Stack spacing={2} sx={{ padding: '12px' }}>
 
                                 <TextField
@@ -233,14 +265,14 @@ function Calendar() {
                                 />
                                 {
                                     cookies.get('UserType') === 'N'
-                                    ?
+                                        ?
                                         <TextField
                                             fullWidth
                                             label="Asesor"
                                             value={`${selectedAdvise.advisorName} ${selectedAdvise.advisorLastName} ${selectedAdvise.advisorLastMotherName}`}
                                             disabled
                                         />
-                                    :
+                                        :
                                         <TextField
                                             fullWidth
                                             label="Alumno"
@@ -267,9 +299,9 @@ function Calendar() {
                                     label="Lugar"
                                     value={
                                         selectedAdvise.advise_modality === 'V'
-                                        ?
+                                            ?
                                             selectedAdvise.advise_url
-                                        :
+                                            :
                                             `Edificio: ${selectedAdvise.building_name} - ${selectedAdvise.classroom_name}`
                                     }
                                     disabled
@@ -282,9 +314,9 @@ function Calendar() {
                 <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
                     {
                         selectedAdvise.advise_code === ''
-                        ?
+                            ?
                             null
-                        :
+                            :
                             <>
                                 <Button fullWidth disabled={validate(selectedAdvise.advise_date_start, selectedAdvise.advise_status)} onClick={() => setOpenCancel(true)}>Cancelar</Button>
                                 <Button fullWidth variant="contained" onClick={handleClose}>Cerrar</Button>

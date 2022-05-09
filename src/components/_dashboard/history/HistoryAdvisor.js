@@ -9,8 +9,10 @@ import downwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 import pinFill from '@iconify/icons-eva/pin-fill';
 import videoFill from '@iconify/icons-eva/video-fill';
 import { LoadingButton } from '@mui/lab';
-import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, Tooltip, AccordionSummary, 
-    AccordionDetails, Rating, Skeleton, Alert, Snackbar } from '@mui/material';
+import {
+    Typography, Box, Stack, Grid, TextField, Divider, Accordion, Tooltip, AccordionSummary,
+    AccordionDetails, Rating, Skeleton, Alert, Snackbar
+} from '@mui/material';
 import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
@@ -104,9 +106,9 @@ function HistoryAdvisor(props) {
 
     return (
         advise.advise_code === ''
-        ?
+            ?
             <Skeleton variant="rectangular" height={90} />
-        :
+            :
             <Accordion>
                 <AccordionSummary
                     expandIcon={<Icon icon={downwardFill} width="26px" />}
@@ -130,7 +132,7 @@ function HistoryAdvisor(props) {
                                     />
                                 </Tooltip>
 
-                                <Box sx={{ textAlign: 'center', marginLeft: '15px' }}>
+                                <Box sx={{ marginLeft: '15px' }}>
                                     <Typography gutterBottom variant="h6">
                                         {`${advise.studentName} ${advise.studentLastName}`}
                                     </Typography>
@@ -171,9 +173,9 @@ function HistoryAdvisor(props) {
                                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                                     {
                                         advise.advise_modality === 'V'
-                                        ?
+                                            ?
                                             `Código: ${advise.advise_url}`
-                                        :
+                                            :
                                             `Edificio: ${advise.building_name} - ${advise.classroom_name}`
                                     }
                                 </Typography>
@@ -224,13 +226,13 @@ function HistoryAdvisor(props) {
                                         </LoadingButton>
                                         {
                                             showAlert
-                                            ?
+                                                ?
                                                 <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
                                                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                                                         ¡Se guardaron los cambios con éxito!
                                                     </Alert>
                                                 </Snackbar>
-                                            :
+                                                :
                                                 null
                                         }
                                     </Stack>

@@ -4,8 +4,10 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination } from '@mui/material';
+import {
+  Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination
+} from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -116,7 +118,19 @@ function User() {
     }
   });
 
-  const USERLIST = data.map((element => ({
+  const filterData = () => {
+    var dataAux = [];
+    data.filter((element) => {
+      if (element.userx_code !== 'l00000000') {
+        dataAux.push(element);
+      }
+      return 0;
+    });
+
+    return dataAux;
+  };
+
+  const USERLIST = filterData().map((element => ({
     id: element.userx_code,
     avatarUrl: element.userx_image !== '' ? element.userx_image : MockImgAvatar(),
     name: `${element.userx_name} ${element.userx_lastname}`,
@@ -225,9 +239,9 @@ function User() {
           </Typography>
           {
             data <= 0 && isUserNotFound
-            ?
+              ?
               null
-            :
+              :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -242,9 +256,9 @@ function User() {
         {
 
           noRequest
-          ?
+            ?
             <Wrong />
-          :
+            :
             <Card>
               <UserListToolbar
                 numSelected={selected.length}
