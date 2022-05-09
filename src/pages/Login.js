@@ -19,6 +19,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
 const SectionStyle = styled(Card)(({ theme }) => ({
   width: '100%',
   maxWidth: 464,
+  maxHeight: '100vh',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -56,7 +57,7 @@ function Login() {
       </AuthLayout>
 
       <MHidden width="mdDown">
-        <SectionStyle>
+        <SectionStyle> 
           <Typography variant="h3" sx={{ px: 5, mt: 12, mb: 3, alignSelf: 'flex-start' }}>
             Hola, bienvenido de nuevo
           </Typography>

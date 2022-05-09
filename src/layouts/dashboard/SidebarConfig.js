@@ -8,6 +8,9 @@ import clipBoardFill from '@iconify/icons-eva/clipboard-fill';
 import calendarFill from '@iconify/icons-eva/calendar-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import infoFill from '@iconify/icons-eva/info-fill';
+import fileAddFill from '@iconify/icons-eva/file-add-fill';
+import pinFill from '@iconify/icons-eva/pin-fill';
+import EditFill from '@iconify/icons-eva/edit-fill';
 
 const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 
@@ -31,6 +34,21 @@ const sidebarConfig = [
     title: 'materias',
     path: '/dashboard/subject',
     icon: getIcon(fileTextFill)
+  },
+  {
+    title: 'añadir materia',
+    path: '/dashboard/new-subject',
+    icon: getIcon(fileAddFill)
+  },
+  {
+    title: 'edificios',
+    path: '/dashboard/buildings',
+    icon: getIcon(pinFill)
+  },
+  {
+    title: 'salones',
+    path: '/dashboard/classrooms',
+    icon: getIcon(EditFill)
   },
   {
     title: 'añadir asesoría',

@@ -21,6 +21,9 @@ import { AdvisorProfile } from './components/_dashboard/advisers';
 import Next from './pages/Next';
 import Calendar from './pages/Calendar';
 import History from './pages/History';
+import Buildings from './pages/Buildings';
+import Classroom from './pages/Classroom';
+import NewSubject from './pages/NewSubject';
 
 function Router() {
   return useRoutes([
@@ -64,6 +67,9 @@ function Router() {
         { path: 'new-advise', element: <NewAdvise /> },
         { path: 'subject', element: <Subjects /> },
         { path: 'subject/:adviserID', element: <Subjects /> },
+        { path: 'new-subject', element: <NewSubject /> },
+        { path: 'buildings', element: <Buildings /> },
+        { path: 'classrooms', element: <Classroom /> },
         { path: 'my-profile', element: <MyProfile /> },
         { path: 'reports', element: <Reports /> },
         { path: 'calendar', element: <Calendar /> },
