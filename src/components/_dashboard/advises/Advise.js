@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Icon } from '@iconify/react';
+import { WS_PATH } from '../../../Configurations';
 import startFill from '@iconify/icons-eva/star-fill';
+import MockImgAvatar from '../../../utils/mockImages';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { sentenceCase } from 'change-case';
-import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton,
-    Dialog, DialogContent, DialogActions, DialogTitle } from '@mui/material';
+import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog, DialogContent, DialogActions, DialogTitle, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Label from '../../../components/Label';
 import Slide from '@mui/material/Slide';
+import axios from 'axios';
+
 
 const ChipStyled = styled(Chip)(({ theme }) => ({
     color: theme.palette.primary.main,
@@ -49,6 +52,20 @@ function Advise(props) {
     const [openDialog, setOpenDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
+    const [advises, setAdvises] = useState({ advise_code: '' });
+
+    const peticionesGet = async () => {
+        await axios.get(`${WS_PATH}advises/${props.id}`)
+            .then(Response => {
+                setAdvises(Response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+    }
+
+    useEffect(() => {
+        peticionesGet();
+    });
 
     var gapi = window.gapi;
     var CLIENT_ID = '403325894307-riktnlopiv84g0mjisqa6b9rgclkeigo.apps.googleusercontent.com';
@@ -64,6 +81,39 @@ function Advise(props) {
         setOpen(false);
         setShowAlert({ message: '', show: false, duration: 0 });
     }
+
+    const peticionPut = () => {
+        axios.put(`${WS_PATH}advises/${props.id}`, {
+            advise_code: advises.advise_code,
+            advise_student: props.idStudent,
+            advise_topic: advises.advise_topic,
+            advise_subject: advises.advise_subject,
+            advise_advisor: advises.advise_advisor,
+            advise_school: advises.advise_school,
+            advise_building: advises.advise_building,
+            advise_classroom: advises.advise_classroom,
+            advise_date_request: advises.advise_date_request,
+            advise_date_start: advises.advise_date_start,
+            advise_date_ends: advises.advise_date_ends,
+            advise_modality: advises.advise_modality,
+            advise_url: advises.advise_url,
+            advise_comments: advises.advise_comments,
+            advise_status: 'A',
+        })
+            .then((response) => {
+                setShowAlert({
+                    message: '¡Se agendó la asesoría con éxito!, puedes consultarla en tu calendario',
+                    show: true,
+                    duration: 6000
+                });
+                setOpen(true);
+                setLoading(false);
+                setDisabled(true);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const googleCalendar = () => {
         setOpenDialog(false);
@@ -85,7 +135,7 @@ function Advise(props) {
                     if (props.modality === 'P') {
                         event = {
                             'summary': 'AsesoraApp',
-                            'location': 'ITCJ- Edificio: ISC',
+                            'location': `ITCJ- Edificio: ${advises.building_name} - ${advises.classroom_name}`,
                             'description': `Cita para tomar asesoría de ${props.subject}`,
                             'colorId': 2,
                             'start': {
@@ -127,9 +177,9 @@ function Advise(props) {
                                 "entryPoints": [
                                     {
                                         "entryPointType": 'video',
-                                        "uri": 'https://meet.google.com/pia-iajq-nht?pli=1&authuser=0',
+                                        "uri": `https://meet.google.com/${advises.advise_url}`,
                                         "label": `Reunión ${props.subject}`,
-                                        "meetingCode": 'pia-iajq-nht',
+                                        "meetingCode": advises.advise_url,
                                     }
                                 ],
                                 "conferenceSolution": {
@@ -149,14 +199,7 @@ function Advise(props) {
                     })
 
                     request.execute(event => {
-                        setShowAlert({
-                            message: '¡Se agendó la asesoría con éxito!, puedes consultarla en tu calendario',
-                            show: true,
-                            duration: 6000
-                        });
-                        setOpen(true);
-                        setLoading(false);
-                        setDisabled(true);
+                        peticionPut();
                     })
 
                 })
@@ -165,7 +208,7 @@ function Advise(props) {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        setShowAlert({message: '', show: false, duration: 0});
+        setShowAlert({ message: '', show: false, duration: 0 });
         setOpen(false);
         setLoading(false);
         setDisabled(false);
@@ -176,100 +219,102 @@ function Advise(props) {
         setOpenDialog(true);
     }
 
+
     return (
-        <Stack
-            alignItems="center"
-            spacing={0}
-            sx={{ p: 2 }}
-        >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                <Typography gutterBottom variant="h6" sx={{ m: 0, mr: 1 }}>
-                    {props.subject}
-                </Typography>
-                <Label
-                    variant="ghost"
-                    color={(props.modality === 'V' && 'virtual') || 'default'}
-                    style={{ alignSelf: 'flex-start', minWidth: 'auto' }}
-                >
-                    {changeLabelModality(props.modality)}
-                </Label>
-            </div>
-
-            <Box sx={{ textAlign: 'center', mt: 2 }}>
-                <div style={{ display: 'inline-flex' }}>
-                    <ChipStyled label={`Fecha ${dateFormat(props.start)}`}/>
-                    <ChipStyled label={`Horario ${timeFormat(props.start, props.end)}`}/>
-                </div>
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-                <div style={{ display: 'flex', alignItems: 'center'}}>
-                    <IconButton
-                        to={`/dashboard/adviser-profile/${props.id}`}
-                        component={RouterLink}
-                        sx={{
-                            padding: 0,
-                            width: 35,
-                            height: 35
-                        }}>
-                        <Avatar
-                            src={`data:image/png;base64,${props.image}`}
-                            alt={props.id}
-                        />
-                    </IconButton>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', pl: 2 }}>
-                        {props.adviser}
+        advises.advise_code === ''
+            ?
+            <Skeleton variant="rectangular" height={235} />
+            :
+            <Stack
+                alignItems="center"
+                spacing={0}
+                sx={{ p: 2 }}
+            >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography gutterBottom variant="h6" sx={{ m: 0, mr: 1 }}>
+                        {props.subject}
                     </Typography>
-                </div>
-            </Box>
-
-            <Box sx={{ textAlign: 'center', mt: 2 }}>
-                <div style={{ display: 'inline-flex' }}>
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
-                        {props.comments}&nbsp;
-                        <Icon icon={messageCircleFill} />
-                    </Typography>
-                    <Typography variant="subtitle2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
-                        {props.rating}&nbsp;
-                        <Icon icon={startFill} />
-                    </Typography>
-                </div>
-            </Box>
-
-            <Grid container columnSpacing={0} sx={{ mt: 2 }}>
-                <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
-                    agendar asesoría
-                </LoadingButton>
-            </Grid>
-
-            <Dialog open={openDialog} TransitionComponent={Transition} onClose={handleCloseDialog}>
-                <DialogTitle>Registrar asesoría</DialogTitle>
-                <DialogContent>
-                    Estas a punto de agregar esta asesoría a tu calendario ¿Deseas continuar?
-                </DialogContent>
-                <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
-                    <Button fullWidth variant="contained" onClick={googleCalendar}>aceptar</Button>
-                    <Button fullWidth onClick={handleCloseDialog}>cancelar</Button>
-                </DialogActions>
-            </Dialog>
-
-            {
-                showAlert.show
-                ?
-                    <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                        open={open}
-                        autoHideDuration={showAlert.duration}
-                        onClose={handleClose}
-                        sx={{ mt: 10 }}
+                    <Label
+                        variant="ghost"
+                        color={(props.modality === 'V' && 'virtual') || 'default'}
+                        style={{ alignSelf: 'flex-start', minWidth: 'auto' }}
                     >
-                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
-                            {showAlert.message}
-                        </Alert>
-                    </Snackbar>
-                :
-                    null
-            }
-        </Stack>
+                        {changeLabelModality(props.modality)}
+                    </Label>
+                </div>
+
+                <Box sx={{ flex: 'flex', textAlign: 'left', mt: 3 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
+                        <ChipStyled label={`Fecha ${dateFormat(props.start)}`} sx={{ mb: 1, mr: 1 }} />
+                        <ChipStyled label={`Horario ${timeFormat(props.start, props.end)}`} sx={{ mb: 1 }} />
+                    </div>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                        <div style={{ display: 'inline-flex' }}>
+                            <IconButton
+                                to={`/dashboard/adviser-profile/${props.idAdviser}`}
+                                component={RouterLink}
+                                sx={{
+                                    padding: 0,
+                                    width: 35,
+                                    height: 35
+                                }}>
+                                <Avatar
+                                    src={`data:image/png;base64,${props.image !== '' ? props.image : MockImgAvatar()}`}
+                                    alt={'subject.idAdvisor'}
+                                />
+                            </IconButton>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 2 }}>
+                                {props.adviser}
+                            </Typography>
+                        </div>
+                        <div style={{ display: 'inline-flex' }}>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>
+                                {props.rating}&nbsp;
+                                <Icon icon={startFill} />
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', pl: 1 }}>
+                                {props.comments}&nbsp;
+                                <Icon icon={messageCircleFill} />
+                            </Typography>
+                        </div>
+                    </Box>
+                </Box>
+
+                <Grid container columnSpacing={0} sx={{ mt: 2 }}>
+                    <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
+                        agendar asesoría
+                    </LoadingButton>
+                </Grid>
+
+                <Dialog open={openDialog} TransitionComponent={Transition} onClose={handleCloseDialog}>
+                    <DialogTitle>Registrar asesoría</DialogTitle>
+                    <DialogContent>
+                        Estas a punto de agregar esta asesoría a tu calendario ¿Deseas continuar?
+                    </DialogContent>
+                    <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
+                        <Button fullWidth variant="contained" onClick={googleCalendar}>aceptar</Button>
+                        <Button fullWidth onClick={handleCloseDialog}>cancelar</Button>
+                    </DialogActions>
+                </Dialog>
+
+                {
+                    showAlert.show
+                        ?
+                        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                            open={open}
+                            autoHideDuration={showAlert.duration}
+                            onClose={handleClose}
+                            sx={{ mt: 10 }}
+                        >
+                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
+                                {showAlert.message}
+                            </Alert>
+                        </Snackbar>
+                        :
+                        null
+                }
+            </Stack>
     );
 }
 export default Advise;

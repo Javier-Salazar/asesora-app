@@ -11,6 +11,7 @@ import axios from 'axios';
 
 function Advises() {
     const [advise, setAdvise] = useState([]);
+    const [advisor, setAdvisor] = useState([]);
     const [noRequest, setNoRequest] = useState(false);
 
     const cookies = new Cookies();
@@ -25,7 +26,7 @@ function Advises() {
             navigate('/');
         }
     });
-    
+
     const requestGet = async () => {
         await axios.get(`${WS_PATH}advises`)
             .then(response => {
@@ -41,30 +42,80 @@ function Advises() {
             });
     }
 
+    const requestGetAdvisor = async () => {
+        await axios.get(`${WS_PATH}advisors`)
+            .then(response => {
+                setAdvisor(response.data);
+            }).catch(error => {
+                if (error.request) {
+                    console.log(error.request);
+                    setNoRequest(true);
+                }
+                else {
+                    console.log(error);
+                }
+            });
+    }
+
     useEffect(() => {
         requestGet();
+        requestGetAdvisor();
     }, []);
+
+    const date = new Date();
+    const validateDate = (adviseDateTime) => {
+        var adviseDateArray = adviseDateTime.split('T');
+        var adviseDate = adviseDateArray[0].split('-');
+        var todayD = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
+        var adviseD = new Date(adviseDate[0], adviseDate[1], adviseDate[2]);
+        return (adviseD > todayD)
+    };
+
 
     const filterAdvises = () => {
         var data = [];
         advise.filter((element) => {
-            if(idSubject !== undefined){
-                if(idUser !== undefined){
-                    if(idSubject.match(element.advise_subject) && idUser.match(element.advise_advisor)){
+            if ((element.advise_status === "S") && (validateDate(element.advise_date_start))) {
+                if (idSubject !== undefined) {
+                    if (idUser !== undefined) {
+                        if (idSubject.match(element.advise_subject) && idUser.match(element.advise_advisor)) {
+                            data.push(element);
+                        }
+                    } else if (idSubject.match(element.advise_subject)) {
                         data.push(element);
                     }
-                } else if(idSubject.match(element.advise_subject)){
+
+                } else {
                     data.push(element);
                 }
-
-            } else {
-                data.push(element);
             }
             return 0;
         });
 
         var uniqueArray = [...new Set(data)];
-        return uniqueArray;
+        var sortedArray = uniqueArray.sort(function (a, b) { a = new Date(a.advise_date_start); b = new Date(b.advise_date_start); return b > a ? -1 : b < a ? 1 : 0; });
+        return sortedArray;
+    };
+
+    const loadComments = (advisor) => {
+        var filterResults = advise.filter((element) => {
+            if (element.advise_advisor === advisor) {
+                return element;
+            }
+            return filterResults;
+        });
+        return filterResults;
+    };
+
+    const loadRating = (advisorAdv) => {
+        var rating = 0;
+        advisor.filter((element) => {
+            if (advisorAdv === element.advisor_code) {
+                rating = element.advisor_rating;
+            }
+            return 0;
+        });
+        return rating;
     };
 
     return (
@@ -77,19 +128,21 @@ function Advises() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                        ?
+                            ?
                             <Wrong />
-                        :
+                            :
                             filterAdvises().map(element => (
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Card>
                                         <Advise
                                             id={element.advise_code}
+                                            idStudent={cookies.get('UserCode')}
                                             subject={element.subjectx_name}
+                                            idAdviser={element.advise_advisor}
                                             adviser={`${element.advisorName} ${element.advisorLastName}`}
                                             image={element.advisorImage !== '' ? element.advisorImage : MockImgAvatar()}
-                                            rating="4"
-                                            comments={element.advise_comments}
+                                            rating={loadRating(element.advise_advisor)}
+                                            comments={loadComments(element.advise_advisor).length}
                                             modality={element.advise_modality}
                                             start={element.advise_date_start}
                                             end={element.advise_date_ends}
