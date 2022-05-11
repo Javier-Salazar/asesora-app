@@ -4,10 +4,8 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import {
-  Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination
-} from '@mui/material';
+import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -201,9 +199,9 @@ function Buildings() {
           {/**
           {
             data <= 0 && isUserNotFound
-              ?
+            ?
               null
-              :
+            :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -218,9 +216,9 @@ function Buildings() {
 
         {
           noRequest
-            ?
+          ?
             <Wrong />
-            :
+          :
             <Card>
               <BuildingListToolbar
                 numSelected={selected.length}
