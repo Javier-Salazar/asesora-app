@@ -57,9 +57,9 @@ function ProfileComments(props) {
                             <div>
                                 {
                                     noRequest
-                                        ?
+                                    ?
                                         <Wrong />
-                                        :
+                                    :
                                         loadData().map(element => (
                                             <ListItem button key={element.advise_code}>
                                                 <ListItemAvatar>
