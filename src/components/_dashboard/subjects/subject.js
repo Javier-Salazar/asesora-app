@@ -33,19 +33,19 @@ function Subject(props) {
             spacing={0}
             sx={{ p: 2 }}
         >
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '55px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                 <Typography gutterBottom variant="h6" sx={{ m: 0 }}>
                     {props.name}
                 </Typography>
                 <IconButton color="error" size="small" onClick={handleLike} style={{ alignSelf: 'flex-start' }}>
                     {
                         like
-                            ?
+                        ?
                             <Tooltip title="Quitar de favoritos" placement="top" arrow>
                                 <Icon icon={heartFill} width="32px" />
                             </Tooltip>
 
-                            :
+                        :
                             <Tooltip title="Añadir a favoritos" placement="top" arrow>
                                 <Icon icon={heartOutline} width="32px" />
                             </Tooltip>
