@@ -11,7 +11,7 @@ import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip, Avatar, Avat
 
 function Subject(props) {
     const [like, setLike] = useState(false);
-    
+
     const handleLike = () => {
         setLike(!like);
     }
@@ -22,7 +22,7 @@ function Subject(props) {
             data.push(element.idAdvisor);
             return 0;
         });
-        
+
         var uniqueArray = [...new Set(data)];
         return uniqueArray;
     };

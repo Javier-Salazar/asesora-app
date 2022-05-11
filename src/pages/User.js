@@ -126,7 +126,6 @@ function User() {
     role: changeLabelType(element.userx_type)
   })));
 
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -174,23 +173,23 @@ function User() {
   }
 
   const filterTable = (filterUser) => {
-    var typeUser = "";
-    var statusUser = "";
+    var typeUser = '';
+    var statusUser = '';
 
-    if ("estudiante".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      typeUser = "N";
+    if ('estudiante'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      typeUser = 'N';
     }
     if ("asesor".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      typeUser = "A";
+      typeUser ='A';
     }
-    if ("administrador".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      typeUser = "S";
+    if ('administrador'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      typeUser = 'S';
     }
-    if ("inactivo".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      statusUser = "I";
+    if ('inactivo'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      statusUser = 'I';
     }
-    if ("activo".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      statusUser = "A";
+    if ('activo'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      statusUser = 'A';
     }
 
     var filterResults = dataTable.filter((element) => {

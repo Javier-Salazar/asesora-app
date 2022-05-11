@@ -56,7 +56,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 function changeLabelStatus(text) {
-    return 'activo';
+  return 'activo';
 }
 
 function Classrooms() {
@@ -179,7 +179,7 @@ function Classrooms() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-              Salones
+            Salones
           </Typography>
           {
             data <= 0 && isUserNotFound

@@ -100,14 +100,44 @@ function Calendar() {
         return filterResults;
     };
 
+    const selectBackgroundColor = (status, modality) => {
+        if (status === 'S') {
+            return ('#FFF5D7');
+        } else if (status === 'C') {
+            return ('#fcd9d9');
+        } else if (modality === 'P') {
+            return ('#EDEFF1');
+        } else if (modality === 'V') {
+            return ('#E8E1FF');
+        }
+    };
+
+    const selectBorderColor = (status, modality, dateEnd) => {
+        var todayD = new Date();
+        var todayA = new Date(dateEnd);
+        if (todayA > todayD) {
+            if (status === 'S') {
+                return ('#FCBA6A');
+            } else if (status === 'C') {
+                return ('#E74C3C');
+            } else if (modality === 'P') {
+                return ('#647482');
+            } else if (modality === 'V') {
+                return ('#502FBC');
+            }
+        } else {
+            return selectBackgroundColor(status, modality);
+        }
+    };
+
     const adviseList = filterData().map((element => ({
         id: element.advise_code,
-        title: element.advise_status === 'C' ? `cancelado: ${element.subjectx_name}` : element.subjectx_name,
+        title: element.subjectx_name,
         start: element.advise_date_start,
         end: element.advise_date_ends,
-        backgroundColor: element.advise_modality === 'P' ? '#EDEFF1' : '#E8E1FF',
-        borderColor: element.advise_modality === 'P' ? '#C7C8C8' : '#B9B2CE',
-        textColor: element.advise_status === 'C' ? '#E74C3C' : (element.advise_modality === 'P' ? '#637381' : '#4B29BA')
+        backgroundColor: selectBackgroundColor(element.advise_status, element.advise_modality),
+        borderColor: selectBorderColor(element.advise_status, element.advise_modality, element.advise_date_ends),
+        textColor: element.advise_modality === 'P' ? '#637381' : '#4B29BA'
     })));
 
     const handleEventClick = (info) => {
@@ -132,7 +162,7 @@ function Calendar() {
     const cancelAdvise = () => {
         axios.put(`${WS_PATH}advises/${selectedAdvise.advise_code}`, {
             advise_code: selectedAdvise.advise_code,
-            advise_student: selectedAdvise.advise_student,
+            advise_student: cookies.get('UserType') === 'N' ? 'l00000000' : selectedAdvise.advise_student,
             advise_topic: selectedAdvise.advise_topic,
             advise_subject: selectedAdvise.advise_subject,
             advise_advisor: selectedAdvise.advise_advisor,

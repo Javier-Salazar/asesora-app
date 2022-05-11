@@ -494,7 +494,7 @@ function NewUser() {
                       {
                         showAlertPost
                         ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
                               Se ha registrado con éxito
                             </Alert>
@@ -505,7 +505,7 @@ function NewUser() {
                       {
                         showAlert.show
                         ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
+                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
                             <Alert onClose={handleClose} severity="error" sx={{ width: '100%', boxShadow: 10 }}>
                               {showAlert.message}
                             </Alert>

@@ -55,11 +55,11 @@ function applySortFilter(array, comparator, query) {
 }
 
 function changeLabelStatus(text) {
-    if (text === 'A'){
-        return 'activo';
-    } else {
-        return 'inactivo';
-    }
+  if (text === 'A') {
+    return 'activo';
+  } else {
+    return 'inactivo';
+  }
 }
 
 function Buildings() {
@@ -181,7 +181,7 @@ function Buildings() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-              Edificios
+            Edificios
           </Typography>
           {
             data <= 0 && isUserNotFound

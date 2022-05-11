@@ -25,7 +25,7 @@ function changeLabelStatus(text) {
     } else if (text === 'C') {
         return sentenceCase('cancelada');
     } else {
-        return sentenceCase('solicitada');
+        return sentenceCase('Publicada');
     }
 }
 
@@ -38,8 +38,8 @@ function dateTimeFormat(date) {
 
 function showDateTime(text) {
     var dateTimeArray = text.split(" ");
-    var dateArray = text.split("/");
-    return `${dateArray[1]}/${dateArray[0]}/${dateArray[0]} ${dateTimeArray[1]}`;
+    var dateArray = dateTimeArray[0].split("/");
+    return `${dateArray[1]}/${dateArray[0]}/${dateArray[2]} ${dateTimeArray[1]}`;
 }
 
 function Reports() {
@@ -124,7 +124,7 @@ function Reports() {
                     <>
                         <Label
                             variant="ghost"
-                            color={(params.value === 'Aceptada' && 'info') || (params.value === 'Solicitada' && 'warning')
+                            color={(params.value === 'Aceptada' && 'info') || (params.value === 'Publicada' && 'warning')
                                 || 'error'}
                         >
                             {sentenceCase(params.value)}
@@ -149,11 +149,28 @@ function Reports() {
         requestGet();
     }, []);
 
-    const adviseList = data.map((element => ({
+    const filterData = () => {
+        var dataAux = [];
+        data.filter((element) => {
+            if (cookies.get('UserType') === 'A') {
+                if (element.advise_advisor === cookies.get('UserCode')) {
+                    dataAux.push(element);
+                }
+            } else if (cookies.get('UserType') === 'S') {
+                dataAux.push(element);
+            }
+            return 0;
+        });
+        var sortedArray = dataAux.sort(function (a, b) { a = new Date(a.advise_date_ends); b = new Date(b.advise_date_ends); return b < a ? -1 : b < a ? 1 : 0; });
+        return sortedArray;
+    };
+
+
+    const adviseList = filterData().map((element => ({
         id: element.advise_code,
-        adviseStudent: element.advise_student,
+        adviseStudent: element.advise_student === 'l00000000' ? '---------' : element.advise_student,
         studentName: `${element.studentName} ${element.studentLastName} ${element.studentLastMotherName}`,
-        studentEmail: element.studentEmail,
+        studentEmail: element.studentEmail === 'l00000000@itcj.edu.mx' ? '---------@itcj.edu.mx' : element.studentEmail,
         studentPhone: element.studentPhone,
         adviseTopic: element.advise_topic,
         subjectName: element.subjectx_name,
@@ -186,11 +203,11 @@ function Reports() {
                     </Typography>
                 </Stack>
                 <Card style={{ height: 472, padding: '24px' }}>
-                    <div style={{ height: '100%'}}>
+                    <div style={{ height: '100%' }}>
                         <DataGrid
                             rows={adviseList}
                             columns={columns}
-                            components={{Toolbar: GridToolbar}}
+                            components={{ Toolbar: GridToolbar }}
                             componentsProps={{ toolbar: { csvOptions: { utf8WithBom: true } } }}
                             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                             initialState={{

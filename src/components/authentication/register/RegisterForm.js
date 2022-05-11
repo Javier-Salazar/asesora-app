@@ -17,7 +17,7 @@ function RegisterForm() {
   const [data, setData] = useState([]);
 
   const date = new Date();
-  
+
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, 'El nombre es muy corto')
@@ -124,7 +124,7 @@ function RegisterForm() {
       userx_password: encryptPassword(getFieldProps("password").value),
       userx_salt: key,
       userx_remember: "N",
-      userx_phone: getFieldProps("phone").value,
+      userx_phone: '',
       userx_type: type,
       userx_istmp_password: "N",
       userx_date: arrayDate[0],

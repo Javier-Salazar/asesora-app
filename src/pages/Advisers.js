@@ -54,8 +54,10 @@ function Advisers() {
     }
 
     const loadComments = (advisor) => {
+        var todayD = new Date();
         var filterResults = advise.filter((element) => {
-            if (element.advise_advisor === advisor) {
+            var todayA = new Date(element.advise_date_ends);
+            if ((element.advise_advisor === advisor) && (element.advise_comments !== '') && (todayA < todayD) && (element.advise_status === 'A')) {
                 return element;
             }
             return filterResults;

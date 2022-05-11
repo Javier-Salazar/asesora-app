@@ -7,7 +7,7 @@ import startFill from '@iconify/icons-eva/star-fill';
 import MockImgAvatar from '../../../utils/mockImages';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { sentenceCase } from 'change-case';
-import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog, 
+import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog,
     DialogContent, DialogActions, DialogTitle, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Label from '../../../components/Label';

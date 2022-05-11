@@ -10,7 +10,7 @@ import downwardFill from '@iconify/icons-eva/arrow-ios-downward-fill';
 import pinFill from '@iconify/icons-eva/pin-fill';
 import videoFill from '@iconify/icons-eva/video-fill';
 import { LoadingButton } from '@mui/lab';
-import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, AccordionSummary, AccordionDetails, 
+import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, AccordionSummary, AccordionDetails,
   Rating, Skeleton, IconButton, Alert, Snackbar } from '@mui/material';
 import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
@@ -138,7 +138,7 @@ function HistoryStudent(props) {
                   />
                 </IconButton>
 
-                <Box sx={{ textAlign: 'center', marginLeft: '15px' }}>
+                <Box sx={{ marginLeft: '15px' }}>
                   <Typography gutterBottom variant="h6">
                     {`${advise.advisorName} ${advise.advisorLastName}`}
                   </Typography>
