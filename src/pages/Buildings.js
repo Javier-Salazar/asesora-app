@@ -102,20 +102,7 @@ function Buildings() {
     }
   });
 
-
-  const filterData = () => {
-    var dataAux = [];
-    data.filter((element) => {
-      if (element.building_code !== '000') {
-        dataAux.push(element);
-      }
-      return 0;
-    });
-
-    return dataAux;
-  };
-
-  const BUILDINGLIST = filterData().map((element => ({
+  const BUILDINGLIST = data.map((element => ({
     id: element.building_code,
     building: element.building_name,
     school: element.school_name,
@@ -276,11 +263,9 @@ function Buildings() {
                                   {sentenceCase(status)}
                                 </Label>
                               </TableCell>
-                              {/**
                               <TableCell align="right">
                                 <BuildingMoreMenu idBuilding={buildingCode} name={building} />
                               </TableCell>
-                               */}
                             </TableRow>
                           );
                         })}
