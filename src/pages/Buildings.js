@@ -196,7 +196,6 @@ function Buildings() {
           <Typography variant="h4" gutterBottom>
             Edificios
           </Typography>
-          {/**
           {
             data <= 0 && isUserNotFound
             ?
@@ -211,7 +210,6 @@ function Buildings() {
                 Agregar edificio
               </Button>
           }
-           */}
         </Stack>
 
         {
