@@ -26,9 +26,24 @@ const sidebarConfig = [
     icon: getIcon(fileTextFill)
   },
   {
+    title: 'añadir materia',
+    path: '/dashboard/new-subject',
+    icon: getIcon(fileAddFill)
+  },
+  {
     title: 'edificios',
     path: '/dashboard/buildings',
     icon: getIcon(pinFill)
+  },
+  {
+    title: 'asesorias',
+    path: '/dashboard/advises',
+    icon: getIcon(bookFill)
+  },
+  {
+    title: 'añadir asesoría',
+    path: '/dashboard/new-advise',
+    icon: getIcon(fileTextFill)
   },
   {
     title: 'salones',
