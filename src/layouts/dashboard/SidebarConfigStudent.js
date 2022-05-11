@@ -7,10 +7,9 @@ import calendarFill from '@iconify/icons-eva/calendar-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import infoFill from '@iconify/icons-eva/info-fill';
 
-
 const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 
-const sidebarConfig = [
+const sidebarConfigStudents = [
   {
     title: 'tablero',
     path: '/dashboard/app',
@@ -20,11 +19,6 @@ const sidebarConfig = [
     title: 'asesores',
     path: '/dashboard/adviser',
     icon: getIcon(personDoneFill)
-  },
-  {
-    title: 'materias',
-    path: '/dashboard/subject',
-    icon: getIcon(fileTextFill)
   },
   {
     title: 'asesorias',
@@ -48,4 +42,4 @@ const sidebarConfig = [
   }
 ];
 
-export default sidebarConfig;
+export default sidebarConfigStudents;
