@@ -55,7 +55,7 @@ function AdviseOfTheDay() {
       <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '87%' }}>
         {
           filterAndSort().length === 0
-            ?
+          ?
             <>
               <CardMedia
                 component="img"
@@ -68,7 +68,7 @@ function AdviseOfTheDay() {
                 Ninguna asesoría agendada por el día de hoy
               </Typography>
             </>
-            :
+          :
             <Box
               mb={2}
               display="flex"
