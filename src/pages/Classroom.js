@@ -99,7 +99,7 @@ function Classrooms() {
     }
   });
 
-  const CLASSROOMLIST = data().map((element => ({
+  const CLASSROOMLIST = data.map((element => ({
     id: element.classroom_code,
     classroom: element.classroom_name,
     building: element.building_name,
