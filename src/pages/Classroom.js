@@ -4,10 +4,8 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import {
-  Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination
-} from '@mui/material';
+import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -101,20 +99,7 @@ function Classrooms() {
     }
   });
 
-
-  const filterData = () => {
-    var dataAux = [];
-    data.filter((element) => {
-      if (element.classroom_code !== '000') {
-        dataAux.push(element);
-      }
-      return 0;
-    });
-
-    return dataAux;
-  };
-
-  const CLASSROOMLIST = filterData().map((element => ({
+  const CLASSROOMLIST = data().map((element => ({
     id: element.classroom_code,
     classroom: element.classroom_name,
     building: element.building_name,
@@ -196,12 +181,11 @@ function Classrooms() {
           <Typography variant="h4" gutterBottom>
             Salones
           </Typography>
-          {/** 
           {
             data <= 0 && isUserNotFound
-              ?
+            ?
               null
-              :
+            :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -211,14 +195,13 @@ function Classrooms() {
                 Agregar salón
               </Button>
           }
-          */}
         </Stack>
 
         {
           noRequest
-            ?
+          ?
             <Wrong />
-            :
+          :
             <Card>
               <ClassroomListToolbar
                 numSelected={selected.length}
