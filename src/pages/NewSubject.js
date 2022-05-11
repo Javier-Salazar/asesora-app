@@ -4,10 +4,8 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import {
-    Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-    Typography, TableContainer, TablePagination
-} from '@mui/material';
+import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+    Typography, TableContainer, TablePagination } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -58,9 +56,9 @@ function applySortFilter(array, comparator, query) {
 
 function changeLabelStatus(text) {
     if (text === 'A') {
-        return 'activa';
+        return 'activo';
     } else {
-        return 'inactiva';
+        return 'inactivo';
     }
 }
 
@@ -179,11 +177,11 @@ function Buildings() {
     const isUserNotFound = filteredUsers.length === 0;
 
     return (
-        <Page title={`Asesora${NAME_APP} | Edificios`}>
+        <Page title={`Asesora${NAME_APP} | Materias`}>
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Edificios
+                        Materias
                     </Typography>
                     {/**
           {
@@ -205,9 +203,9 @@ function Buildings() {
 
                 {
                     noRequest
-                        ?
+                    ?
                         <Wrong />
-                        :
+                    :
                         <Card>
                             <BuildingListToolbar
                                 numSelected={selected.length}
