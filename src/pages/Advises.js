@@ -79,7 +79,6 @@ function Advises() {
                     if (idUser !== undefined) {
                         if (idSubject.match(element.advise_subject) && idUser.match(element.advise_advisor)) {
                             data.push(element);
-                            console.log(element.advise_code)
                         }
                     } else if (idSubject.match(element.advise_subject)) {
                         data.push(element);
@@ -130,9 +129,9 @@ function Advises() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                            ?
+                        ?
                             <Wrong />
-                            :
+                        :
                             filterAdvises().map(element => (
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Card>
