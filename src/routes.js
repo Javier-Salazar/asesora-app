@@ -67,7 +67,7 @@ function Router() {
         { path: 'new-advise', element: <NewAdvise /> },
         { path: 'subject', element: <Subjects /> },
         { path: 'subject/:adviserID', element: <Subjects /> },
-        { path: 'subjects', element: <NewSubject /> },
+        { path: 'new-subject', element: <NewSubject /> },
         { path: 'buildings', element: <Buildings /> },
         { path: 'classrooms', element: <Classroom /> },
         { path: 'my-profile', element: <MyProfile /> },
