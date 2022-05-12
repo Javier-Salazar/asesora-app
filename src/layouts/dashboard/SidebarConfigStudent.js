@@ -21,6 +21,11 @@ const sidebarConfigStudents = [
     icon: getIcon(personDoneFill)
   },
   {
+    title: 'materias',
+    path: '/dashboard/subject',
+    icon: getIcon(fileTextFill)
+  },
+  {
     title: 'asesorias',
     path: '/dashboard/advises',
     icon: getIcon(bookFill)

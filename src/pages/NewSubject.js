@@ -12,7 +12,7 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { Wrong } from '../components/_dashboard/errors';
 import { UserListHead } from '../components/_dashboard/user';
-import { BuildingListToolbar, BuildingMoreMenu } from '../components/_dashboard/building';
+import { SubjectListToolbar, SubjectMoreMenu } from '../components/_dashboard/subjects';
 import { WS_PATH, NAME_APP } from '../Configurations';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -62,7 +62,7 @@ function changeLabelStatus(text) {
     }
 }
 
-function Buildings() {
+function NewSubjects() {
     const [data, setData] = useState([]);
     const [dataTable, setDataTable] = useState([]);
     const [page, setPage] = useState(0);
@@ -102,11 +102,11 @@ function Buildings() {
         }
     });
 
-    const BUILDINGLIST = data.map((element => ({
-        id: element.building_code,
-        building: element.subjectx_name,
+    const SUBJECTLIST = data.map((element => ({
+        id: element.subjectx_id,
+        subject: element.subjectx_name,
         school: 'Instituto Tecnológico de Ciudad Juárez',
-        buildingCode: element.subjectx_code,
+        subjectCode: element.subjectx_code,
         status: changeLabelStatus(element.subjectx_status)
     })));
 
@@ -118,7 +118,7 @@ function Buildings() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = BUILDINGLIST.map((n) => n.building);
+            const newSelecteds = SUBJECTLIST.map((n) => n.subject);
             setSelected(newSelecteds);
             return;
         }
@@ -170,9 +170,9 @@ function Buildings() {
         return setData(filterResults);
     }
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - BUILDINGLIST.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - SUBJECTLIST.length) : 0;
 
-    const filteredUsers = applySortFilter(BUILDINGLIST, getComparator(order, orderBy), filter);
+    const filteredUsers = applySortFilter(SUBJECTLIST, getComparator(order, orderBy), filter);
 
     const isUserNotFound = filteredUsers.length === 0;
 
@@ -183,22 +183,21 @@ function Buildings() {
                     <Typography variant="h4" gutterBottom>
                         Materias
                     </Typography>
-                    {/**
-          {
-            data <= 0 && isUserNotFound
-              ?
-              null
-              :
-              <Button
-                variant="contained"
-                component={RouterLink}
-                to=""
-                startIcon={<Icon icon={plusFill} />}
-              >
-                Agregar edificio
-              </Button>
-          }
-           */}
+                    {
+                        data <= 0 && isUserNotFound
+                        ?
+                        null
+                        :
+                        <Button
+                            variant="contained"
+                            component={RouterLink}
+                            to=""
+                            startIcon={<Icon icon={plusFill} />}
+                        >
+                            Agregar materia
+                        </Button>
+                    }
+          
                 </Stack>
 
                 {
@@ -207,7 +206,7 @@ function Buildings() {
                         <Wrong />
                     :
                         <Card>
-                            <BuildingListToolbar
+                            <SubjectListToolbar
                                 numSelected={selected.length}
                                 filterName={filter}
                                 onFilterName={handleFilter}
@@ -221,7 +220,7 @@ function Buildings() {
                                             order={order}
                                             orderBy={orderBy}
                                             headLabel={TABLE_HEAD}
-                                            rowCount={BUILDINGLIST.length}
+                                            rowCount={SUBJECTLIST.length}
                                             numSelected={selected.length}
                                             onRequestSort={handleRequestSort}
                                             onSelectAllClick={handleSelectAllClick}
@@ -230,8 +229,8 @@ function Buildings() {
                                             {filteredUsers
                                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                 .map((row) => {
-                                                    const { id, building, school, buildingCode, status } = row;
-                                                    const isItemSelected = selected.indexOf(building) !== -1;
+                                                    const { id, subject, school, subjectCode, status } = row;
+                                                    const isItemSelected = selected.indexOf(subject) !== -1;
 
                                                     return (
                                                         <TableRow
@@ -245,18 +244,18 @@ function Buildings() {
                                                             <TableCell padding="checkbox">
                                                                 <Checkbox
                                                                     checked={isItemSelected}
-                                                                    onChange={(event) => handleClick(event, building)}
+                                                                    onChange={(event) => handleClick(event, subject)}
                                                                 />
                                                             </TableCell>
                                                             <TableCell component="th" scope="row" padding="none">
                                                                 <Stack direction="row" alignItems="center" spacing={2}>
                                                                     <Typography variant="subtitle2" noWrap>
-                                                                        {building}
+                                                                        {subject}
                                                                     </Typography>
                                                                 </Stack>
                                                             </TableCell>
                                                             <TableCell align="left">{school}</TableCell>
-                                                            <TableCell align="left">{buildingCode}</TableCell>
+                                                            <TableCell align="left">{subjectCode}</TableCell>
                                                             <TableCell align="left">
                                                                 <Label
                                                                     variant="ghost"
@@ -265,11 +264,10 @@ function Buildings() {
                                                                     {sentenceCase(status)}
                                                                 </Label>
                                                             </TableCell>
-                                                            {/**
-                              <TableCell align="right">
-                                <BuildingMoreMenu idBuilding={buildingCode} name={building} />
-                              </TableCell>
-                               */}
+                                                            <TableCell align="right">
+                                                                <SubjectMoreMenu idSubject={subjectCode} name={subject} />
+                                                            </TableCell>
+                              
                                                         </TableRow>
                                                     );
                                                 })}
@@ -295,7 +293,7 @@ function Buildings() {
                             <TablePagination
                                 rowsPerPageOptions={[25, 50, 100]}
                                 component="div"
-                                count={BUILDINGLIST.length}
+                                count={SUBJECTLIST.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}
@@ -312,4 +310,4 @@ function Buildings() {
     );
 }
 
-export default Buildings;
+export default NewSubjects;
