@@ -29,15 +29,21 @@ function AdviseOfTheDay() {
     return cortarHora[0] + ":" + cortarHora[1];
   };
 
-  const date = new Date();
+  const datesAreOnSameDay = (dateAdv, dateSys) => {
+    if (dateAdv.getFullYear() === dateSys.getFullYear() &&
+      dateAdv.getMonth() === dateSys.getMonth() &&
+      dateAdv.getDate() === dateSys.getDate()) {
+      return (true);
+    } else {
+      return (false);
+    }
+  };
 
   const filterAndSort = () => {
     var filterResults = data.filter((element) => {
       if ((cookies.get('UserType') === 'N' ? element.advise_student : element.advise_advisor) === cookies.get('UserCode')) {
         if (element.advise_status === 'A') {
-          var dateArray = element.advise_date_start.split('T', 1);
-          var dateSys = date.toISOString().split('T', 1);
-          if (dateArray[0] === dateSys[0]) {
+          if (datesAreOnSameDay(new Date(element.advise_date_start), new Date())) {
             return element;
           }
           return 0;
@@ -89,7 +95,7 @@ function AdviseOfTheDay() {
                         />
                         <TimelineConnector />
                       </TimelineSeparator>
-                      <TimelineContent sx={{ py: '12px', px: 2 }}>
+                      <TimelineContent sx={{ py: '12px', px: 10 }}>
                         <Typography variant="h6" component="span">
                           {timeFormat(element.advise_date_start)}
                         </Typography>
