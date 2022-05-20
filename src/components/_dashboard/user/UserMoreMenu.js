@@ -4,8 +4,10 @@ import { Icon } from '@iconify/react';
 import editFill from '@iconify/icons-eva/edit-fill';
 import slashOutline from '@iconify/icons-eva/slash-outline';
 import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
-import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
-  DialogActions, Button, DialogTitle, Snackbar, Alert } from '@mui/material';
+import {
+  Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Dialog, DialogContent,
+  DialogActions, Button, DialogTitle, Snackbar, Alert
+} from '@mui/material';
 import { WS_PATH } from '../../../Configurations';
 import Slide from '@mui/material/Slide';
 import axios from 'axios';
@@ -195,13 +197,13 @@ function UserMoreMenu(props) {
 
       {
         showAlert.show
-        ?
-          <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+          ?
+          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert} sx={{ mt: 10 }}>
             <Alert onClose={handleCloseAlert} severity={showAlert.color} sx={{ width: '100%' }}>
               {showAlert.message}
             </Alert>
           </Snackbar>
-        :
+          :
           null
       }
     </>
