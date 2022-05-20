@@ -74,7 +74,7 @@ function Advises() {
     const filterAdvises = () => {
         var data = [];
         advise.filter((element) => {
-            if ((element.advise_status === 'S') && (validateDate(element.advise_date_start))) {
+            if ((element.advise_status === 'S') && (validateDate(element.advise_date_start)) && (element.advisorStatus === 'A')) {
                 if (idSubject !== undefined) {
                     if (idUser !== undefined) {
                         if (idSubject.match(element.advise_subject) && idUser.match(element.advise_advisor)) {

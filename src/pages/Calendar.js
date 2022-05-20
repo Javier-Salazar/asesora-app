@@ -88,13 +88,23 @@ function Calendar() {
 
     const filterData = () => {
         var filterResults = data.filter((element) => {
+            var todayD = new Date();
+            var todayA = new Date(element.advise_date_ends);
             if (cookies.get('UserType') === 'N') {
                 if (element.advise_student === cookies.get('UserCode') && (element.advise_status !== 'S')) {
-                    return element;
+                    if (element.advisorStatus === 'A') {
+                        return element;
+                    } else if (todayA < todayD) {
+                        return element;
+                    }
                 }
             } else if (cookies.get('UserType') === 'A') {
                 if (element.advise_advisor === cookies.get('UserCode')) {
-                    return element;
+                    if (element.studentStatus === 'A') {
+                        return element;
+                    } else if (todayA < todayD) {
+                        return element;
+                    }
                 }
             }
             return filterResults;
@@ -247,7 +257,9 @@ function Calendar() {
                     {
                         selectedAdvise.advise_code === ''
                             ?
-                            <CircularProgress color="success" />
+                            <Stack alignItems="center">
+                                <CircularProgress color="success" />
+                            </Stack>
                             :
                             <Stack spacing={2} sx={{ padding: '12px' }}>
 
