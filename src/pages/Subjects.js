@@ -72,7 +72,7 @@ function Subjects() {
     const uniqueSubjects = () => {
         var subject = [];
         data.filter((element) => {
-            if ((element.advise_status === 'S') && (validateDate(element.advise_date_start))) {
+            if ((element.advise_status === 'S') && (validateDate(element.advise_date_start) && (element.advisorStatus === 'A'))) {
                 if (idUser !== undefined) {
                     if (idUser.match(element.advise_advisor)) {
                         subject.push(element.advise_subject);
@@ -149,14 +149,15 @@ function Subjects() {
         var infoSubject = [];
         for (let i = 0; i < uniqueSubjects().length; i++) {
             var filterResults = data.filter((element) => {
-                if ((uniqueSubjects()[i] === element.advise_subject) && (element.advise_status === 'S') && (validateDate(element.advise_date_start))) {
+                if ((uniqueSubjects()[i] === element.advise_subject) && (element.advise_status === 'S') && (validateDate(element.advise_date_start)) && (element.advisorStatus === 'A')) {
                     return element;
                 }
                 return 0;
             });
             infoSubject.push(dataFormat(filterResults));
         }
-        return infoSubject;
+        var sortedArray = infoSubject.sort(function (a, b) { a = a.name; b = b.name; return b > a ? -1 : b < a ? 1 : 0; });
+        return sortedArray;
     };
 
     return (
