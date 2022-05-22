@@ -116,7 +116,19 @@ function User() {
     }
   });
 
-  const USERLIST = data.map((element => ({
+  const filterData = () => {
+    var dataAux = [];
+    data.filter((element) => {
+      if (element.userx_code !== 'l00000000') {
+        dataAux.push(element);
+      }
+      return 0;
+    });
+
+    return dataAux;
+  };
+
+  const USERLIST = filterData().map((element => ({
     id: element.userx_code,
     avatarUrl: element.userx_image !== '' ? element.userx_image : MockImgAvatar(),
     name: `${element.userx_name} ${element.userx_lastname}`,

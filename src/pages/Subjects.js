@@ -18,6 +18,7 @@ function Subjects() {
 
     const cookies = new Cookies();
     const navigate = useNavigate();
+    const date = new Date();
 
     useEffect(() => {
         if (!cookies.get('UserCode')) {
@@ -60,7 +61,6 @@ function Subjects() {
         requestGetAdvisor();
     }, []);
 
-    const date = new Date();
     const validateDate = (adviseDateTime) => {
         var adviseDateArray = adviseDateTime.split('T');
         var adviseDate = adviseDateArray[0].split('-');

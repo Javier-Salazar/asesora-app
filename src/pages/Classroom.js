@@ -99,7 +99,19 @@ function Classrooms() {
     }
   });
 
-  const CLASSROOMLIST = data.map((element => ({
+  const filterData = () => {
+    var dataAux = [];
+    data.filter((element) => {
+      if (element.classroom_code !== '000') {
+        dataAux.push(element);
+      }
+      return 0;
+    });
+
+    return dataAux;
+  };
+
+  const CLASSROOMLIST = filterData().map((element => ({
     id: element.classroom_code,
     classroom: element.classroom_name,
     building: element.building_name,

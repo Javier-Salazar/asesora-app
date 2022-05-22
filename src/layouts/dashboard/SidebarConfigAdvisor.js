@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import gridFill from '@iconify/icons-eva/grid-fill';
 import fileTextFill from '@iconify/icons-eva/file-text-fill';
-import bookFill from '@iconify/icons-eva/book-fill';
 import clipBoardFill from '@iconify/icons-eva/clipboard-fill';
 import calendarFill from '@iconify/icons-eva/calendar-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
@@ -16,19 +15,9 @@ const sidebarConfigAdvisor = [
     icon: getIcon(gridFill)
   },
   {
-    title: 'materias',
-    path: '/dashboard/subject',
-    icon: getIcon(fileTextFill)
-  },
-  {
     title: 'añadir asesoría',
     path: '/dashboard/new-advise',
     icon: getIcon(fileTextFill)
-  },
-  {
-    title: 'asesorias',
-    path: '/dashboard/advises',
-    icon: getIcon(bookFill)
   },
   {
     title: 'reportes',

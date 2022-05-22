@@ -91,7 +91,7 @@ function AdviseOfTheDay() {
                       <TimelineSeparator>
                         <TimelineConnector />
                         <TimelineDot
-                          sx={{ bgcolor: (element.advise_modality === 'P' && '#7f8c98') || '#502fbc' }}
+                          sx={{ bgcolor: (element.advise_modality === 'P' && '#7F8C98') || '#502FBC' }}
                         />
                         <TimelineConnector />
                       </TimelineSeparator>

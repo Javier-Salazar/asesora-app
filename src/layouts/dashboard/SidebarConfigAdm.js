@@ -3,7 +3,6 @@ import gridFill from '@iconify/icons-eva/grid-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
 import personDoneFill from '@iconify/icons-eva/person-done-fill';
 import fileTextFill from '@iconify/icons-eva/file-text-fill';
-import bookFill from '@iconify/icons-eva/book-fill';
 import clipBoardFill from '@iconify/icons-eva/clipboard-fill';
 import infoFill from '@iconify/icons-eva/info-fill';
 import fileAddFill from '@iconify/icons-eva/file-add-fill';
@@ -47,16 +46,6 @@ const sidebarConfigAdm = [
     title: 'salones',
     path: '/dashboard/classrooms',
     icon: getIcon(EditFill)
-  },
-  {
-    title: 'añadir asesoría',
-    path: '/dashboard/new-advise',
-    icon: getIcon(fileTextFill)
-  },
-  {
-    title: 'asesorias',
-    path: '/dashboard/advises',
-    icon: getIcon(bookFill)
   },
   {
     title: 'reportes',

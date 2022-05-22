@@ -102,7 +102,19 @@ function Buildings() {
     }
   });
 
-  const BUILDINGLIST = data.map((element => ({
+  const filterData = () => {
+    var dataAux = [];
+    data.filter((element) => {
+      if (element.building_code !== '000') {
+        dataAux.push(element);
+      }
+      return 0;
+    });
+
+    return dataAux;
+  };
+
+  const BUILDINGLIST = filterData().map((element => ({
     id: element.building_code,
     building: element.building_name,
     school: element.school_name,
