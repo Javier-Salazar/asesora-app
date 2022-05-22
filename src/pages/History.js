@@ -71,21 +71,21 @@ function History() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                            ?
+                        ?
                             <Wrong />
-                            :
+                        :
                             filterSortAdvises().map(element => (
                                 <Grid item xs={12} sm={12} md={12}>
                                     <Card>
                                         {
                                             cookies.get('UserType') === 'N'
-                                                ?
+                                            ?
                                                 <HistoryStudent
                                                     id={element.advise_code}
                                                     dateStart={element.advise_date_start}
                                                     dateEnd={element.advise_date_ends}
                                                 />
-                                                :
+                                            :
                                                 <HistoryAdvisor
                                                     id={element.advise_code}
                                                     dateStart={element.advise_date_start}
