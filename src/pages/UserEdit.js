@@ -32,15 +32,15 @@ function UserEdit() {
   const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState({
-    userx_code: "",
-    userx_name: "",
-    userx_lastname: "",
-    userx_mother_lastname: "",
-    userx_email: "",
-    userx_phone: "",
-    userx_type: "",
-    userx_status: "",
-    userx_image: ""
+    userx_code: '',
+    userx_name: '',
+    userx_lastname: '',
+    userx_mother_lastname: '',
+    userx_email: '',
+    userx_phone: '',
+    userx_type: '',
+    userx_status: '',
+    userx_image: ''
   });
 
   const cookies = new Cookies();
@@ -154,7 +154,7 @@ function UserEdit() {
   }
 
   function changeLabelStatus(text) {
-    if (text === "") {
+    if (text === '') {
       if (user.userx_status === 'I') {
         return sentenceCase('Inactivo');
       } else {
@@ -169,7 +169,7 @@ function UserEdit() {
   }
 
   function currentUserType() {
-    var typeUser = "";
+    var typeUser = '';
 
     if (changeType === false) {
       typeUser = user.userx_type;
@@ -186,9 +186,9 @@ function UserEdit() {
   }
 
   function currentUserStatus() {
-    var statusUser = "";
+    var statusUser = '';
 
-    if (accountStatus === "") {
+    if (accountStatus === '') {
       statusUser = user.userx_status;
     } else {
       statusUser = accountStatus;
@@ -197,12 +197,12 @@ function UserEdit() {
   }
 
   const changeSwitch = (type) => {
-    if (type === "S") {
+    if (type === 'S') {
       setAdmin(user.userx_type === 'S' ? false : true);
       setAdvisor(false);
       setChangeType(true);
     }
-    if (type === "A") {
+    if (type === 'A') {
       setAdvisor(user.userx_type === 'A' ? false : true);
       setAdmin(false);
       setChangeType(true);
@@ -212,14 +212,14 @@ function UserEdit() {
   const peticionPutUser = async (status, type) => {
     await axios.put(baseUrl, {
       userx_code: user.userx_code,
-      userx_name: getFieldProps("name").value,
-      userx_lastname: getFieldProps("lastName").value,
-      userx_mother_lastname: getFieldProps("motherLastName").value,
+      userx_name: getFieldProps('name').value,
+      userx_lastname: getFieldProps('lastName').value,
+      userx_mother_lastname: getFieldProps('motherLastName').value,
       userx_email: user.userx_email,
       userx_password: user.userx_password,
       userx_salt: user.userx_salt,
       userx_remember: user.userx_remember,
-      userx_phone: getFieldProps("phone").value,
+      userx_phone: getFieldProps('phone').value,
       userx_type: type,
       userx_istmp_password: user.userx_istmp_password,
       userx_date: user.userx_date,
@@ -329,9 +329,9 @@ function UserEdit() {
                 variant="ghost"
                 color={
                   accountStatus === ''
-                    ?
+                  ?
                     (user.userx_status === 'I' && 'error') || 'success'
-                    :
+                  :
                     (accountStatus === 'I' && 'error') || 'success'
                 }
               >
@@ -362,9 +362,9 @@ function UserEdit() {
               </div>
               {
                 accountStatus === ''
-                  ?
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(user.userx_status === 'I' ? 'A' : 'I')} checked={user.userx_status === 'I' ? false : true} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => setStatus(accountStatus === 'I' ? 'A' : 'I')} checked={accountStatus === 'I' ? false : true} />
               }
             </div>
@@ -383,9 +383,9 @@ function UserEdit() {
               </div>
               {
                 advisor === ''
-                  ?
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('A')} checked={user.userx_type === 'A' ? true : false} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdvisor(!advisor); setAdmin(false); }} checked={advisor} />
               }
 
@@ -405,9 +405,9 @@ function UserEdit() {
               </div>
               {
                 admin === ''
-                  ?
+                ?
                   <Switch sx={{ pl: 2 }} onChange={() => changeSwitch('S')} checked={user.userx_type === 'S' ? true : false} />
-                  :
+                :
                   <Switch sx={{ pl: 2 }} onChange={() => { setAdmin(!admin); setAdvisor(false); }} checked={admin} />
               }
 
@@ -501,13 +501,13 @@ function UserEdit() {
 
                       {
                         showAlert.show
-                          ?
+                        ?
                           <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
                             <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
                               {showAlert.message}
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
 

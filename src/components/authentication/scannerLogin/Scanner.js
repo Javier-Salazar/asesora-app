@@ -49,7 +49,7 @@ function Scanner() {
           }
         } else {
           setActiveAlert({
-            message: "No tienes permitido ingresar a tu cuenta",
+            message: 'No tienes permitido ingresar a tu cuenta',
             show: true,
           });
         }
@@ -78,11 +78,11 @@ function Scanner() {
       <br></br>
       {
         activeAlert.show
-          ?
+        ?
           <Alert border-radius="12px" severity="error" sx={{ boxShadow: 4 }}>
             {activeAlert.message}
           </Alert>
-          :
+        :
           <Alert border-radius="12px" severity="info" sx={{ boxShadow: 4 }}>Escaneando credencial...</Alert>
       }
       <br></br>

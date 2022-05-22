@@ -255,9 +255,7 @@ function Calendar() {
                     {
                         selectedAdvise.advise_code === ''
                         ?
-                            <Stack alignItems="center">
-                                <CircularProgress color="success" />
-                            </Stack>
+                            <CircularProgress color="success" />
                         :
                             <Stack spacing={2} sx={{ padding: '12px' }}>
 

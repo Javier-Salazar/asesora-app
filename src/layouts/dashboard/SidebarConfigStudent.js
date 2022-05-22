@@ -7,10 +7,9 @@ import calendarFill from '@iconify/icons-eva/calendar-fill';
 import clockFill from '@iconify/icons-eva/clock-fill';
 import infoFill from '@iconify/icons-eva/info-fill';
 
-
 const getIcon = (name) => <Icon icon={name} width={22} height={22} />;
 
-const sidebarConfig = [
+const sidebarConfigStudents = [
   {
     title: 'tablero',
     path: '/dashboard/app',
@@ -48,4 +47,4 @@ const sidebarConfig = [
   }
 ];
 
-export default sidebarConfig;
+export default sidebarConfigStudents;

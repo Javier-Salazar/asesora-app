@@ -13,12 +13,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function BuildingMoreMenu(props) {
+function SubjectMoreMenu(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false, color: '' });
   const [openAlert, setOpenAlert] = useState(false);
-  const [building, setBuilding] = useState([]);
+  const [subject, setSubject] = useState([]);
 
   const ref = useRef(null);
   const navigate = useNavigate();
@@ -33,9 +33,9 @@ function BuildingMoreMenu(props) {
   }
 
   const requestGet = async () => {
-    await axios.get(`${WS_PATH}buildings/${props.idBuilding}`)
+    await axios.get(`${WS_PATH}subjects/${props.idSubject}`)
       .then(response => {
-        setBuilding(response.data);
+        setSubject(response.data);
       }).catch(error => {
         console.log(error);
       });
@@ -47,29 +47,33 @@ function BuildingMoreMenu(props) {
 
   const inactivateUser = () => {
     setOpen(false);
-    if (building.building_status === 'I') {
+    if (subject.subjectx_status === 'I') {
       setShowAlert({
-        message: 'El edificio ya se encuentra inactivo',
+        message: 'La materia ya se encuentra inactiva',
         show: true,
         color: 'warning'
       });
       setOpenAlert(true);
     } else {
-      putBuilding();
+      putSubject();
     }
   }
 
-  const putBuilding = () => {
-    var UrlBuilding = `${WS_PATH}buildings/${props.idBuilding}`;
-    axios.get(UrlBuilding)
+  const putSubject = () => {
+    var UrlSubject = `${WS_PATH}subjects/${props.idSubject}`;
+    axios.get(UrlSubject)
       .then(response => {
-        axios.put(UrlBuilding, {
-          building_code: response.data.building_code,
-          building_name: response.data.building_name,
-          building_school: response.data.building_school,
-          building_status: 'I'
+        axios.put(UrlSubject, {
+          subjectx_id: response.data.subjectx_id,
+          subjectx_code: response.data.subjectx_code,
+          subjectx_name: response.data.subjectx_name,
+          subjectx_credits: 0,
+          subjectx_career: 'ISC',
+          subjectx_major: 'redes',
+          subjectx_classroom: response.data.subjectx_classroom,
+          subjectx_status: 'I'
         }).then(response => {
-          navigate('/dashboard/buildings');
+          navigate('/dashboard/subjects');
           window.location.reload(false);
         }).catch(error => {
           console.log(error);
@@ -111,9 +115,9 @@ function BuildingMoreMenu(props) {
       </Menu>
 
       <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
-        <DialogTitle>Inactivar usuario</DialogTitle>
+        <DialogTitle>Inactivar materia</DialogTitle>
         <DialogContent>
-          ¿Estas seguro de querer inactivar el edificio <b>{props.name}</b>?
+          ¿Estas seguro de querer inactivar la materia <b>{props.name}</b>?
           Esta acción no se podrá revertir
         </DialogContent>
         <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
@@ -137,4 +141,4 @@ function BuildingMoreMenu(props) {
   );
 }
 
-export default BuildingMoreMenu;
+export default SubjectMoreMenu;

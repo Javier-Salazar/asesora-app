@@ -169,9 +169,9 @@ function Subjects() {
                 <Grid container spacing={3}>
                     {
                         noRequest
-                            ?
+                        ?
                             <Wrong />
-                            :
+                        :
                             filterSubjectData().map(subject => (
                                 <Grid item xs={12} sm={6} md={4}>
                                     <Card>

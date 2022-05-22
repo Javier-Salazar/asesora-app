@@ -180,9 +180,9 @@ function Reports() {
         advisorPhone: element.advisorPhone,
         counselingLocationInfo:
             element.advise_modality === 'V'
-                ?
+            ?
                 element.advise_url
-                :
+            :
                 `Edificio: ${element.building_name} - ${element.classroom_name}`,
         adviseDateRequest: dateTimeFormat(element.advise_date_request),
         adviseDateStart: dateTimeFormat(element.advise_date_start),

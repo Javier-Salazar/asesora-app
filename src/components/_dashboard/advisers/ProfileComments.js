@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Card, CardContent, Grid, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@mui/material';
 import { Wrong } from '../errors';
 import MockImgAvatar from '../../../utils/mockImages';
@@ -57,9 +56,9 @@ function ProfileComments(props) {
                             <div>
                                 {
                                     noRequest
-                                        ?
+                                    ?
                                         <Wrong />
-                                        :
+                                    :
                                         loadData().map(element => (
                                             <ListItem button key={element.advise_code}>
                                                 <ListItemAvatar>
