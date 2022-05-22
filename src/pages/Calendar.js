@@ -309,9 +309,9 @@ function Calendar() {
                                     label="Lugar"
                                     value={
                                         selectedAdvise.advise_modality === 'V'
-                                            ?
+                                        ?
                                             selectedAdvise.advise_url
-                                            :
+                                        :
                                             `Edificio: ${selectedAdvise.building_name} - ${selectedAdvise.classroom_name}`
                                     }
                                     disabled
