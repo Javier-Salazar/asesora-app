@@ -200,7 +200,8 @@ function HistoryAdvisor(props) {
                                         <Rating
                                             name="size-medium"
                                             disabled
-                                            defaultValue={5} />
+                                            value={advise.advise_rating}
+                                        />
                                     </Stack>
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={12}>

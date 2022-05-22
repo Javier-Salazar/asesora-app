@@ -31,6 +31,8 @@ function timeFormat(dateStart, dateEnd) {
 
 function HistoryStudent(props) {
   const [advise, setAdvise] = useState({ advise_code: '' });
+  const [dataAdvises, setDataAdvises] = useState([]);
+  const [rating, setRating] = useState('');
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [open, setOpen] = useState(false);
@@ -42,7 +44,7 @@ function HistoryStudent(props) {
       }).catch(error => {
         console.log(error);
       });
-  }
+  };
 
   useEffect(() => {
     requestGet();
@@ -71,17 +73,56 @@ function HistoryStudent(props) {
       advise_modality: advise.advise_modality,
       advise_url: advise.advise_url,
       advise_comments: getFieldProps('comments').value,
-      advise_status: advise.advise_status
+      advise_status: advise.advise_status,
+      advise_rating: rating === '' ? advise.advise_rating : rating
     })
       .then((response) => {
-        setLoading(false);
-        setOpen(true);
-        setShowAlert(true);
+        ratingAdvisor(advise.advise_advisor);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  const ratingAdvisor = (idAdvisor) => {
+    axios.get(`${WS_PATH}advises`)
+      .then(response => {
+        var sumRating = 0;
+        var numAdvises = 0;
+        response.data.filter((element) => {
+          if ((element.advise_advisor === idAdvisor) && (element.advise_rating !== 0)) {
+            sumRating = sumRating + element.advise_rating;
+            numAdvises = numAdvises + 1;
+          }
+          return 0;
+        });
+        var avg = Math.round(sumRating / numAdvises);
+        peticionPutAdvisor(idAdvisor, avg);
+      }).catch(error => {
+        console.log(error);
+      });
+  };
+
+  const peticionPutAdvisor = (idAdvisor, ratingAvg) => {
+    var UrlAdvisor = `${WS_PATH}advisors/${idAdvisor}`;
+    axios.get(UrlAdvisor)
+      .then(Response => {
+        axios.put(UrlAdvisor, {
+          advisor_code: Response.data.advisor_code,
+          advisor_rating: ratingAvg,
+          advisor_comments: Response.data.advisor_comments,
+          advisor_status: Response.data.advisor_status,
+        }).then(response => {
+          setLoading(false);
+          setOpen(true);
+          setShowAlert(true);
+        }).catch(error => {
+          console.log(error);
+        });
+      }).catch(error => {
+        console.log(error);
+      })
+  }
 
   const RegisterSchema = Yup.object().shape({
     comments: Yup.string()
@@ -206,8 +247,11 @@ function HistoryStudent(props) {
                   <Stack style={{ display: 'flex', alignItems: 'center' }}>
                     <Rating
                       name="size-medium"
-                      disabled
-                      defaultValue={5} />
+                      value={rating === '' ? advise.advise_rating : rating}
+                      onChange={(event, newValue) => {
+                        setRating(newValue);
+                      }}
+                    />
                   </Stack>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>

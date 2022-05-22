@@ -195,7 +195,8 @@ function NewAdvises() {
       advise_modality: modality ? 'V' : 'P',
       advise_url: modality ? valueLinkMeet : 'link',
       advise_comments: '',
-      advise_status: 'S'
+      advise_status: 'S',
+      advise_rating: 0
     })
       .then((response) => {
         setLoading(false);
