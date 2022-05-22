@@ -31,7 +31,6 @@ function timeFormat(dateStart, dateEnd) {
 
 function HistoryStudent(props) {
   const [advise, setAdvise] = useState({ advise_code: '' });
-  const [dataAdvises, setDataAdvises] = useState([]);
   const [rating, setRating] = useState('');
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);

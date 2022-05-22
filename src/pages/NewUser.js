@@ -98,7 +98,7 @@ function NewUser() {
     var AuxEmail = email.split('@');
     var code = AuxEmail[0].slice(1);
 
-    if (email === "") {
+    if (email === '') {
       errors.email = 'El correo electrónico es obligatorio';
     } else if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@itcj\.edu\.mx/.test(email)) {
       errors.email = 'Ingrese un correo institucional, por ejemplo: user@itcj.edu.mx';
@@ -193,12 +193,12 @@ function NewUser() {
   }
 
   function clearData() {
-    setEmail("");
-    setFieldValue("firstName", "", false);
-    setFieldValue("lastName", "", false);
-    setFieldValue("motherLastName", "", false);
-    setFieldValue("phone", "", false);
-    setFieldValue("password", "", false);
+    setEmail('');
+    setFieldValue('firstName', '', false);
+    setFieldValue('lastName', '', false);
+    setFieldValue('motherLastName', '', false);
+    setFieldValue('phone', '', false);
+    setFieldValue('password', '', false);
     setShowAlert({ message: '', show: false });
     setShowAlertPost(false);
     setAdmin(false);
@@ -211,24 +211,24 @@ function NewUser() {
     var arrayDate = date.toISOString().split('T');
     await axios.post(`${WS_PATH}users`, {
       userx_code: arrayCode[0],
-      userx_name: getFieldProps("firstName").value,
-      userx_lastname: getFieldProps("lastName").value,
-      userx_mother_lastname: getFieldProps("motherLastName").value,
+      userx_name: getFieldProps('firstName').value,
+      userx_lastname: getFieldProps('lastName').value,
+      userx_mother_lastname: getFieldProps('motherLastName').value,
       userx_email: email,
-      userx_password: encryptPassword(getFieldProps("password").value),
+      userx_password: encryptPassword(getFieldProps('password').value),
       userx_salt: key,
-      userx_remember: "N",
-      userx_phone: getFieldProps("phone").value,
+      userx_remember: 'N',
+      userx_phone: getFieldProps('phone').value,
       userx_type: type,
-      userx_istmp_password: "N",
+      userx_istmp_password: 'N',
       userx_date: arrayDate[0],
-      userx_islockedout: "N",
+      userx_islockedout: 'N',
       userx_islockedout_date: arrayDate[0],
       userx_islockedout_enable_date: arrayDate[0],
       userx_last_login_date: arrayDate[0],
       userx_lastfailed_login_date: arrayDate[0],
       userx_status: accountStatus ? 'A' : 'I',
-      userx_image: ""
+      userx_image: ''
     })
       .then((response) => {
         if (type === 'N') {
@@ -249,9 +249,9 @@ function NewUser() {
 
     await axios.post(`${WS_PATH}students`, {
       student_code: arrayCode[0],
-      student_school: "ITCJC1",
-      student_career: "SINCS",
-      student_major: "SINES",
+      student_school: 'ITCJC1',
+      student_career: 'SINCS',
+      student_major: 'SINES',
       student_semester: 1,
       student_status: accountStatus ? 'A' : 'I',
     })

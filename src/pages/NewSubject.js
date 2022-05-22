@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-    Typography, TableContainer, TablePagination } from '@mui/material';
+import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container, TextField, Typography, TableContainer,
+    TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Autocomplete, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -13,6 +13,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { Wrong } from '../components/_dashboard/errors';
 import { UserListHead } from '../components/_dashboard/user';
 import { SubjectListToolbar, SubjectMoreMenu } from '../components/_dashboard/subjects';
+import Slide from '@mui/material/Slide';
 import { WS_PATH, NAME_APP } from '../Configurations';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -62,6 +63,10 @@ function changeLabelStatus(text) {
     }
 }
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function NewSubjects() {
     const [data, setData] = useState([]);
     const [dataTable, setDataTable] = useState([]);
@@ -72,6 +77,13 @@ function NewSubjects() {
     const [rowsPerPage, setRowsPerPage] = useState(25);
     const [filter, setFilter] = useState('');
     const [noRequest, setNoRequest] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [building, setBuilding] = useState([]);
+    const [code, setSubjectCode] = useState('');
+    const [subject, setSubject] = useState('');
+    const [classroom, setClassroom] = useState([]);
+    const [showAlertPost, setShowAlertPost] = useState(false);
+    const [openAlert, setOpenAlert] = useState(false);
 
     const cookies = new Cookies();
     const navigate = useNavigate();
@@ -92,8 +104,38 @@ function NewSubjects() {
             });
     }
 
+    const getBuildingRequest = async () => {
+        await axios.get(`${WS_PATH}buildings`)
+          .then(response => {
+            setBuilding(response.data);
+          }).catch(error => {
+            console.log(error);
+          })
+    }
+
+    const postSubject = async () => {
+        await axios.post(`${WS_PATH}subjects`, {
+          subjectx_id: 0,
+          subjectx_code: code,
+          subjectx_name: subject,
+          subjectx_credits: 3, 
+          subjectx_career: 'ISC',
+          subjectx_major: 'WEB',
+          subjectx_classroom: classroom,
+          subjectx_status: 'A'
+        })
+          .then((response) => {
+            setShowAlertPost(true);
+            setOpenAlert(true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    };
+
     useEffect(() => {
         requestGet();
+        getBuildingRequest();
     }, []);
 
     useEffect(() => {
@@ -175,6 +217,45 @@ function NewSubjects() {
     const filteredUsers = applySortFilter(SUBJECTLIST, getComparator(order, orderBy), filter);
 
     const isUserNotFound = filteredUsers.length === 0;
+    
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const handleAlertClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpenAlert(false);
+    };
+
+    const handleChange = (event) => {
+        setSubjectCode(event.target.value);
+        setClassroom(event.target.value);
+
+        for (let i = 0; i < dataTable.length; i++) {
+            dataTable.filter((element) => {
+                if (event.target.value === element.subjectx_classroom) {
+                    setSubject(element.subjectx_classroom);
+                    return 0;
+                }
+                return 0;
+            });
+        }
+    };
+    
+    const optionsBuilding = () => {
+        let data = [];
+        building.filter((element) => {
+          if (element.building_code !== '000') {
+            data.push({ label: element.building_name, id: element.building_code });
+          }
+          return 0;
+        });
+    
+        var uniqueArray = [...new Set(data)];
+        return uniqueArray;
+    };
 
     return (
         <Page title={`Asesora${NAME_APP} | Materias`}>
@@ -186,16 +267,19 @@ function NewSubjects() {
                     {
                         data <= 0 && isUserNotFound
                         ?
-                        null
+                            null
                         :
-                        <Button
-                            variant="contained"
-                            component={RouterLink}
-                            to=""
-                            startIcon={<Icon icon={plusFill} />}
-                        >
-                            Agregar materia
-                        </Button>
+                            <Button
+                                variant="contained"
+                                component={RouterLink}
+                                onClick={() => {
+                                    setOpen(true);
+                                }}
+                                to="#"
+                                startIcon={<Icon icon={plusFill} />}
+                            >
+                                Agregar materia
+                            </Button>
                     }
           
                 </Stack>
@@ -306,6 +390,58 @@ function NewSubjects() {
                         </Card>
                 }
             </Container>
+
+            <Dialog open={open} TransitionComponent={Transition} onClose={handleClose} 
+                maxWidth={'sm'}>
+                <DialogTitle>
+                    Agregar materia
+                </DialogTitle>
+                <DialogContent>
+                    <Stack spacing={2} sx={{ padding: '12px' }}>
+                        <TextField
+                            fullWidth
+                            label="Código materia"
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Nombre materia"
+                            onChange={handleChange}
+                        />
+                        
+                        <TextField
+                            fullWidth
+                            label="Carrera"
+                            onChange={handleChange}
+                        />
+
+                        <Autocomplete
+                            fullWidth
+                            disablePortal
+                            id="combo-box-building"
+                            onChange={handleChange}
+                            options={optionsBuilding()}
+                            renderInput={(params) => <TextField {...params} label="Salón" />}
+                          />
+                    </Stack>
+                </DialogContent>
+
+                <DialogActions sx={{ pb: 2, pr: 3 }}>
+                    <Button variant="contained" size="medium" onClick={() => postSubject}>Guardar</Button>
+                    <Button onClick={handleClose}>Cancelar</Button>
+                    {
+                        showAlertPost
+                        ?
+                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+                            <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+                              Se ha registrado con éxito
+                            </Alert>
+                          </Snackbar>
+                        :
+                          null
+                    }
+                </DialogActions>
+            </Dialog>
         </Page>
     );
 }
