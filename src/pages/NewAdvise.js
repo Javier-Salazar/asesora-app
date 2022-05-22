@@ -443,7 +443,7 @@ function NewAdvises() {
 
                     {
                       modality
-                        ?
+                      ?
                         <TextField
                           fullWidth
                           label="Código de reunión de Google Meet"
@@ -452,7 +452,7 @@ function NewAdvises() {
                           error={Boolean(touched.linkMeet && errors.linkMeet)}
                           helperText={touched.linkMeet && errors.linkMeet}
                         />
-                        :
+                      :
                         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                           <Autocomplete
                             fullWidth
@@ -515,13 +515,13 @@ function NewAdvises() {
 
                       {
                         showAlertPost
-                          ?
+                        ?
                           <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
                               Se ha registrado con éxito
                             </Alert>
                           </Snackbar>
-                          :
+                        :
                           null
                       }
                     </Stack>

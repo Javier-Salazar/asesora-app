@@ -196,8 +196,8 @@ function UserMoreMenu(props) {
       {
         showAlert.show
         ?
-          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
-            <Alert onClose={handleCloseAlert} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert} sx={{ mt: 10 }}>
+            <Alert onClose={handleCloseAlert} severity={showAlert.color} sx={{ width: '100%' }}>
               {showAlert.message}
             </Alert>
           </Snackbar>
