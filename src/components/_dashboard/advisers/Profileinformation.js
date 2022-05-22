@@ -4,7 +4,7 @@ import emailFill from '@iconify/icons-eva/email-fill';
 import briefcaseFill from '@iconify/icons-eva/briefcase-fill';
 import startFill from '@iconify/icons-eva/star-fill';
 
-function Profileinformation(props) {
+function ProfileInformation(props) {
     return (
         <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
@@ -42,4 +42,4 @@ function Profileinformation(props) {
     );
 }
 
-export default Profileinformation;
+export default ProfileInformation;

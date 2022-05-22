@@ -182,13 +182,13 @@ function NewAdvises() {
 
   const postAdvise = async () => {
     await axios.post(`${WS_PATH}advises`, {
-      advise_student: '1',
+      advise_student: 'l00000000',
       advise_topic: 'Pendiente',
       advise_subject: valueSubject.id,
-      advise_advisor: '1',
-      advise_school: 'ITCJ',
-      advise_building: modality ? 'cienes' : valueBuilding.id,
-      advise_classroom: modality ? '101' : valueClassroom.id,
+      advise_advisor: cookies.get('UserCode'),
+      advise_school: 'ITCJC1',
+      advise_building: modality ? '000' : valueBuilding.id,
+      advise_classroom: modality ? '000' : valueClassroom.id,
       advise_date_request: dateTimeFormat(dateAdvise, dateAdvise),
       advise_date_start: dateTimeFormat(dateAdvise, dateStart),
       advise_date_ends: dateTimeFormat(dateAdvise, dateEnd),

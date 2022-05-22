@@ -42,7 +42,7 @@ function AdviseOfTheDay() {
   const filterAndSort = () => {
     var filterResults = data.filter((element) => {
       if ((cookies.get('UserType') === 'N' ? element.advise_student : element.advise_advisor) === cookies.get('UserCode')) {
-        if (element.advise_status === 'A') {
+        if ((element.advise_status === 'A') && ((cookies.get('UserType') === 'N' ? element.advisorStatus : element.studentStatus) === 'A')) {
           if (datesAreOnSameDay(new Date(element.advise_date_start), new Date())) {
             return element;
           }

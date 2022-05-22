@@ -134,18 +134,18 @@ function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = USERLIST.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -247,6 +247,7 @@ function User() {
             <Card>
               <UserListToolbar
                 numSelected={selected.length}
+                selectedRow={selected}
                 filterName={filter}
                 onFilterName={handleFilter}
               />
@@ -269,7 +270,7 @@ function User() {
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((row) => {
                           const { id, name, role, status, email, avatarUrl, userCode } = row;
-                          const isItemSelected = selected.indexOf(name) !== -1;
+                          const isItemSelected = selected.indexOf(id) !== -1;
 
                           return (
                             <TableRow
@@ -283,7 +284,7 @@ function User() {
                               <TableCell padding="checkbox">
                                 <Checkbox
                                   checked={isItemSelected}
-                                  onChange={(event) => handleClick(event, name)}
+                                  onChange={(event) => handleClick(event, id)}
                                 />
                               </TableCell>
                               <TableCell component="th" scope="row" padding="none">
