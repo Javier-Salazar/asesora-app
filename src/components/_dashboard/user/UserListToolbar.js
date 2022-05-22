@@ -176,11 +176,11 @@ function UserListToolbar({ numSelected, selectedRow, filterName, onFilterName })
     >
       {
         numSelected > 0
-          ?
+        ?
           <Typography component="div" variant="subtitle1">
             {numSelected} Elemento{numSelected > 1 ? 's' : ''} seleccionado{numSelected > 1 ? 's' : ''}
           </Typography>
-          :
+        :
           <SearchStyle
             value={filterName}
             onChange={onFilterName}
@@ -195,13 +195,13 @@ function UserListToolbar({ numSelected, selectedRow, filterName, onFilterName })
 
       {
         numSelected > 0
-          ?
+        ?
           <Tooltip title="Inactivar selección" placement="top" enterDelay={200} arrow>
             <IconButton onClick={handleClickOpen}>
               <Icon icon={slashOutline} />
             </IconButton>
           </Tooltip>
-          :
+        :
           ''
       }
 

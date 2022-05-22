@@ -4,10 +4,8 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import {
-  Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination
-} from '@mui/material';
+import { Card, Table, Stack, Avatar, Button, Checkbox, TableRow, TableBody, TableCell, Container,
+  Typography, TableContainer, TablePagination } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -118,19 +116,7 @@ function User() {
     }
   });
 
-  const filterData = () => {
-    var dataAux = [];
-    data.filter((element) => {
-      if (element.userx_code !== 'l00000000') {
-        dataAux.push(element);
-      }
-      return 0;
-    });
-
-    return dataAux;
-  };
-
-  const USERLIST = filterData().map((element => ({
+  const USERLIST = data.map((element => ({
     id: element.userx_code,
     avatarUrl: element.userx_image !== '' ? element.userx_image : MockImgAvatar(),
     name: `${element.userx_name} ${element.userx_lastname}`,
@@ -139,7 +125,6 @@ function User() {
     status: changeLabelStatus(element.userx_status),
     role: changeLabelType(element.userx_type)
   })));
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -188,23 +173,23 @@ function User() {
   }
 
   const filterTable = (filterUser) => {
-    var typeUser = "";
-    var statusUser = "";
+    var typeUser = '';
+    var statusUser = '';
 
-    if ("estudiante".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      typeUser = "N";
+    if ('estudiante'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      typeUser = 'N';
     }
     if ("asesor".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      typeUser = "A";
+      typeUser ='A';
     }
-    if ("administrador".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      typeUser = "S";
+    if ('administrador'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      typeUser = 'S';
     }
-    if ("inactivo".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      statusUser = "I";
+    if ('inactivo'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      statusUser = 'I';
     }
-    if ("activo".toString().toLowerCase().includes(filterUser.toLowerCase())) {
-      statusUser = "A";
+    if ('activo'.toString().toLowerCase().includes(filterUser.toLowerCase())) {
+      statusUser = 'A';
     }
 
     var filterResults = dataTable.filter((element) => {
@@ -239,9 +224,9 @@ function User() {
           </Typography>
           {
             data <= 0 && isUserNotFound
-              ?
+            ?
               null
-              :
+            :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -256,9 +241,9 @@ function User() {
         {
 
           noRequest
-            ?
+          ?
             <Wrong />
-            :
+          :
             <Card>
               <UserListToolbar
                 numSelected={selected.length}
