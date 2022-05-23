@@ -228,6 +228,7 @@ function NewSubjects() {
           return;
         }
         setOpenAlert(false);
+        window.location.reload(false);
     };
     
     const optionsClassroom = () => {
@@ -336,7 +337,7 @@ function NewSubjects() {
                                                                 </Label>
                                                             </TableCell>
                                                             <TableCell align="right">
-                                                                <SubjectMoreMenu idSubject={subjectCode} name={subject} />
+                                                                <SubjectMoreMenu idSubject={id} name={subject} />
                                                             </TableCell>
                               
                                                         </TableRow>

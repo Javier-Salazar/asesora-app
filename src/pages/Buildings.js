@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination } from '@mui/material';
+import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container, TextField, Typography, TableContainer,
+  TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -13,6 +13,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { Wrong } from '../components/_dashboard/errors';
 import { UserListHead } from '../components/_dashboard/user';
 import { BuildingListToolbar, BuildingMoreMenu } from '../components/_dashboard/building';
+import Slide from '@mui/material/Slide';
 import { WS_PATH, NAME_APP } from '../Configurations';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -62,6 +63,10 @@ function changeLabelStatus(text) {
   }
 }
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function Buildings() {
   const [data, setData] = useState([]);
   const [dataTable, setDataTable] = useState([]);
@@ -72,6 +77,11 @@ function Buildings() {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [filter, setFilter] = useState('');
   const [noRequest, setNoRequest] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [code, setBuildingCode] = useState('');
+  const [building, setBuilding] = useState('');
+  const [showAlertPost, setShowAlertPost] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -91,6 +101,23 @@ function Buildings() {
         }
       });
   }
+
+  const postBuilding = async () => {
+    await axios.post(`${WS_PATH}buildings`, {
+      building_code: code,
+      building_name: building,
+      building_school: 'ITCJ',
+      building_status: 'A'
+    })
+      .then((response) => {
+        setShowAlertPost(true);
+        setOpenAlert(true);
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+};
 
   useEffect(() => {
     requestGet();
@@ -117,7 +144,7 @@ function Buildings() {
   const BUILDINGLIST = filterData().map((element => ({
     id: element.building_code,
     building: element.building_name,
-    school: element.school_name,
+    school: 'Instituto Tecnológico de Ciudad Juárez',
     buildingCode: element.building_code,
     status: changeLabelStatus(element.building_status)
   })));
@@ -188,6 +215,18 @@ function Buildings() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const handleAlertClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlert(false);
+      window.location.reload(false);
+  };
+
   return (
     <Page title={`Asesora${NAME_APP} | Edificios`}>
       <Container>
@@ -203,7 +242,10 @@ function Buildings() {
               <Button
                 variant="contained"
                 component={RouterLink}
-                to=""
+                onClick={() => {
+                  setOpen(true);
+                }}
+                to="#"
                 startIcon={<Icon icon={plusFill} />}
               >
                 Agregar edificio
@@ -316,6 +358,47 @@ function Buildings() {
             </Card>
         }
       </Container>
+
+      <Dialog open={open} TransitionComponent={Transition} onClose={handleClose} 
+        maxWidth={'sm'}>
+        <DialogTitle>
+            Agregar edificio
+        </DialogTitle>
+        <DialogContent>
+            <Stack spacing={2} sx={{ padding: '12px' }}>
+                <TextField
+                    fullWidth
+                    label="Código edificio"
+                    onChange={(event, newValue) => {
+                        setBuildingCode(event.target.value);
+                    }}
+                />
+                <TextField
+                    fullWidth
+                    label="Nombre edificio"
+                    onChange={(event, newValue) => {
+                        setBuilding(event.target.value);
+                    }}
+                />
+            </Stack>
+        </DialogContent>
+
+        <DialogActions sx={{ pb: 2, pr: 3 }}>
+            <Button variant="contained" size="medium" onClick={() => postBuilding()}>Guardar</Button>
+            <Button onClick={handleClose}>Cancelar</Button>
+        </DialogActions>
+      </Dialog>
+      {
+          showAlertPost
+          ?
+              <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+              <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+                  Se ha registrado con éxito
+              </Alert>
+              </Snackbar>
+          :
+              null
+      }
     </Page>
   );
 }

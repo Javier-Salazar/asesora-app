@@ -111,7 +111,7 @@ function BuildingMoreMenu(props) {
       </Menu>
 
       <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}>
-        <DialogTitle>Inactivar usuario</DialogTitle>
+        <DialogTitle>Inactivar edificio</DialogTitle>
         <DialogContent>
           ¿Estas seguro de querer inactivar el edificio <b>{props.name}</b>?
           Esta acción no se podrá revertir

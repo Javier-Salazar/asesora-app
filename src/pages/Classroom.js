@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container,
-  Typography, TableContainer, TablePagination } from '@mui/material';
+import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container, TextField, Typography, TableContainer,
+  TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Autocomplete, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -13,6 +13,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { Wrong } from '../components/_dashboard/errors';
 import { UserListHead } from '../components/_dashboard/user';
 import { ClassroomListToolbar } from '../components/_dashboard/classroom';
+import Slide from '@mui/material/Slide';
 import { WS_PATH, NAME_APP } from '../Configurations';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
@@ -59,6 +60,10 @@ function changeLabelStatus(text) {
   return 'activo';
 }
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function Classrooms() {
   const [data, setData] = useState([]);
   const [dataTable, setDataTable] = useState([]);
@@ -69,6 +74,13 @@ function Classrooms() {
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const [filter, setFilter] = useState('');
   const [noRequest, setNoRequest] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [code, setClassroomCode] = useState('');
+  const [classroom, setClassroom] = useState('');
+  const [buildings, setBuildings] = useState([]);
+  const [valueBuilding, setValueBuilding] = useState('');
+  const [showAlertPost, setShowAlertPost] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -89,8 +101,34 @@ function Classrooms() {
       });
   }
 
+  const getBuildingsRequest = async () => {
+    await axios.get(`${WS_PATH}buildings`)
+      .then(response => {
+        setBuildings(response.data);
+      }).catch(error => {
+        console.log(error);
+      })
+}
+
+  const postClassroom = async () => {
+    await axios.post(`${WS_PATH}classrooms`, {
+      classroom_code: code,
+      classroom_name: classroom,
+      classroom_building: valueBuilding.id,
+    })
+      .then((response) => {
+        setShowAlertPost(true);
+        setOpenAlert(true);
+        setOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     requestGet();
+    getBuildingsRequest();
   }, []);
 
   useEffect(() => {
@@ -115,7 +153,7 @@ function Classrooms() {
     id: element.classroom_code,
     classroom: element.classroom_name,
     building: element.building_name,
-    school: element.school_name,
+    school: 'Instituto Tecnológico de Ciudad Juárez',
     classCode: element.classroom_code,
     status: changeLabelStatus('activo')
   })));
@@ -186,6 +224,32 @@ function Classrooms() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const handleAlertClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlert(false);
+      window.location.reload(false);
+  };
+
+  const optionsBuildings = () => {
+      let data = [];
+      buildings.filter((element) => {
+          if (element.building_code !== '000' && element.building_status !== 'I') {
+              data.push({ label: element.building_name, id: element.building_code });
+          }
+          return 0;
+      });
+
+      var uniqueArray = [...new Set(data)];
+
+      return uniqueArray;
+  };
+
   return (
     <Page title={`Asesora${NAME_APP} | Salones`}>
       <Container>
@@ -201,7 +265,10 @@ function Classrooms() {
               <Button
                 variant="contained"
                 component={RouterLink}
-                to=""
+                onClick={() => {
+                  setOpen(true);
+                }}
+                to="#"
                 startIcon={<Icon icon={plusFill} />}
               >
                 Agregar salón
@@ -312,6 +379,59 @@ function Classrooms() {
             </Card>
         }
       </Container>
+
+      <Dialog open={open} TransitionComponent={Transition} onClose={handleClose} 
+        maxWidth={'sm'}>
+        <DialogTitle>
+            Agregar Salón
+        </DialogTitle>
+        <DialogContent>
+            <Stack spacing={2} sx={{ padding: '12px' }}>
+                <TextField
+                    fullWidth
+                    label="Código salón"
+                    onChange={(event, newValue) => {
+                        setClassroomCode(event.target.value);
+                    }}
+                />
+                <TextField
+                    fullWidth
+                    label="Nombre salón"
+                    onChange={(event, newValue) => {
+                        setClassroom(event.target.value);
+                    }}
+                />
+
+                <Autocomplete
+                    fullWidth
+                    disablePortal
+                    id="combo-box-classroom"
+                    onChange={(event, newValue) => {
+                        setValueBuilding(newValue);
+                    }}
+                    options={optionsBuildings()}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                    renderInput={(params) => <TextField {...params} label="Edificio" />}
+                />
+            </Stack>
+        </DialogContent>
+
+        <DialogActions sx={{ pb: 2, pr: 3 }}>
+            <Button variant="contained" size="medium" onClick={() => postClassroom()}>Guardar</Button>
+            <Button onClick={handleClose}>Cancelar</Button>
+        </DialogActions>
+      </Dialog>
+      {
+          showAlertPost
+          ?
+              <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+              <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+                  Se ha registrado con éxito
+              </Alert>
+              </Snackbar>
+          :
+              null
+      }
     </Page>
   );
 }

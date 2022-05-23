@@ -45,7 +45,7 @@ function SubjectMoreMenu(props) {
     requestGet();
   });
 
-  const inactivateUser = () => {
+  const inactivateSubject = () => {
     setOpen(false);
     if (subject.subjectx_status === 'I') {
       setShowAlert({
@@ -67,13 +67,13 @@ function SubjectMoreMenu(props) {
           subjectx_id: response.data.subjectx_id,
           subjectx_code: response.data.subjectx_code,
           subjectx_name: response.data.subjectx_name,
-          subjectx_credits: 0,
-          subjectx_career: 'ISC',
-          subjectx_major: 'redes',
+          subjectx_credits: response.data.subjectx_credits,
+          subjectx_career: response.data.subjectx_career,
+          subjectx_major: response.data.subjectx_major,
           subjectx_classroom: response.data.subjectx_classroom,
           subjectx_status: 'I'
         }).then(response => {
-          navigate('/dashboard/subjects');
+          navigate('/dashboard/new-subject');
           window.location.reload(false);
         }).catch(error => {
           console.log(error);
@@ -121,7 +121,7 @@ function SubjectMoreMenu(props) {
           Esta acción no se podrá revertir
         </DialogContent>
         <DialogActions sx={{ pb: 2, pr: 3, maxWidth: '50%', ml: '50%' }}>
-          <Button fullWidth onClick={inactivateUser}>Aceptar</Button>
+          <Button fullWidth onClick={inactivateSubject}>Aceptar</Button>
           <Button fullWidth variant="contained" onClick={handleClose}>Cancelar</Button>
         </DialogActions>
       </Dialog>
