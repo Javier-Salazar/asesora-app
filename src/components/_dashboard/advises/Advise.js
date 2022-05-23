@@ -229,7 +229,7 @@ function Advise(props) {
                 spacing={0}
                 sx={{ p: 2 }}
             >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '55px' }}>
                     <Typography gutterBottom variant="h6" sx={{ m: 0, mr: 1 }}>
                         {props.subject}
                     </Typography>

@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Stack, TextField, Button } from '@mui/material';
-import { WS_PATH } from '../../../Configurations';
+import emailjs from '@emailjs/browser';
+import { WS_PATH, NAME_APP } from '../../../Configurations';
 import { LoadingButton } from '@mui/lab';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
@@ -27,8 +28,7 @@ function ResetPasswordForm({ func }) {
         validationSchema: RegisterSchema,
         onSubmit: () => {
             if (searchUser(getFieldProps('email').value)) {
-                console.log('Encuentra el correo');
-                //emailjs.send('service_r1b24ph', 'template_rmxjflb', templateParams[0], 'bpH5lyWRIbIT4L-oh');
+                emailjs.send('service_r1b24ph', 'template_rmxjflb', templateParams[0], 'bpH5lyWRIbIT4L-oh');
             } else {
                 console.log('No encuentra el correo');
             }
@@ -60,7 +60,8 @@ function ResetPasswordForm({ func }) {
                 templateParams[0] = {
                     name: element.userx_name,
                     password: decryptPassword(element.userx_password, element.userx_salt),
-                    email: element.userx_email
+                    email: element.userx_email,
+                    app: NAME_APP
                 }
             }
             return 0;
@@ -76,7 +77,7 @@ function ResetPasswordForm({ func }) {
 
     const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
 
-    func(isSubmitting, 'formik');
+    func(isSubmitting, 'undefined');
 
     return (
         <FormikProvider value={formik}>

@@ -53,10 +53,10 @@ function HeaderLegal(){
                     </Typography>
                 </TitleStyle>
                 <SectionStyle>
-                    <Link underline="none" variant="subtitle2" component={RouterLink} to="/comming" sx={{ mr:3, color: '#637381' }}>
+                    {/* <Link underline="none" variant="subtitle2" component={RouterLink} to="/comming" sx={{ mr:3, color: '#637381' }}>
                         Ayuda
                     </Link>
-                    |
+                    | */}
                     <Link underline="none" variant="subtitle2" component={RouterLink} to="/register" sx={{ ml:3, mr:3 }}>
                         Registrarse
                     </Link>
