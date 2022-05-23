@@ -372,6 +372,7 @@ function NewAdvises() {
                           setValueSubject(newValue);
                         }}
                         options={optionsSubject()}
+                        noOptionsText={'No hay coincidencias'}
                         renderInput={
                           (params) =>
                             <TextField
@@ -463,6 +464,7 @@ function NewAdvises() {
                               filterClassrooms(newValue);
                             }}
                             options={optionsBuilding()}
+                            noOptionsText={'No hay coincidencias'}
                             renderInput={
                               (params) =>
                                 <TextField
@@ -483,6 +485,7 @@ function NewAdvises() {
                               setValueClassroom(newValue);
                             }}
                             options={listClassroom}
+                            noOptionsText={'No hay coincidencias'}
                             renderInput={
                               (params) =>
                                 <TextField

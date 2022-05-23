@@ -414,6 +414,7 @@ function NewSubjects() {
                                 setValueClassroom(newValue);
                             }}
                             options={optionsClassroom()}
+                            noOptionsText={'No hay coincidencias'}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             renderInput={(params) => <TextField {...params} label="Salón" />}
                         />

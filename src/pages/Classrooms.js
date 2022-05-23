@@ -410,6 +410,7 @@ function Classrooms() {
                         setValueBuilding(newValue);
                     }}
                     options={optionsBuildings()}
+                    noOptionsText={'No hay coincidencias'}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     renderInput={(params) => <TextField {...params} label="Edificio" />}
                 />
