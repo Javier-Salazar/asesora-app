@@ -130,9 +130,6 @@ function NewSubjects() {
             setOpen(false);
           })
           .catch((error) => {
-            console.log(`si llega ${code}`);
-            console.log(`si llega ${subject}`);
-            console.log(`si llega ${valueClassroom.id}`);
             console.log(error);
           });
     };
