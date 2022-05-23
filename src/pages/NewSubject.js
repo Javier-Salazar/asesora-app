@@ -78,10 +78,10 @@ function NewSubjects() {
     const [filter, setFilter] = useState('');
     const [noRequest, setNoRequest] = useState(false);
     const [open, setOpen] = useState(false);
-    const [building, setBuilding] = useState([]);
     const [code, setSubjectCode] = useState('');
     const [subject, setSubject] = useState('');
     const [classroom, setClassroom] = useState([]);
+    const [valueClassroom, setValueClassroom] = useState('');
     const [showAlertPost, setShowAlertPost] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
 
@@ -104,10 +104,10 @@ function NewSubjects() {
             });
     }
 
-    const getBuildingRequest = async () => {
-        await axios.get(`${WS_PATH}buildings`)
+    const getClassroomRequest = async () => {
+        await axios.get(`${WS_PATH}classrooms`)
           .then(response => {
-            setBuilding(response.data);
+            setClassroom(response.data);
           }).catch(error => {
             console.log(error);
           })
@@ -121,21 +121,25 @@ function NewSubjects() {
           subjectx_credits: 3, 
           subjectx_career: 'ISC',
           subjectx_major: 'WEB',
-          subjectx_classroom: classroom,
+          subjectx_classroom: valueClassroom.id,
           subjectx_status: 'A'
         })
           .then((response) => {
             setShowAlertPost(true);
             setOpenAlert(true);
+            setOpen(false);
           })
           .catch((error) => {
+            console.log(`si llega ${code}`);
+            console.log(`si llega ${subject}`);
+            console.log(`si llega ${valueClassroom.id}`);
             console.log(error);
           });
     };
 
     useEffect(() => {
         requestGet();
-        getBuildingRequest();
+        getClassroomRequest();
     }, []);
 
     useEffect(() => {
@@ -228,32 +232,18 @@ function NewSubjects() {
         }
         setOpenAlert(false);
     };
-
-    const handleChange = (event) => {
-        setSubjectCode(event.target.value);
-        setClassroom(event.target.value);
-
-        for (let i = 0; i < dataTable.length; i++) {
-            dataTable.filter((element) => {
-                if (event.target.value === element.subjectx_classroom) {
-                    setSubject(element.subjectx_classroom);
-                    return 0;
-                }
-                return 0;
-            });
-        }
-    };
     
-    const optionsBuilding = () => {
+    const optionsClassroom = () => {
         let data = [];
-        building.filter((element) => {
-          if (element.building_code !== '000') {
-            data.push({ label: element.building_name, id: element.building_code });
-          }
-          return 0;
+        classroom.filter((element) => {
+            if (element.classroom_code !== '000') {
+                data.push({ label: element.classroom_name, id: element.classroom_code });
+            }
+            return 0;
         });
-    
+
         var uniqueArray = [...new Set(data)];
+
         return uniqueArray;
     };
 
@@ -401,47 +391,53 @@ function NewSubjects() {
                         <TextField
                             fullWidth
                             label="Código materia"
-                            onChange={handleChange}
+                            onChange={(event, newValue) => {
+                                setSubjectCode(event.target.value);
+                            }}
                         />
                         <TextField
                             fullWidth
                             label="Nombre materia"
-                            onChange={handleChange}
+                            onChange={(event, newValue) => {
+                                setSubject(event.target.value);
+                            }}
                         />
                         
                         <TextField
                             fullWidth
                             label="Carrera"
-                            onChange={handleChange}
                         />
 
                         <Autocomplete
                             fullWidth
                             disablePortal
-                            id="combo-box-building"
-                            onChange={handleChange}
-                            options={optionsBuilding()}
+                            id="combo-box-classroom"
+                            onChange={(event, newValue) => {
+                                setValueClassroom(newValue);
+                            }}
+                            options={optionsClassroom()}
+                            isOptionEqualToValue={(option, value) => option.id === value.id}
                             renderInput={(params) => <TextField {...params} label="Salón" />}
-                          />
+                        />
                     </Stack>
                 </DialogContent>
 
                 <DialogActions sx={{ pb: 2, pr: 3 }}>
-                    <Button variant="contained" size="medium" onClick={() => postSubject}>Guardar</Button>
+                    <Button variant="contained" size="medium" onClick={() => postSubject()}>Guardar</Button>
                     <Button onClick={handleClose}>Cancelar</Button>
-                    {
-                        showAlertPost
-                        ?
-                          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
-                            <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
-                              Se ha registrado con éxito
-                            </Alert>
-                          </Snackbar>
-                        :
-                          null
-                    }
                 </DialogActions>
             </Dialog>
+            {
+                showAlertPost
+                ?
+                    <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+                    <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+                        Se ha registrado con éxito
+                    </Alert>
+                    </Snackbar>
+                :
+                    null
+            }
         </Page>
     );
 }
