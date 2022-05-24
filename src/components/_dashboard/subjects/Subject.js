@@ -8,9 +8,11 @@ import bookFill from '@iconify/icons-eva/book-fill';
 import pinFill from '@iconify/icons-eva/pin-fill';
 import videoFill from '@iconify/icons-eva/video-fill';
 import { Typography, Box, Stack, Button, Grid, IconButton, Tooltip, Avatar, AvatarGroup } from '@mui/material';
+import Cookies from 'universal-cookie';
 
 function Subject(props) {
     const [like, setLike] = useState(false);
+    const cookies = new Cookies();
 
     const handleLike = () => {
         setLike(!like);
@@ -37,20 +39,26 @@ function Subject(props) {
                 <Typography gutterBottom variant="h6" sx={{ m: 0 }}>
                     {props.name}
                 </Typography>
-                <IconButton color="error" size="small" onClick={handleLike} style={{ alignSelf: 'flex-start' }}>
-                    {
-                        like
+                {
+                    cookies.get('UserType') === 'S'
                         ?
-                            <Tooltip title="Quitar de favoritos" placement="top" arrow>
-                                <Icon icon={heartFill} width="32px" />
-                            </Tooltip>
-
+                        null
                         :
-                            <Tooltip title="Añadir a favoritos" placement="top" arrow>
-                                <Icon icon={heartOutline} width="32px" />
-                            </Tooltip>
-                    }
-                </IconButton>
+                        <IconButton color="error" size="small" onClick={handleLike} style={{ alignSelf: 'flex-start' }}>
+                            {
+                                like
+                                    ?
+                                    <Tooltip title="Quitar de favoritos" placement="top" arrow>
+                                        <Icon icon={heartFill} width="32px" />
+                                    </Tooltip>
+
+                                    :
+                                    <Tooltip title="Añadir a favoritos" placement="top" arrow>
+                                        <Icon icon={heartOutline} width="32px" />
+                                    </Tooltip>
+                            }
+                        </IconButton>
+                }
             </div>
 
             <Box sx={{ textAlign: 'center' }}>
