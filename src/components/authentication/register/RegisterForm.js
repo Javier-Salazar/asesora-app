@@ -264,7 +264,7 @@ function RegisterForm() {
           <TextField
             fullWidth
             autoComplete="current-password"
-            type={showPassword ?'tex' :'passwor'}
+            type={showPassword ? 'text' : 'password'}
             label="Contraseña"
             {...getFieldProps('password')}
             InputProps={{
@@ -294,13 +294,13 @@ function RegisterForm() {
 
           {
             showAlert.show
-            ?
+              ?
               <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity={showAlert.color} sx={{ width: '100%', boxShadow: 10 }}>
                   {showAlert.message}
                 </Alert>
               </Snackbar>
-            :
+              :
               null
           }
 
