@@ -4,8 +4,10 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container, TextField, Typography, TableContainer,
-  TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, Alert } from '@mui/material';
+import {
+  Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container, TextField, Typography, TableContainer,
+  TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, Alert
+} from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -106,7 +108,7 @@ function Buildings() {
     await axios.post(`${WS_PATH}buildings`, {
       building_code: code,
       building_name: building,
-      building_school: 'ITCJ',
+      building_school: 'ITCJC1',
       building_status: 'A'
     })
       .then((response) => {
@@ -117,7 +119,7 @@ function Buildings() {
       .catch((error) => {
         console.log(error);
       });
-};
+  };
 
   useEffect(() => {
     requestGet();
@@ -220,11 +222,11 @@ function Buildings() {
   }
 
   const handleAlertClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-      setOpenAlert(false);
-      window.location.reload(false);
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+    window.location.reload(false);
   };
 
   return (
@@ -236,9 +238,9 @@ function Buildings() {
           </Typography>
           {
             data <= 0 && isUserNotFound
-            ?
+              ?
               null
-            :
+              :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -255,9 +257,9 @@ function Buildings() {
 
         {
           noRequest
-          ?
+            ?
             <Wrong />
-          :
+            :
             <Card>
               <BuildingListToolbar
                 numSelected={selected.length}
@@ -359,45 +361,45 @@ function Buildings() {
         }
       </Container>
 
-      <Dialog open={open} TransitionComponent={Transition} onClose={handleClose} 
+      <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}
         maxWidth={'sm'}>
         <DialogTitle>
-            Agregar edificio
+          Agregar edificio
         </DialogTitle>
         <DialogContent>
-            <Stack spacing={2} sx={{ padding: '12px' }}>
-                <TextField
-                    fullWidth
-                    label="Código edificio"
-                    onChange={(event, newValue) => {
-                        setBuildingCode(event.target.value);
-                    }}
-                />
-                <TextField
-                    fullWidth
-                    label="Nombre edificio"
-                    onChange={(event, newValue) => {
-                        setBuilding(event.target.value);
-                    }}
-                />
-            </Stack>
+          <Stack spacing={2} sx={{ padding: '12px' }}>
+            <TextField
+              fullWidth
+              label="Código edificio"
+              onChange={(event, newValue) => {
+                setBuildingCode(event.target.value);
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Nombre edificio"
+              onChange={(event, newValue) => {
+                setBuilding(event.target.value);
+              }}
+            />
+          </Stack>
         </DialogContent>
 
         <DialogActions sx={{ pb: 2, pr: 3 }}>
-            <Button variant="contained" size="medium" onClick={() => postBuilding()}>Guardar</Button>
-            <Button onClick={handleClose}>Cancelar</Button>
+          <Button variant="contained" size="medium" onClick={() => postBuilding()}>Guardar</Button>
+          <Button onClick={handleClose}>Cancelar</Button>
         </DialogActions>
       </Dialog>
       {
-          showAlertPost
+        showAlertPost
           ?
-              <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
-              <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
-                  Se ha registrado con éxito
-              </Alert>
-              </Snackbar>
+          <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
+            <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+              Se ha registrado con éxito
+            </Alert>
+          </Snackbar>
           :
-              null
+          null
       }
     </Page>
   );
