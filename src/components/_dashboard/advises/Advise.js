@@ -7,14 +7,12 @@ import startFill from '@iconify/icons-eva/star-fill';
 import MockImgAvatar from '../../../utils/mockImages';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { sentenceCase } from 'change-case';
-import {
-    Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog,
-    DialogContent, DialogActions, DialogTitle, Skeleton
-} from '@mui/material';
+import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog, DialogContent, DialogActions, DialogTitle, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Label from '../../../components/Label';
 import Slide from '@mui/material/Slide';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 const ChipStyled = styled(Chip)(({ theme }) => ({
     color: theme.palette.primary.main,
@@ -55,6 +53,7 @@ function Advise(props) {
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [advises, setAdvises] = useState({ advise_code: '' });
+    const cookies = new Cookies();
 
     const peticionesGet = async () => {
         await axios.get(`${WS_PATH}advises/${props.id}`)
@@ -293,13 +292,17 @@ function Advise(props) {
                         </div>
                     </Box>
                 </Box>
-
-                <Grid container columnSpacing={0} sx={{ mt: 2 }}>
-                    <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
-                        agendar asesoría
-                    </LoadingButton>
-                </Grid>
-
+                {
+                    cookies.get('UserType') === 'S'
+                        ?
+                        null
+                        :
+                        <Grid container columnSpacing={0} sx={{ mt: 2 }}>
+                            <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
+                                agendar asesoría
+                            </LoadingButton>
+                        </Grid>
+                }
                 <Dialog open={openDialog} TransitionComponent={Transition} onClose={handleCloseDialog}>
                     <DialogTitle>Registrar asesoría</DialogTitle>
                     <DialogContent>
