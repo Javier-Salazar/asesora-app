@@ -4,10 +4,8 @@ import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { sentenceCase } from 'change-case';
-import {
-  Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container, TextField, Typography, TableContainer,
-  TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, Alert
-} from '@mui/material';
+import { Card, Table, Stack, Button, Checkbox, TableRow, TableBody, TableCell, Container, TextField, Typography, TableContainer,
+  TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, Alert } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
@@ -238,9 +236,9 @@ function Buildings() {
           </Typography>
           {
             data <= 0 && isUserNotFound
-              ?
+            ?
               null
-              :
+            :
               <Button
                 variant="contained"
                 component={RouterLink}
@@ -257,9 +255,9 @@ function Buildings() {
 
         {
           noRequest
-            ?
+          ?
             <Wrong />
-            :
+          :
             <Card>
               <BuildingListToolbar
                 numSelected={selected.length}
@@ -392,13 +390,13 @@ function Buildings() {
       </Dialog>
       {
         showAlertPost
-          ?
+        ?
           <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
             <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
               Se ha registrado con éxito
             </Alert>
           </Snackbar>
-          :
+        :
           null
       }
     </Page>
