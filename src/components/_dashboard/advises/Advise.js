@@ -47,7 +47,7 @@ function changeLabelModality(text) {
 }
 
 function Advise(props) {
-    const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0 });
+    const [showAlert, setShowAlert] = useState({ message: '', show: false, duration: 0, severity: '' });
     const [open, setOpen] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -79,7 +79,7 @@ function Advise(props) {
             return;
         }
         setOpen(false);
-        setShowAlert({ message: '', show: false, duration: 0 });
+        setShowAlert({ message: '', show: false, duration: 0, severity: '' });
     }
 
     const peticionPut = () => {
@@ -104,7 +104,8 @@ function Advise(props) {
                 setShowAlert({
                     message: '¡Se agendó la asesoría con éxito!, puedes consultarla en tu calendario',
                     show: true,
-                    duration: 6000
+                    duration: 6000,
+                    severity: 'success'
                 });
                 setOpen(true);
                 setLoading(false);
@@ -199,9 +200,20 @@ function Advise(props) {
                     })
 
                     request.execute(event => {
-                        peticionPut();
+                        if (event.id) {
+                            window.open(event.htmlLink);
+                            peticionPut();
+                        } else {
+                            setShowAlert({
+                                message: 'Ocurrió un error. Por favor, inténtelo de nuevo más tarde',
+                                show: true,
+                                duration: 6000,
+                                severity: 'error'
+                            });
+                            setOpen(true);
+                            setLoading(false);
+                        }
                     })
-
                 })
         });
     }
@@ -300,12 +312,7 @@ function Advise(props) {
                 {
                     showAlert.show
                     ?
-                        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            open={open}
-                            autoHideDuration={showAlert.duration}
-                            onClose={handleClose}
-                            sx={{ mt: 10 }}
-                        >
+                        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose} sx={{ mt: 10 }}>
                             <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
                                 {showAlert.message}
                             </Alert>
