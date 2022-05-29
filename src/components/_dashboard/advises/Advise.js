@@ -7,12 +7,12 @@ import startFill from '@iconify/icons-eva/star-fill';
 import MockImgAvatar from '../../../utils/mockImages';
 import messageCircleFill from '@iconify/icons-eva/message-circle-fill';
 import { sentenceCase } from 'change-case';
-import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog,
-    DialogContent, DialogActions, DialogTitle, Skeleton } from '@mui/material';
+import { Typography, Box, Stack, Button, Grid, Avatar, Snackbar, Alert, Chip, IconButton, Dialog, DialogContent, DialogActions, DialogTitle, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Label from '../../../components/Label';
 import Slide from '@mui/material/Slide';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 const ChipStyled = styled(Chip)(({ theme }) => ({
     color: theme.palette.primary.main,
@@ -53,6 +53,7 @@ function Advise(props) {
     const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [advises, setAdvises] = useState({ advise_code: '' });
+    const cookies = new Cookies();
 
     const peticionesGet = async () => {
         await axios.get(`${WS_PATH}advises/${props.id}`)
@@ -241,7 +242,7 @@ function Advise(props) {
                 spacing={0}
                 sx={{ p: 2 }}
             >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '55px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '50px' }}>
                     <Typography gutterBottom variant="h6" sx={{ m: 0, mr: 1 }}>
                         {props.subject}
                     </Typography>
@@ -291,13 +292,17 @@ function Advise(props) {
                         </div>
                     </Box>
                 </Box>
-
-                <Grid container columnSpacing={0} sx={{ mt: 2 }}>
-                    <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
-                        agendar asesoría
-                    </LoadingButton>
-                </Grid>
-
+                {
+                    cookies.get('UserType') === 'S'
+                    ?
+                        null
+                    :
+                        <Grid container columnSpacing={0} sx={{ mt: 2 }}>
+                            <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
+                                agendar asesoría
+                            </LoadingButton>
+                        </Grid>
+                }
                 <Dialog open={openDialog} TransitionComponent={Transition} onClose={handleCloseDialog}>
                     <DialogTitle>Registrar asesoría</DialogTitle>
                     <DialogContent>
@@ -313,7 +318,7 @@ function Advise(props) {
                     showAlert.show
                     ?
                         <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose} sx={{ mt: 10 }}>
-                            <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
+                            <Alert onClose={handleClose} severity={showAlert.severity} sx={{ width: '100%', boxShadow: 10 }}>
                                 {showAlert.message}
                             </Alert>
                         </Snackbar>

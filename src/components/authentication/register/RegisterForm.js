@@ -264,7 +264,7 @@ function RegisterForm() {
           <TextField
             fullWidth
             autoComplete="current-password"
-            type={showPassword ?'tex' :'passwor'}
+            type={showPassword ? 'text' : 'password'}
             label="Contraseña"
             {...getFieldProps('password')}
             InputProps={{

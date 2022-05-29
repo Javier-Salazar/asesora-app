@@ -10,7 +10,7 @@ import pinFill from '@iconify/icons-eva/pin-fill';
 import videoFill from '@iconify/icons-eva/video-fill';
 import { LoadingButton } from '@mui/lab';
 import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, Tooltip, AccordionSummary,
-    AccordionDetails, Rating, Skeleton, Alert, Snackbar } from '@mui/material';
+    AccordionDetails, Rating, Skeleton, Alert, Snackbar  from '@mui/material';
 import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 
@@ -70,7 +70,8 @@ function HistoryAdvisor(props) {
             advise_modality: advise.advise_modality,
             advise_url: advise.advise_url,
             advise_comments: advise.advise_comments,
-            advise_status: advise.advise_status
+            advise_status: advise.advise_status,
+            advise_rating: advise.advise_rating
         })
             .then((response) => {
                 setLoading(false);

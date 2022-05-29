@@ -106,32 +106,32 @@ function NewSubjects() {
 
     const getClassroomRequest = async () => {
         await axios.get(`${WS_PATH}classrooms`)
-          .then(response => {
-            setClassroom(response.data);
-          }).catch(error => {
-            console.log(error);
-          })
+            .then(response => {
+                setClassroom(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
     }
 
     const postSubject = async () => {
         await axios.post(`${WS_PATH}subjects`, {
-          subjectx_id: 0,
-          subjectx_code: code,
-          subjectx_name: subject,
-          subjectx_credits: 3, 
-          subjectx_career: 'ISC',
-          subjectx_major: 'WEB',
-          subjectx_classroom: valueClassroom.id,
-          subjectx_status: 'A'
+            subjectx_id: 0,
+            subjectx_code: code,
+            subjectx_name: subject,
+            subjectx_credits: 5,
+            subjectx_career: 'ISCC1',
+            subjectx_major: 'ISCE1',
+            subjectx_classroom: valueClassroom.id,
+            subjectx_status: 'A'
         })
-          .then((response) => {
-            setShowAlertPost(true);
-            setOpenAlert(true);
-            setOpen(false);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            .then((response) => {
+                setShowAlertPost(true);
+                setOpenAlert(true);
+                setOpen(false);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     useEffect(() => {
@@ -218,19 +218,19 @@ function NewSubjects() {
     const filteredUsers = applySortFilter(SUBJECTLIST, getComparator(order, orderBy), filter);
 
     const isUserNotFound = filteredUsers.length === 0;
-    
+
     const handleClose = () => {
         setOpen(false);
     }
 
     const handleAlertClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
         setOpenAlert(false);
         window.location.reload(false);
     };
-    
+
     const optionsClassroom = () => {
         let data = [];
         classroom.filter((element) => {
@@ -269,7 +269,7 @@ function NewSubjects() {
                                 Agregar materia
                             </Button>
                     }
-          
+
                 </Stack>
 
                 {
@@ -339,7 +339,7 @@ function NewSubjects() {
                                                             <TableCell align="right">
                                                                 <SubjectMoreMenu idSubject={id} name={subject} />
                                                             </TableCell>
-                              
+
                                                         </TableRow>
                                                     );
                                                 })}
@@ -379,7 +379,7 @@ function NewSubjects() {
                 }
             </Container>
 
-            <Dialog open={open} TransitionComponent={Transition} onClose={handleClose} 
+            <Dialog open={open} TransitionComponent={Transition} onClose={handleClose}
                 maxWidth={'sm'}>
                 <DialogTitle>
                     Agregar materia
@@ -400,7 +400,7 @@ function NewSubjects() {
                                 setSubject(event.target.value);
                             }}
                         />
-                        
+
                         <TextField
                             fullWidth
                             label="Carrera"
@@ -430,9 +430,9 @@ function NewSubjects() {
                 showAlertPost
                 ?
                     <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={openAlert} autoHideDuration={6000} onClose={handleAlertClose}>
-                    <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
-                        Se ha registrado con éxito
-                    </Alert>
+                        <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%', boxShadow: 10, marginTop: 10 }}>
+                            Se ha registrado con éxito
+                        </Alert>
                     </Snackbar>
                 :
                     null
