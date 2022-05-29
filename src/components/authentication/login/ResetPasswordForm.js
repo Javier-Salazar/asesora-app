@@ -11,6 +11,8 @@ import axios from 'axios';
 
 function ResetPasswordForm({ func }) {
     const [data, setData] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     
     const navigate = useNavigate();
     const RegisterSchema = Yup.object().shape({
@@ -29,8 +31,11 @@ function ResetPasswordForm({ func }) {
         onSubmit: () => {
             if (searchUser(getFieldProps('email').value)) {
                 emailjs.send('service_r1b24ph', 'template_rmxjflb', templateParams[0], 'bpH5lyWRIbIT4L-oh');
+                setIsSubmitting(true);
+                setShowAlert(false);
             } else {
-                console.log('No encuentra el correo');
+                setIsSubmitting(false);
+                setShowAlert(true);
             }
         }
     });
@@ -72,12 +77,13 @@ function ResetPasswordForm({ func }) {
     const decryptPassword = (text, key) => {
         var bytes = CryptoJS.AES.decrypt(text, key);
         var decryptedText = bytes.toString(CryptoJS.enc.Utf8);
+        console.log(decryptedText);
         return decryptedText;
     }
 
-    const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+    const { errors, touched, handleSubmit, getFieldProps } = formik;
 
-    func(isSubmitting, 'undefined');
+    func(isSubmitting, getFieldProps('email').value, showAlert);
 
     return (
         <FormikProvider value={formik}>
@@ -98,7 +104,6 @@ function ResetPasswordForm({ func }) {
                         size="large"
                         type="submit"
                         variant="contained"
-                        loading={isSubmitting}
                     >
                         Restablecer contraseña
                     </LoadingButton>

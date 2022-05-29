@@ -21,12 +21,6 @@ function Advises() {
     var idSubject = params.subjectID;
     var idUser = params.adviserID;
 
-    useEffect(() => {
-        if (!cookies.get('UserCode')) {
-            navigate('/');
-        }
-    });
-
     const requestGet = async () => {
         await axios.get(`${WS_PATH}advises`)
             .then(response => {
@@ -61,6 +55,12 @@ function Advises() {
         requestGet();
         requestGetAdvisor();
     }, []);
+
+    useEffect(() => {
+        if (!cookies.get('UserCode')) {
+            navigate('/');
+        }
+    });
 
     const date = new Date();
     const validateDate = (adviseDateTime) => {

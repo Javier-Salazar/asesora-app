@@ -10,7 +10,7 @@ import pinFill from '@iconify/icons-eva/pin-fill';
 import videoFill from '@iconify/icons-eva/video-fill';
 import { LoadingButton } from '@mui/lab';
 import { Typography, Box, Stack, Grid, TextField, Divider, Accordion, Tooltip, AccordionSummary,
-    AccordionDetails, Rating, Skeleton, Alert, Snackbar  from '@mui/material';
+    AccordionDetails, Rating, Skeleton, Alert, Snackbar } from '@mui/material';
 import { WS_PATH } from '../../../Configurations';
 import axios from 'axios';
 

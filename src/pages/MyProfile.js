@@ -46,7 +46,7 @@ const Input = styled('input')({
 });
 
 function MyProfile() {
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState('');
   const [changePhoto, setChangePhoto] = useState(false);
   const [showAlert, setShowAlert] = useState({ message: '', show: false });
   const [open, setOpen] = useState(false);
@@ -55,16 +55,16 @@ function MyProfile() {
   const [errorBiography, setErrorBiography] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [user, setUser] = useState({
-    userx_code: "",
-    userx_name: "",
-    userx_lastname: "",
-    userx_mother_lastname: "",
-    userx_email: "",
-    userx_phone: "",
-    userx_type: "",
-    userx_status: "",
-    userx_image: "",
-    userx_date: ""
+    userx_code: '',
+    userx_name: '',
+    userx_lastname: '',
+    userx_mother_lastname: '',
+    userx_email: '',
+    userx_phone: '',
+    userx_type: '',
+    userx_status: '',
+    userx_image: '',
+    userx_date: ''
   });
 
   const cookies = new Cookies();
@@ -88,15 +88,15 @@ function MyProfile() {
 
   const peticionPut = async () => {
     await axios.put(`${WS_PATH}users/${cookies.get('UserCode')}`, {
-      userx_code: getFieldProps("code").value,
-      userx_name: getFieldProps("firstName").value,
-      userx_lastname: getFieldProps("lastName").value,
-      userx_mother_lastname: getFieldProps("motherLastName").value,
-      userx_email: getFieldProps("email").value,
-      userx_password: getFieldProps("password").value === "**********" ? user.userx_password : encryptPassword(getFieldProps("password").value),
-      userx_salt: getFieldProps("password").value === "**********" ? user.userx_salt : key,
+      userx_code: getFieldProps('code').value,
+      userx_name: getFieldProps('firstName').value,
+      userx_lastname: getFieldProps('lastName').value,
+      userx_mother_lastname: getFieldProps('motherLastName').value,
+      userx_email: getFieldProps('email').value,
+      userx_password: getFieldProps('password').value === '**********' ? user.userx_password : encryptPassword(getFieldProps('password').value),
+      userx_salt: getFieldProps('password').value === '**********' ? user.userx_salt : key,
       userx_remember: user.userx_remember,
-      userx_phone: getFieldProps("phone").value,
+      userx_phone: getFieldProps('phone').value,
       userx_type: user.userx_type,
       userx_istmp_password: user.userx_istmp_password,
       userx_date: user.userx_date,
@@ -471,8 +471,8 @@ function MyProfile() {
               {
                 showAlert.show
                 ?
-                  <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                  <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
+                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%', boxShadow: 10 }}>
                       {showAlert.message}
                     </Alert>
                   </Snackbar>

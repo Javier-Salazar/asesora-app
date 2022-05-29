@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Page from '../components/Page';
-import { Container, Typography, Button } from '@mui/material';
+import { Container, Typography, Button, Snackbar, Alert } from '@mui/material';
 import ResetPasswordForm from '../components/authentication/login/ResetPasswordForm';
 import { NAME_APP } from '../Configurations';
 
@@ -23,12 +23,21 @@ const SectionStyle = styled('div')(({ theme }) => ({
 function ResetPassword() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [email, setEmail] = useState('');
+    const [open, setOpen] = useState(false);
     
     const navigate = useNavigate();
 
-    const pullData = (status, email) => {
+    const pullData = (status, email, showAlert) => {
         setIsSubmitting(status);
         setEmail(email);
+        setOpen(showAlert);
+    }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        setOpen(false);
     }
 
     return (
@@ -65,20 +74,28 @@ function ResetPassword() {
                                 </Button>
                             </div>
                         :
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column'
-                            }}>
-                                <Typography variant="h3" sx={{mb: 2}}>
-                                    ¿Olvidaste tu contraseña?
-                                </Typography>
-                                <Typography variant="body1" sx={{mb: 4}}>
-                                    Introduce la dirección de correo electrónico asociada a tu cuenta y 
-                                    te enviaremos un enlace para restablecer tu contraseña.
-                                </Typography>
+                            <>
+                                <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={6000} onClose={handleClose} sx={{ mt: 10 }}>
+                                    <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                                        El correo ingresado no se encuentra registrado
+                                    </Alert>
+                                </Snackbar>
 
-                                <ResetPasswordForm func={pullData}/>
-                            </div>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}>
+                                    <Typography variant="h3" sx={{mb: 2}}>
+                                        ¿Olvidaste tu contraseña?
+                                    </Typography>
+                                    <Typography variant="body1" sx={{mb: 4}}>
+                                        Introduce la dirección de correo electrónico asociada a tu cuenta y 
+                                        te enviaremos un enlace para restablecer tu contraseña.
+                                    </Typography>
+
+                                    <ResetPasswordForm func={pullData}/>
+                                </div>
+                            </>
                     }
                     
                 </Container>
