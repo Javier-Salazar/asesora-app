@@ -234,9 +234,9 @@ function Advise(props) {
 
     return (
         advises.advise_code === ''
-            ?
+        ?
             <Skeleton variant="rectangular" height={235} />
-            :
+        :
             <Stack
                 alignItems="center"
                 spacing={0}
@@ -294,9 +294,9 @@ function Advise(props) {
                 </Box>
                 {
                     cookies.get('UserType') === 'S'
-                        ?
+                    ?
                         null
-                        :
+                    :
                         <Grid container columnSpacing={0} sx={{ mt: 2 }}>
                             <LoadingButton fullWidth onClick={handleClick} loading={loading} disabled={disabled}>
                                 agendar asesoría
@@ -316,7 +316,7 @@ function Advise(props) {
 
                 {
                     showAlert.show
-                        ?
+                    ?
                         <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                             open={open}
                             autoHideDuration={showAlert.duration}
@@ -327,7 +327,7 @@ function Advise(props) {
                                 {showAlert.message}
                             </Alert>
                         </Snackbar>
-                        :
+                    :
                         null
                 }
             </Stack>
