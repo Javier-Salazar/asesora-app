@@ -317,12 +317,7 @@ function Advise(props) {
                 {
                     showAlert.show
                     ?
-                        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                            open={open}
-                            autoHideDuration={showAlert.duration}
-                            onClose={handleClose}
-                            sx={{ mt: 10 }}
-                        >
+                        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={open} autoHideDuration={showAlert.duration} onClose={handleClose} sx={{ mt: 10 }}>
                             <Alert onClose={handleClose} severity={showAlert.severity} sx={{ width: '100%', boxShadow: 10 }}>
                                 {showAlert.message}
                             </Alert>
