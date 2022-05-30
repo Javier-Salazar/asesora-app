@@ -48,7 +48,7 @@ function LoadingLayout(props) {
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [num, 1000]);
+    }, [num]);
 
     return(
         <Modal>
