@@ -11,6 +11,7 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { Wrong } from '../components/_dashboard/errors';
+import LoadingLayout from '../layouts/LoadingLayout';
 import { UserListHead } from '../components/_dashboard/user';
 import { ClassroomListToolbar } from '../components/_dashboard/classroom';
 import Slide from '@mui/material/Slide';
@@ -81,6 +82,7 @@ function Classrooms() {
   const [valueBuilding, setValueBuilding] = useState('');
   const [showAlertPost, setShowAlertPost] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
+  const [procesing, setProcesing] = useState(true);
 
   const cookies = new Cookies();
   const navigate = useNavigate();
@@ -90,6 +92,7 @@ function Classrooms() {
       .then(response => {
         setData(response.data);
         setDataTable(response.data);
+        setProcesing(false);
       }).catch(error => {
         if (error.request) {
           console.log(error.request);
@@ -432,6 +435,14 @@ function Classrooms() {
               </Snackbar>
           :
               null
+      }
+
+      {
+        procesing
+        ?
+            <LoadingLayout isProcesing={procesing}/>
+        :
+            null
       }
     </Page>
   );

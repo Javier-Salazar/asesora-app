@@ -4,6 +4,7 @@ import { Container, Typography, Grid, Card } from '@mui/material';
 import Page from '../components/Page';
 import { Adviser } from '../components/_dashboard/advisers';
 import { Wrong } from '../components/_dashboard/errors';
+import LoadingLayout from '../layouts/LoadingLayout';
 import MockImgAvatar from '../utils/mockImages';
 import { WS_PATH, NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
@@ -13,6 +14,7 @@ function Advisers() {
     const [advisers, setAdvisers] = useState([]);
     const [noRequest, setNoRequest] = useState(false);
     const [advise, setAdvise] = useState([]);
+    const [procesing, setProcesing] = useState(true);
 
     const cookies = new Cookies();
     const navigate = useNavigate();
@@ -27,6 +29,7 @@ function Advisers() {
         await axios.get(`${WS_PATH}advisors`)
             .then(Response => {
                 setAdvisers(Response.data);
+                setProcesing(false);
             }).catch(error => {
                 if (error.request) {
                     console.log(error.request);
@@ -97,6 +100,14 @@ function Advisers() {
                                     </Card>
                                 </Grid>
                             ))
+                    }
+
+                    {
+                        procesing
+                        ?
+                            <LoadingLayout isProcesing={procesing}/>
+                        :
+                            null
                     }
                 </Grid>
             </Container>

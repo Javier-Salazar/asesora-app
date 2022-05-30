@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Typography, Grid, Card } from '@mui/material';
 import { Wrong } from '../components/_dashboard/errors';
+import LoadingLayout from '../layouts/LoadingLayout';
 import Page from '../components/Page';
 import { Subject } from '../components/_dashboard/subjects';
 import { WS_PATH, NAME_APP } from '../Configurations';
@@ -12,6 +13,7 @@ function Subjects() {
     const [noRequest, setNoRequest] = useState(false);
     const [data, setData] = useState([]);
     const [advisor, setAdvisor] = useState([]);
+    const [procesing, setProcesing] = useState(true);
 
     var params = useParams();
     var idUser = params.adviserID;
@@ -30,6 +32,7 @@ function Subjects() {
         await axios.get(`${WS_PATH}advises`)
             .then(response => {
                 setData(response.data);
+                setProcesing(false);
             }).catch(error => {
                 if (error.request) {
                     console.log(error.request);
@@ -188,6 +191,14 @@ function Subjects() {
                     }
                 </Grid>
             </Container>
+
+            {
+                procesing
+                ?
+                    <LoadingLayout isProcesing={procesing}/>
+                :
+                    null
+            }
         </Page>
     );
 }

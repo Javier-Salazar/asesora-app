@@ -6,6 +6,7 @@ import { Stack, Container, Typography, Card } from '@mui/material';
 import Page from '../components/Page';
 import Label from '../components/Label';
 import { sentenceCase } from 'change-case';
+import LoadingLayout from '../layouts/LoadingLayout';
 import { WS_PATH, NAME_APP } from '../Configurations';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
@@ -44,6 +45,7 @@ function showDateTime(text) {
 
 function Reports() {
     const [data, setData] = useState([]);
+    const [procesing, setProcesing] = useState(true);
 
     const cookies = new Cookies();
     const navigate = useNavigate();
@@ -140,6 +142,7 @@ function Reports() {
         await axios.get(`${WS_PATH}advises`)
             .then(response => {
                 setData(response.data);
+                setProcesing(false);
             }).catch(error => {
                 console.log(error);
             });
@@ -233,6 +236,14 @@ function Reports() {
                     </div>
                 </Card>
             </Container>
+
+            {
+                procesing
+                ?
+                    <LoadingLayout isProcesing={procesing}/>
+                :
+                    null
+            }
         </Page >
     );
 }
